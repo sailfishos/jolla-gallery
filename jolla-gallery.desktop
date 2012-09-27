@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Gallery
+Icon=icons-Applications-gallery
+Exec=/opt/applications/jolla-gallery/jolla-gallery -fullscreen
+Comment=Jolla Gallery
+
