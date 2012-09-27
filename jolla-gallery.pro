@@ -38,7 +38,9 @@ include(qmlapplicationviewer/qmlapplicationviewer.pri)
 
 OTHER_FILES += \
     *.qml \
-    pages/*.qml
+    pages/*.qml \
+    jolla-gallery.desktop \
+    rpm/jolla-gallery.spec
 
 INSTALLS += target qml desktop dummydata
 

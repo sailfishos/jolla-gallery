@@ -102,7 +102,9 @@ Page{
             source: model.fullsize
             width: imageList.width
             height: imageList.height
-            fillMode: Image.PreserveAspectCrop
+            sourceSize.height: imageList.height
+            sourceSize.width: imageList.width
+            fillMode: Image.PreserveAspectFit
             clip: true
             MouseArea{
                 anchors.fill: parent
