@@ -7,6 +7,7 @@ Page{
     GridView{
         cellWidth: parent.width/4
         cellHeight: parent.width/4
+        boundsBehavior: Flickable.StopAtBounds
         anchors.fill: parent
         model: imageModel
 
