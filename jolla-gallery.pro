@@ -9,9 +9,8 @@ qml.path = $$DEPLOYMENT_PATH
 desktop.files = jolla-gallery.desktop
 desktop.path = /usr/share/applications
 
-dummydata.files = dummydata
-dummydata.path = $$DEPLOYMENT_PATH
-
+#dummydata.files = dummydata
+#dummydata.path = $$DEPLOYMENT_PATH
 
 # Add more folders to ship with the application, here
 # pages.source = pages
@@ -25,6 +24,10 @@ QML_IMPORT_PATH =
 # lines and add the respective components to the MOBILITY variable.
 # CONFIG += mobility
 # MOBILITY +=
+
+contains(CONFIG, desktop) {
+    DEFINES *= DESKTOP
+}
 
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
 # CONFIG += qdeclarative-boostable
@@ -42,6 +45,6 @@ OTHER_FILES += \
     jolla-gallery.desktop \
     rpm/jolla-gallery.spec
 
-INSTALLS += target qml desktop dummydata
+INSTALLS += target qml desktop
 
 DEFINES *= DEPLOYMENT_PATH=\"\\\"\"$${DEPLOYMENT_PATH}/\"\\\"\"

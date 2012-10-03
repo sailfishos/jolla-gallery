@@ -6,13 +6,14 @@ ApplicationWindow {
     id: window
 
     cover: Image {
-        source: "dummydata/images/cover-gallery.png"
+        source: "pages/images/cover-gallery.png"
         anchors.fill: parent
         Rectangle {
             z: -1
             anchors.fill: parent
         }
     }
+
     initialPage: GalleryGridPage {}
 }
 
