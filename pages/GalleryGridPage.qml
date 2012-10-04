@@ -14,8 +14,7 @@ Page {
     Label {
         id: title
         y: grid.contentItem.y + grid.pullDownMenu.height + grid.cellHeight + (grid.cellHeight - title.paintedHeight) / 2
-        anchors.right: grid.right
-        anchors.rightMargin: 10
+        anchors { right: grid.right; rightMargin: 10 }
         color: theme.highlightColor
         font.pixelSize: theme.fontSizeExtraLarge
         opacity: mediaModel.status === DocumentGalleryModel.Idle
