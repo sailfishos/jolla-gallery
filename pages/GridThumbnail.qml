@@ -7,42 +7,55 @@ import org.nemomobile.thumbnailer 1.0
   */
 Image{
     id: thumbnail
-    signal clicked
+    signal clicked    
     width: GridView.view.cellWidth
     height: GridView.view.cellHeight
+    property string type: mimeType
     sourceSize.width: width
     sourceSize.height: height
     asynchronous: true
 
-    function isVideo()
+    scale: mouse.pressed & mouse.containsMouse ? 0.95 : 1
+
+    function secondRowItem()
     {
-        return (mimeType.substring(0,5) === "video")
+        return index <= 7 && 4 <= index
     }
 
-    function loadImageThumbnail()
+    function initThumbnail()
     {
-        source = "image://nemoThumbnail/" + url
+        // The second row should be invisible first and
+        // after a few seconds it will be animated to
+        // a full opacity
+        if (secondRowItem()){
+            opacity = 0
+            opacityBehavior.enabled = true
+        }
+
+        if ( mimeType.substring(0,5) === "video" ){
+            var rect = Qt.createQmlObject('import QtQuick 1.1; Rectangle { }', thumbnail, "thumbnail")
+            rect.width = width
+            rect.height= height
+            rect.color = "black"
+            rect.border.color = "white"
+        } else {
+            source = "image://nemoThumbnail/" + url
+        }
     }
 
-    function loadVideoThumbnail()
-    {
-        // TODO: show video thumbnails when available
-        // Just show a black rectangle because we can't get video thumbs atm.
-        var rect = Qt.createQmlObject('import QtQuick 1.1; Rectangle { }', thumbnail, "thumbnail")
-        rect.width = width
-        rect.height= height
-        rect.color = "black"
-        rect.border.color = "white"
-    }
+    // Do earlier init
+    onTypeChanged: initThumbnail()
 
-    Component.onCompleted: isVideo() ? loadVideoThumbnail() : loadImageThumbnail()
+    // We can't start opacity the animation before everything is set up
+    Component.onCompleted: if (secondRowItem()) opacity = 1
 
-    Behavior on scale { NumberAnimation{ duration: 150 }}
+    Behavior on opacity { id: opacityBehavior; animation:  NumberAnimation { duration: 2500 } enabled: false}
+    Behavior on scale { NumberAnimation { duration: 150 }}
 
     MouseArea {
+        id: mouse
         anchors.fill: parent
-        onClicked: parent.clicked()
-        onPressed: thumbnail.scale = 0.95
-        onReleased: thumbnail.scale = 1
+        onClicked: parent.clicked()        
     }
+
 }

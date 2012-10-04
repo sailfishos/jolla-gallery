@@ -13,12 +13,17 @@ import QtMobility.gallery 1.1
   */
 DocumentGalleryModel {
     id: localMediaModel
+    property string currentMedia
 
     function queryImages()
-    {       
+    {
+        if (currentMedia === "image")
+            return;
+
+        currentMedia  = "image"
         var oldFilter = filter
         rootType = DocumentGallery.Image
-        filter = __createFilter("image")
+        filter = __createFilter(currentMedia)
 
         if (oldFilter !== null)
             oldFilter.destroy()
@@ -26,9 +31,13 @@ DocumentGalleryModel {
 
     function queryVideos()
     {
+        if (currentMedia === "video")
+            return;
+
+        currentMedia  = "video"
         rootType = DocumentGallery.Video
         var oldFilter = filter
-        filter = __createFilter("video")
+        filter = __createFilter(currentMedia)
 
         if (oldFilter !== null)
             oldFilter.destroy()
@@ -36,8 +45,12 @@ DocumentGalleryModel {
 
     function queryAll()
     {
-        // FilterUnion
-        console.log("Query all")
+
+        if (currentMedia === "all")
+            return;
+
+        currentMedia  = "all"
+
         var images = __createFilter("image")
         var videos = __createFilter("video")
 

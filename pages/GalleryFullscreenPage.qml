@@ -12,8 +12,7 @@ Page {
     id: fullscreenPage
     property alias model: imageList.model
     property alias currentIndex: imageList.currentIndex
-    property bool showMenu: false
-
+    property bool showMenu
 
     ListModel {
         id: actionsModel
@@ -102,23 +101,23 @@ Page {
         y: fullscreenPage.showMenu ? fullscreenPage.height / 2 : 0
         Behavior on y { NumberAnimation { duration: 200 } }
 
-
         // TODO: No UI spec for a background yet. Just keep the image aspect ratio,
         //       center it and display a black background.
         // TODO: This implementation will be replaced in the next commit
         delegate: Rectangle {
-            property bool isVideoItem: mimeType.substring(0,5) === "video"
+            property bool videoItem: mimeType.substring(0,5) === "video"
             width: ListView.view.width
             height: ListView.view.height
             color: "black"
 
             Image {
                 id: image
-                source: isVideoItem ? "" : url
+                source: videoItem ? "" : url
                 width: parent.width
                 sourceSize.height: imageList.height
                 asynchronous: true
                 fillMode: Image.PreserveAspectFit
+                // If PullDownMenu is visible, the image needs to be centered to the area of size of half a screen
                 y: fullscreenPage.showMenu ? (Math.max(0, (parent.height/2 - height) / 2)) : ((parent.height - height) / 2)
 
                 Behavior on y {
@@ -130,7 +129,7 @@ Page {
             Label {
                 text: "video"
                 anchors.centerIn: image
-                visible: isVideoItem
+                visible: videoItem
             }
 
             MouseArea {
