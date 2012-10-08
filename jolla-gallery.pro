@@ -42,6 +42,7 @@ include(qmlapplicationviewer/qmlapplicationviewer.pri)
 OTHER_FILES += \
     *.qml \
     pages/*.qml \
+    pages/scripts/*.js \
     jolla-gallery.desktop \
     rpm/jolla-gallery.spec
 

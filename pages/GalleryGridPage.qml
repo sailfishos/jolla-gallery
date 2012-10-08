@@ -66,6 +66,4 @@ Page {
         ScrollBar {}
         ScrollDecorator {}
     }
-
-
 }
