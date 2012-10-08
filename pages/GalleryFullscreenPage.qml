@@ -12,7 +12,6 @@ Page {
     id: fullscreenPage
     property alias model: imageList.model
     property alias currentIndex: imageList.currentIndex
-    property bool showMenu
 
     ListModel {
         id: actionsModel
@@ -20,15 +19,19 @@ Page {
             name: "Email"
             title: "Share"
         }
+
         ListElement {
             name: "SMS"
         }
+
         ListElement {
             name: "Facebook"
         }
+
         ListElement {
             name: "Picasa"
         }
+
         ListElement {
             name: "Evernote"
         }
@@ -84,58 +87,14 @@ Page {
                 color: theme.highlightColor
                 anchors { right: parent.right; verticalCenter: parent.verticalCenter }
             }
-
-            onClicked: fullscreenPage.showMenu = !fullscreenPage.showMenu
         }
     }
 
-    // TODO: Replace ListView with more nemo gallery like implementation. This is just a placeholder
-    //       until we have a better implementation.
-    JollaListView {
+    // Element for handling the actual flicking and image buffering
+    FlickableImageView{
         id: imageList
         width: fullscreenPage.width
         height: fullscreenPage.height
-        orientation: ListView.Horizontal
-        snapMode: ListView.SnapOneItem
-        cacheBuffer: width*2
-        y: fullscreenPage.showMenu ? fullscreenPage.height / 2 : 0
-        Behavior on y { NumberAnimation { duration: 200 } }
-
-        // TODO: No UI spec for a background yet. Just keep the image aspect ratio,
-        //       center it and display a black background.
-        // TODO: This implementation will be replaced in the next commit
-        delegate: Rectangle {
-            property bool videoItem: mimeType.substring(0,5) === "video"
-            width: ListView.view.width
-            height: ListView.view.height
-            color: "black"
-
-            Image {
-                id: image
-                source: videoItem ? "" : url
-                width: parent.width
-                sourceSize.height: imageList.height
-                asynchronous: true
-                fillMode: Image.PreserveAspectFit
-                // If PullDownMenu is visible, the image needs to be centered to the area of size of half a screen
-                y: fullscreenPage.showMenu ? (Math.max(0, (parent.height/2 - height) / 2)) : ((parent.height - height) / 2)
-
-                Behavior on y {
-                    animation: NumberAnimation { duration: 150 }
-                    enabled: image.progress == 1
-                }
-            }
-
-            Label {
-                text: "video"
-                anchors.centerIn: image
-                visible: videoItem
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked:  fullscreenPage.showMenu = !fullscreenPage.showMenu
-            }
-        }
+        onClicked: alignMiddle = !alignMiddle
     }
 }

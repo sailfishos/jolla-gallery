@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.0.5
+Version:    0.0.6
 Release:    1
 Group:      System/Applications
 License:    TBD
@@ -11,7 +11,6 @@ BuildRequires:  pkgconfig(QtDeclarative)
 BuildRequires:  pkgconfig(QtGui)
 BuildRequires:  pkgconfig(QtOpenGL)
 BuildRequires:  desktop-file-utils
-BuildRequires:  fdupes
 
 Requires:  jollacomponents
 
@@ -34,7 +33,6 @@ rm -rf %{buildroot}
 desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
-%fdupes  %{buildroot}/%{_libdir}
 
 %files
 %defattr(-,root,root,-)
