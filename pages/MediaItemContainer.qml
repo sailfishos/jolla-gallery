@@ -12,11 +12,7 @@ Rectangle{
     property QtObject mediaItem: null
     color: "black"
 
-    Binding {
-        target: parent
-        property: "itemScaled"
-        value: itemScaled
-    }
+    onItemScaledChanged: parent.itemScaled = itemScaled
 
     function loadMediaContent()
     {

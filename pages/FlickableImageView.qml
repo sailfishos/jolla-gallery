@@ -15,7 +15,6 @@ Item{
     property bool alignMiddle
     property bool itemScaled
 
-
     // Make this element to slide in the middle
     y: alignMiddle ? parent.height / 2 : 0
     Behavior on y { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }

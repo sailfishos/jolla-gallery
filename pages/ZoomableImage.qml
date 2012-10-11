@@ -4,22 +4,17 @@ import QtQuick 1.1
 Flickable {
      id: flickable
 
-     property bool imageScaled: photo.scale > 1
+     property bool itemScaled: photo.scale > 1
      property bool alignTop: parent.alignTop
      property alias source: photo.source
 
      contentWidth: imageContainer.width
      contentHeight: imageContainer.height
      onHeightChanged: photo.calculateSize()
-     boundsBehavior: Flickable.DragOverBounds
-     clip: imageScaled
-
+     clip: itemScaled
+     boundsBehavior: Flickable.StopAtBounds
      // Bind info about scaling to parent
-     Binding {
-         target: parent
-         property: "itemScaled"
-         value: imageScaled
-     }
+     onItemScaledChanged: parent.itemScaled = itemScaled
 
      Rectangle{
          id: imageContainer

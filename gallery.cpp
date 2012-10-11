@@ -1,6 +1,6 @@
 #include <QtGui/QApplication>
 #include "qmlapplicationviewer.h"
-#include "wallpapermanager.h"
+#include "wallpaper.h"
 
 #include <QDir>
 #include <QDeclarativeError>
@@ -25,8 +25,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         path = QString(DEPLOYMENT_PATH);
     }
 
-    WallpaperManager wpManager;
-    viewer.rootContext()->setContextProperty("wallpaperManager", &wpManager);
+    Wallpaper wallpaper;
+    viewer.rootContext()->setContextProperty("wallpaper", &wallpaper);
 
     viewer.setMainQmlFile(path +  QLatin1String("gallery.qml"));
 

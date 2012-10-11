@@ -60,7 +60,7 @@ Page {
 
             MenuItem {
                 text: "Set as wallpaper"
-                onClicked: wallpaperManager.setWallpaper(imageList.currentItemUrl())
+                onClicked: wallpaper.source = imageList.currentItemUrl()
             }
 
             MenuItem {
