@@ -19,7 +19,7 @@ Image{
 
     function secondRowItem()
     {
-        return index <= 7 && 4 <= index
+        return index <= 5 && 3 <= index
     }
 
     function initThumbnail()

@@ -23,8 +23,8 @@ Page {
 
     GridView {
         id: grid
-        cellWidth: parent.width/4
-        cellHeight: parent.width/4
+        cellWidth: parent.width/3.0
+        cellHeight: parent.width/3.0
         boundsBehavior: Flickable.StopAtBounds
         height: parent.height
         width: parent.width

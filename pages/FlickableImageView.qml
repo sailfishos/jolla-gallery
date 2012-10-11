@@ -13,14 +13,12 @@ Item{
     property int bufferSize: 2
     property int flickAnimationDuration: 150
     property bool alignMiddle
+    property bool imageScaled
 
-    // Make all the image elements to align correctly if this Element
-    // is align ed in the middle
-    onAlignMiddleChanged: ItemContainer.alignTop(alignMiddle)
 
     // Make this element to slide in the middle
     y: alignMiddle ? parent.height / 2 : 0
-    Behavior on y { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+    Behavior on y { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
 
     // Create fullscreen images
     Component.onCompleted: createFSImageItems()
@@ -31,31 +29,31 @@ Item{
         // First create "empty" images to make sure that they are ordered properly
         // This creates 1 + 2*bufferSize number of images
         for (var i=0; i < 1+2*bufferSize; i++){
-            var component = Qt.createComponent("FullScreenImage.qml");
+            var component = Qt.createComponent("MediaItemContainer.qml");
             if (component.status === Component.Ready) {
-                var fsImage = component.createObject(flickListView);
+                var mediaItemContainer = component.createObject(flickListView);
 
-                if (fsImage === null){
+                if (mediaItemContainer === null){
                     console.log("Failed to create FS Image")
                     return;
                 }
 
-                fsImage.width     = flickListView.width
-                fsImage.height    = flickListView.height
+                mediaItemContainer.width  = flickListView.width
+                mediaItemContainer.height = flickListView.height
 
-                ItemContainer.addItem(fsImage)
+                ItemContainer.addItem(mediaItemContainer)
 
                 // Make the first item to go left most
                 if (i == 0){
-                    fsImage.x = (i - bufferSize) * width
-                    leftMostItem = fsImage
+                    mediaItemContainer.x = (i - bufferSize) * width
+                    leftMostItem = mediaItemContainer
                 }
 
                 // Anchor items so that all the items are achored to
                 // the left item execpte the first one
                 if (i > 0) {
                     var obj = ItemContainer.itemAt(i-1)
-                    fsImage.anchors.left = obj.right
+                    mediaItemContainer.anchors.left = obj.right
                 }
             }
         }
@@ -76,14 +74,16 @@ Item{
 
             var modelItem = model.get(modelIndex(modelItemIndex))
 
-            var image = ItemContainer.itemAt(bufferItemIndex)
-            image.source = modelItem.url
-            image.mimeType = modelItem.mimeType
+            var mediaItemContainer = ItemContainer.itemAt(bufferItemIndex)
+            mediaItemContainer.source = modelItem.url
+            mediaItemContainer.mimeType = modelItem.mimeType
+            mediaItemContainer.loadMediaContent()
         }
     }
 
     function moveToLeft()
     {
+        // Right to left flick
         if (flickAnimation.running)
             return
 
@@ -97,6 +97,7 @@ Item{
 
     function moveToRight()
     {
+        // Left to right flick
         if (flickAnimation.running)
             return
 
@@ -105,6 +106,18 @@ Item{
         flickAnimation.to = -flickListView.width
 
         currentIndex = modelIndex(currentIndex - 1)
+        flickAnimation.start()
+    }
+
+    function moveBackToBeginning()
+    {
+        if (flickAnimation.running)
+            return
+
+        moveDirection = 0
+        flickAnimation.target = ItemContainer.itemAt(0)
+        flickAnimation.to = (flickListView.width * -bufferSize)
+
         flickAnimation.start()
     }
 
@@ -123,8 +136,9 @@ Item{
 
         // Make it load new content
         var modelItem = model.get(modelIndex((0 - bufferSize) + currentIndex))
-        leftMostItem.source = modelItem.url
-        leftMostItem.mimeType  = modelItem.mimeType
+        leftMostItem.source   = modelItem.url
+        leftMostItem.mimeType = modelItem.mimeType
+        leftMostItem.loadMediaContent()
     }
 
     function swapLeft()
@@ -148,6 +162,7 @@ Item{
         var modelItem = model.get(modelIndex(bufferSize + currentIndex))
         rightMostItem.source   = modelItem.url
         rightMostItem.mimeType = modelItem.mimeType
+        rightMostItem.loadMediaContent()
     }
 
     function modelIndex(index)
@@ -171,11 +186,13 @@ Item{
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
+    MouseArea {       
         property real firstPressX
         property real pressX
         property real tapThresshold: 15
+        z: 10
+        anchors.fill: parent
+        enabled: !imageScaled
 
         onPressed: {
             firstPressX = mouseX
@@ -193,6 +210,14 @@ Item{
                 return
             }
 
+            // If user has moved too little, return back to beginning
+            var delta = Math.abs(firstPressX-mouseX)
+            if ( 0 < delta && delta < (parent.width / 3)){
+                moveBackToBeginning()
+                return
+            }
+
+            // Move to the next or previous item
             if ( firstPressX > mouseX )
                 moveToLeft()
             else

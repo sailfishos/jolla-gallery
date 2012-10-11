@@ -91,7 +91,7 @@ Page {
     }
 
     // Element for handling the actual flicking and image buffering
-    FlickableImageView{
+    FlickableImageView {
         id: imageList
         width: fullscreenPage.width
         height: fullscreenPage.height
