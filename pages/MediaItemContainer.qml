@@ -12,6 +12,12 @@ Rectangle{
     property QtObject mediaItem: null
     color: "black"
 
+    Binding {
+        target: parent
+        property: "itemScaled"
+        value: itemScaled
+    }
+
     function loadMediaContent()
     {
         // Destroy the old media item if the type is different, otherwise
@@ -35,7 +41,9 @@ Rectangle{
             }
         }
 
-        // Finally set the source
+        // Finally set the source and make sure id we reuse the item
+        // it's not scaled
+        itemScaled = false
         mediaItem.source = fsMediaItem.source
     }
 

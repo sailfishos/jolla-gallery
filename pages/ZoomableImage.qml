@@ -11,12 +11,15 @@ Flickable {
      contentWidth: imageContainer.width
      contentHeight: imageContainer.height
      onHeightChanged: photo.calculateSize()
-     boundsBehavior: Flickable.StopAtBounds
+     boundsBehavior: Flickable.DragOverBounds
      clip: imageScaled
 
-     // Not so nice way, but this need to inform flickableImageView
-     // that our content has been scaled.
-     onImageScaledChanged: parent.parent.imageScaled = imageScaled
+     // Bind info about scaling to parent
+     Binding {
+         target: parent
+         property: "itemScaled"
+         value: imageScaled
+     }
 
      Rectangle{
          id: imageContainer
