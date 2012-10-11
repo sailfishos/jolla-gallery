@@ -60,11 +60,7 @@ Page {
 
             MenuItem {
                 text: "Set as wallpaper"
-                onClicked: {
-                    console.log("dada")
-                    console.log("CurrentImage url: " + imageList.currentItemUrl())
-                    wallpaperManager.setWallpaper(imageList.currentItemUrl())
-                }
+                onClicked: wallpaperManager.setWallpaper(imageList.currentItemUrl())
             }
 
             MenuItem {
