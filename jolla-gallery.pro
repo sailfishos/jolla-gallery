@@ -29,11 +29,17 @@ contains(CONFIG, desktop) {
     DEFINES *= DESKTOP
 }
 
+
+CONFIG += link_pkgconfig
+PKGCONFIG += mlite
+
+
 # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
 # CONFIG += qdeclarative-boostable
 
 # The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += gallery.cpp
+SOURCES += gallery.cpp \
+    declarativewallpaper.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -49,3 +55,6 @@ OTHER_FILES += \
 INSTALLS += target qml desktop
 
 DEFINES *= DEPLOYMENT_PATH=\"\\\"\"$${DEPLOYMENT_PATH}/\"\\\"\"
+
+HEADERS += \
+    declarativewallpaper.h

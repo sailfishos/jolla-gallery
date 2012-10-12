@@ -13,8 +13,7 @@ Item{
     property int bufferSize: 2
     property int flickAnimationDuration: 150
     property bool alignMiddle
-    property bool imageScaled
-
+    property bool itemScaled
 
     // Make this element to slide in the middle
     y: alignMiddle ? parent.height / 2 : 0
@@ -173,11 +172,17 @@ Item{
             return (index%model.count)
     }
 
+    function currentItemUrl()
+    {
+        return model.get(currentIndex).url
+    }
+
     PropertyAnimation{
         id: flickAnimation
         property: "x"
         duration: flickAnimationDuration
         alwaysRunToEnd: true
+        easing.type: Easing.OutQuad
         onCompleted: {
             if (moveDirection < 0)
                 swapLeft()
@@ -192,7 +197,7 @@ Item{
         property real tapThresshold: 15
         z: 10
         anchors.fill: parent
-        enabled: !imageScaled
+        enabled: !itemScaled
 
         onPressed: {
             firstPressX = mouseX
@@ -212,7 +217,7 @@ Item{
 
             // If user has moved too little, return back to beginning
             var delta = Math.abs(firstPressX-mouseX)
-            if ( 0 < delta && delta < (parent.width / 3)){
+            if ( 0 < delta && delta < (parent.width / 4)){
                 moveBackToBeginning()
                 return
             }

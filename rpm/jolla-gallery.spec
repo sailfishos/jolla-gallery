@@ -11,6 +11,7 @@ BuildRequires:  pkgconfig(QtDeclarative)
 BuildRequires:  pkgconfig(QtGui)
 BuildRequires:  pkgconfig(QtOpenGL)
 BuildRequires:  desktop-file-utils
+BuildRequires:  mlite-devel
 
 Requires:  jollacomponents
 

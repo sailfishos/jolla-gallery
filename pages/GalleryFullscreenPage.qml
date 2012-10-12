@@ -60,9 +60,7 @@ Page {
 
             MenuItem {
                 text: "Set as wallpaper"
-                onClicked: {
-
-                }
+                onClicked: wallpaper.source = imageList.currentItemUrl()
             }
 
             MenuItem {

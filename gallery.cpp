@@ -1,5 +1,6 @@
 #include <QtGui/QApplication>
 #include "qmlapplicationviewer.h"
+#include "declarativewallpaper.h"
 
 #include <QDir>
 #include <QDeclarativeError>
@@ -23,6 +24,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     } else {
         path = QString(DEPLOYMENT_PATH);
     }
+
+    DeclarativeWallpaper wallpaper;
+    viewer.rootContext()->setContextProperty("wallpaper", &wallpaper);
 
     viewer.setMainQmlFile(path +  QLatin1String("gallery.qml"));
 
