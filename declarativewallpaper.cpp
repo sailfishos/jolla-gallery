@@ -1,14 +1,14 @@
-#include "wallpaper.h"
+#include "declarativewallpaper.h"
 #include <MGConfItem>
 
-Wallpaper::Wallpaper(QObject *parent) :
+DeclarativeWallpaper::DeclarativeWallpaper(QObject *parent) :
     QObject(parent),
     m_gconfItem(new MGConfItem("/desktop/meego/background/portrait/picture_filename", this))
 {
     connect(m_gconfItem, SIGNAL(valueChanged()), this, SIGNAL(sourceChanged()));
 }
 
-void Wallpaper::setSource(const QUrl & url)
+void DeclarativeWallpaper::setSource(const QUrl & url)
 {
     QUrl oldWallpaper = source();
     if (oldWallpaper != url){
@@ -16,7 +16,7 @@ void Wallpaper::setSource(const QUrl & url)
     }
 }
 
-QUrl Wallpaper::source() const
+QUrl DeclarativeWallpaper::source() const
 {
     return QUrl::fromLocalFile(m_gconfItem->value().toString());
 }

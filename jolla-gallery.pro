@@ -39,7 +39,7 @@ PKGCONFIG += mlite
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += gallery.cpp \
-    wallpaper.cpp
+    declarativewallpaper.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -57,4 +57,4 @@ INSTALLS += target qml desktop
 DEFINES *= DEPLOYMENT_PATH=\"\\\"\"$${DEPLOYMENT_PATH}/\"\\\"\"
 
 HEADERS += \
-    wallpaper.h
+    declarativewallpaper.h
