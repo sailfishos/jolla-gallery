@@ -5,13 +5,13 @@ import QtQuick 1.1
 Flickable {
     id: flickable
 
-    property bool itemScaled: photo.scale > 1
+    property bool itemScaled: photo.width > flickable.width
     property bool alignTop: parent.alignTop
     property alias source: photo.source
 
     flickableDirection: Flickable.HorizontalAndVerticalFlick
-    contentWidth: parent.width
-    contentHeight: parent.height
+    contentWidth: 480//photo.width* photo.scale
+    contentHeight: 854// photo.height * photo.scale
     clip: itemScaled
     boundsBehavior: Flickable.StopAtBounds
     onItemScaledChanged: parent.itemScaled = itemScaled
@@ -37,50 +37,54 @@ Flickable {
         height:Math.max(photo.height * photo.scale, flickable.height)
         transformOrigin: Item.TopLeft
     */
-        Image {
-            id: photo
-            smooth: !(flickable.movingVertically || flickable.movingHorizontally)
-            sourceSize.width: flickable.width*2
-            width: flickable.width
-            fillMode: Image.PreserveAspectFit
-            transformOrigin: Item.TopLeft
-            asynchronous: true
-            //y: Math.max(0, (parent.height - height) / 2)
+    Image {
+        id: photo
+        smooth: !(flickable.movingVertically || flickable.movingHorizontally)
+        sourceSize.width: flickable.width*2
+        width: flickable.width
 
-        }
+        fillMode: Image.PreserveAspectFit
+        transformOrigin: Item.TopLeft
+        asynchronous: true
+        //y: Math.max(0, (parent.height - height) / 2)
+
+
+    }
     //}
 
      PinchArea {
          id: pinchArea
-         enabled: !flickable.alignTop
+         //enabled: !flickable.alignTop
          anchors.fill: parent
-         pinch.target: photo
          pinch.minimumScale: 0.98
          pinch.maximumScale: 4.5
-         property real prevCenterX: -1
-         property real prevCenterY: -1
-
-         onPinchStarted: {
-             prevCenterX = pinch.startCenter.x
-             prevCenterY = pinch.startCenter.y
-         }
 
          onPinchUpdated: {
-             flickable.contentX += prevCenterX - pinch.center.x
-             flickable.contentY += prevCenterY - pinch.center.y
+             var scale = 1.0 + pinch.scale - pinch.previousScale
 
-             console.log("PrevX " + prevCenterX + ", new " + pinch.center.x + " prev cente x " + pinch.previousCenter.x + " start x " + pinch.startCenter.x)
-             // resize content
+             var newWidth  =  flickable.contentWidth * scale
+             var newHeight = flickable.contentHeight * scale
 
-             var scale = 1.0 + pinch.scale - pinch.lastScale
+             // It's enough to check against width if we have reached min or max scale values
+             if (newWidth <= flickable.width * 0.98 || flickable.width * 4.5 <= newWidth)
+                 return
 
-             flickable.resizeContent(flickable.contentWidth * scale, flickable.contentHeight * scale, pinch.center)
-             //flickable.resizeContent(photo.width * photo.scale, photo.height*photo.scale, pinch.center)
-             prevCenterX = pinch.center.x
-             prevCenterY = pinch.center.y
+             photo.width  = newWidth
+             photo.height = newHeight
+             flickable.resizeContent(newWidth, newHeight, pinch.center)
+
+             /*
+               // WORKS
+              flickable.resizeContent(photo.width * photo.scale,
+                                      photo.height * photo.scale,
+                                      pinch.center)
+             */
+
          }
 
          onPinchFinished: flickable.returnToBounds()
+
+
      }
 
 
