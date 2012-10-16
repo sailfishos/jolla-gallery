@@ -1,85 +1,95 @@
 import QtQuick 1.1
 
 
+
 Flickable {
-     id: flickable
+    id: flickable
 
-     property bool itemScaled: photo.scale > 1
-     property bool alignTop: parent.alignTop
-     property alias source: photo.source
+    property bool itemScaled: photo.scale > 1
+    property bool alignTop: parent.alignTop
+    property alias source: photo.source
 
-     contentWidth: imageContainer.width
-     contentHeight: imageContainer.height
-     onHeightChanged: photo.calculateSize()
-     clip: itemScaled
-     boundsBehavior: Flickable.StopAtBounds
-     // Bind info about scaling to parent
-     onItemScaledChanged: parent.itemScaled = itemScaled
+    flickableDirection: Flickable.HorizontalAndVerticalFlick
+    contentWidth: parent.width
+    contentHeight: parent.height
+    clip: itemScaled
+    boundsBehavior: Flickable.StopAtBounds
+    onItemScaledChanged: parent.itemScaled = itemScaled
 
-     Rectangle{
-         id: imageContainer
-         width: Math.max(photo.width * photo.scale, flickable.width)
-         height:Math.max(photo.height * photo.scale, flickable.height)
-         color: "black"
 
-         Image {
-             id: photo
-             property real prevScale
-             smooth: !(flickable.movingVertically || flickable.movingHorizontally)
-             sourceSize.width: flickable.width
-             fillMode: Image.PreserveAspectFit
-             asynchronous: true
-             anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter }
-             onStatusChanged: if (status == Image.Ready) calculateSize()
+    function scaleToMax(centerX, centerY)
+    {
+        if ( photo.scale <= 1){
+            photo.scale = 4.0
+            flickable.resizeContent(photo.width * photo.scale, photo.height * photo.scale, Qt.point(centerX, centerY))
+            flickable.returnToBounds()
+        } else {
+            photo.scale = 0.98
+            flickable.resizeContent(photo.width * photo.scale, photo.height * photo.scale, Qt.point(width/2, height/2))
+        }
 
-             onScaleChanged: {
-                 if (photo.progress < 1)
-                     return
 
-                 if ((width * scale) > flickable.width) {
-                     var xoff = (flickable.width / 2 + flickable.contentX) * scale / prevScale
-                     flickable.contentX = xoff - flickable.width / 2
-                 }
+    }
+    /*
+    Rectangle{
+        color: "green"
+        width: Math.max(photo.width * photo.scale, flickable.width)
+        height:Math.max(photo.height * photo.scale, flickable.height)
+        transformOrigin: Item.TopLeft
+    */
+        Image {
+            id: photo
+            smooth: !(flickable.movingVertically || flickable.movingHorizontally)
+            sourceSize.width: flickable.width*2
+            width: flickable.width
+            fillMode: Image.PreserveAspectFit
+            transformOrigin: Item.TopLeft
+            asynchronous: true
+            //y: Math.max(0, (parent.height - height) / 2)
 
-                 if ((height * scale) > flickable.height) {
-                     var yoff = (flickable.height / 2 + flickable.contentY) * scale / prevScale
-                     flickable.contentY = yoff - flickable.height / 2
-                 }
-
-                 prevScale = scale;
-             }
-
-             function calculateSize()
-             {
-                 scale = Math.min(flickable.width / width, flickable.height / height)*0.98;
-                 pinchArea.minScale = scale;
-                 prevScale = Math.min(scale, 1);
-             }
-         }
-     }
+        }
+    //}
 
      PinchArea {
          id: pinchArea
          enabled: !flickable.alignTop
-         property real minScale:  1.0
          anchors.fill: parent
          pinch.target: photo
-         pinch.minimumScale: minScale
+         pinch.minimumScale: 0.98
          pinch.maximumScale: 4.5
+         property real prevCenterX: -1
+         property real prevCenterY: -1
+
+         onPinchStarted: {
+             prevCenterX = pinch.startCenter.x
+             prevCenterY = pinch.startCenter.y
+         }
+
+         onPinchUpdated: {
+             flickable.contentX += prevCenterX - pinch.center.x
+             flickable.contentY += prevCenterY - pinch.center.y
+
+             console.log("PrevX " + prevCenterX + ", new " + pinch.center.x + " prev cente x " + pinch.previousCenter.x + " start x " + pinch.startCenter.x)
+             // resize content
+
+             var scale = 1.0 + pinch.scale - pinch.lastScale
+
+             flickable.resizeContent(flickable.contentWidth * scale, flickable.contentHeight * scale, pinch.center)
+             //flickable.resizeContent(photo.width * photo.scale, photo.height*photo.scale, pinch.center)
+             prevCenterX = pinch.center.x
+             prevCenterY = pinch.center.y
+         }
+
          onPinchFinished: flickable.returnToBounds()
      }
 
+
+
      states: State {
          when: alignTop
-         AnchorChanges {
-             target: photo
-             anchors.horizontalCenter: undefined
-             anchors.verticalCenter: undefined
-             anchors.top: imageContainer.top
-         }
          PropertyChanges {
              target: photo
-             anchors.topMargin: Math.max(0, (parent.height/2 - height) / 2)
+             y: Math.max(0, (parent.height/2 - height) / 2)
          }
      }
 
@@ -87,4 +97,5 @@ Flickable {
             AnchorAnimation { duration: 300; easing.type: Easing.OutCubic }
             PropertyAnimation { property: "anchors.topMargin"; duration: 250; easing.type: Easing.OutCubic }
      }
+
 }

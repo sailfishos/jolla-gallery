@@ -4,6 +4,7 @@ import "scripts/ItemContainer.js" as ItemContainer
 Item{
     id: flickListView    
     signal clicked
+    signal doubleClicked
 
     property QtObject leftMostItem
     property QtObject rightMostItem
@@ -14,6 +15,9 @@ Item{
     property int flickAnimationDuration: 150
     property bool alignMiddle
     property bool itemScaled
+
+
+    onItemScaledChanged: console.log("Item scale changed: " + itemScaled)
 
     // Make this element to slide in the middle
     y: alignMiddle ? parent.height / 2 : 0
@@ -191,29 +195,53 @@ Item{
         }
     }
 
-    MouseArea {       
+    MouseArea {
+        id: mouseArea
         property real firstPressX
         property real pressX
+        property real pressY
         property real tapThresshold: 15
         z: 10
         anchors.fill: parent
         enabled: !itemScaled
 
+
+        Timer {
+            id: clickTimer
+            interval: 200
+            onTriggered: if ( !flickListView.itemScaled ) flickListView.clicked()
+        }
+
         onPressed: {
             firstPressX = mouseX
             pressX = mouseX
+            pressY = mouseY
         }
 
         onPositionChanged: {
+
+            if (parent.itemScaled){
+                return
+            }
+
             leftMostItem.x = leftMostItem.x - (pressX - mouseX)
             pressX = mouseX
         }
 
-        onReleased: {
+        onReleased: {         
             if ( Math.abs(firstPressX-mouseX) < tapThresshold){
-                flickListView.clicked()
+                //flickListView.clicked()
+                if (clickTimer.running){
+                    clickTimer.stop()
+                    ItemContainer.itemAt(bufferSize).scaleToMax(pressX, pressY)
+                } else {
+                     clickTimer.start()
+                }
                 return
             }
+
+            if ( flickListView.itemScaled)
+                return
 
             // If user has moved too little, return back to beginning
             var delta = Math.abs(firstPressX-mouseX)
@@ -227,6 +255,7 @@ Item{
                 moveToLeft()
             else
                 moveToRight()
+
         }
     }
 }
