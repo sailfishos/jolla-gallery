@@ -30,56 +30,65 @@ Flickable {
 
 
     }
-    /*
+
     Rectangle{
-        color: "green"
-        width: Math.max(photo.width * photo.scale, flickable.width)
-        height:Math.max(photo.height * photo.scale, flickable.height)
+        color: "black"
+        width: Math.max(photo.paintedWidth, flickable.width)
+        height:Math.max(photo.paintedHeight, flickable.height)
         transformOrigin: Item.TopLeft
-    */
-    Image {
-        id: photo
-        smooth: !(flickable.movingVertically || flickable.movingHorizontally)
-        sourceSize.width: flickable.width*2
-        width: flickable.width
+        onHeightChanged: console.log("Item container H: " + height)
 
-        fillMode: Image.PreserveAspectFit
-        transformOrigin: Item.TopLeft
-        asynchronous: true
-        //y: Math.max(0, (parent.height - height) / 2)
+        Image {
+            id: photo
+            smooth: !(flickable.movingVertically || flickable.movingHorizontally)
+            sourceSize.width: flickable.width*2
+            width: flickable.width
 
+            fillMode: Image.PreserveAspectFit
+            transformOrigin: Item.TopLeft
+            asynchronous: true
+            y: Math.max(0, (parent.height - height) / 2)
 
+            onHeightChanged: console.log("Photo H: " + height + "Photo PH: " + paintedHeight)
+        }
     }
-    //}
 
      PinchArea {
          id: pinchArea
          //enabled: !flickable.alignTop
          anchors.fill: parent
-         pinch.minimumScale: 0.98
-         pinch.maximumScale: 4.5
 
          onPinchUpdated: {
              var scale = 1.0 + pinch.scale - pinch.previousScale
 
+             var newPhotoWidth  = photo.width * scale
+             var newPhotoHeight = photo.height * scale
+
              var newWidth  =  flickable.contentWidth * scale
-             var newHeight = flickable.contentHeight * scale
+             var newHeight =  flickable.contentHeight * scale
+
+             // We need to compare painted size here in order to
+             // decided if painted image is larger that the container
+             // around it. We can't compare width/height or a sourceSize
+             // because they are not related what's visible on a display
+             if (photo.paintedHeight * scale < flickable.height)
+                 newHeight = flickable.height
+             else
+                 newHeight = newPhotoHeight
+
+             if (photo.paintedWidth * scale < flickable.width)
+                 newWidth = flickable.width
+             else
+                 newWidth = newPhotoWidth
 
              // It's enough to check against width if we have reached min or max scale values
              if (newWidth <= flickable.width * 0.98 || flickable.width * 4.5 <= newWidth)
                  return
 
+             // Finally set the new content size
              photo.width  = newWidth
              photo.height = newHeight
              flickable.resizeContent(newWidth, newHeight, pinch.center)
-
-             /*
-               // WORKS
-              flickable.resizeContent(photo.width * photo.scale,
-                                      photo.height * photo.scale,
-                                      pinch.center)
-             */
-
          }
 
          onPinchFinished: flickable.returnToBounds()
@@ -98,8 +107,7 @@ Flickable {
      }
 
      transitions: Transition {
-            AnchorAnimation { duration: 300; easing.type: Easing.OutCubic }
-            PropertyAnimation { property: "anchors.topMargin"; duration: 250; easing.type: Easing.OutCubic }
+            PropertyAnimation { property: "y"; duration: 250; easing.type: Easing.OutCubic }
      }
 
 }
