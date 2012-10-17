@@ -4,7 +4,6 @@ import "scripts/ItemContainer.js" as ItemContainer
 Item{
     id: flickListView    
     signal clicked
-    signal doubleClicked
 
     property QtObject leftMostItem
     property QtObject rightMostItem

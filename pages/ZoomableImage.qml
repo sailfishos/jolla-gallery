@@ -30,7 +30,10 @@ Flickable {
         if (itemScaled){
             photo.width = photo.initialWidth
             photo.height = photo.initialHeight
-            flickable.resizeContent( photo.initialWidth, photo.initialHeight, Qt.point(flickable.width/2, flickable.height/2))
+            flickable.contentX = 0
+            flickable.contentY = 0
+            flickable.contentWidth = flickable.width
+            flickable.contentHeight= flickable.height
         }
     }
 
@@ -109,7 +112,7 @@ Flickable {
      // is disabled while interacting with this QML element.
      MouseArea {
          anchors.fill: parent
-         Timer { id: clickTimer; interval: 200; onTriggered: console.log("timer quit") }
+         Timer { id: clickTimer; interval: 200 }
 
          onPressed: {
              if (clickTimer.running)
