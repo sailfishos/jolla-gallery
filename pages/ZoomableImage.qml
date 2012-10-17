@@ -5,7 +5,7 @@ import QtQuick 1.1
 Flickable {
     id: flickable
 
-    property bool itemScaled: photo.width > photo.initialWidth
+    property bool itemScaled: photo.width > flickable.width
     property bool alignTop: parent.alignTop
     property alias source: photo.source
 
@@ -28,7 +28,7 @@ Flickable {
     function resetScale()
     {
         if (itemScaled){
-            photo.width = photo.initialWidth
+            photo.width =  photo.initialWidth
             photo.height = photo.initialHeight
             flickable.contentX = 0
             flickable.contentY = 0
@@ -55,12 +55,12 @@ Flickable {
             newHeight = newPhotoHeight
 
         if (photo.paintedWidth * scale < flickable.width)
-            newWidth = flickable.width
+            newWidth = flickable.width * 0.98
         else
             newWidth = newPhotoWidth
 
         // It's enough to check against width if we have reached min or max scale values
-        if (newWidth <= flickable.width * 0.98 || flickable.width * 3.51 <= newWidth)
+        if (newWidth <= flickable.width * 0.97 || flickable.width * 3.51 <= newWidth)
             return
 
         // Finally set the new content size
@@ -71,7 +71,7 @@ Flickable {
 
     // Rect is a container which is used to provide black bars if the image doesn't fill
     // the display area fully
-    Rectangle{
+    Rectangle {
         color: "black"
         width: Math.max(photo.paintedWidth, flickable.width)
         height: Math.max(photo.paintedHeight, flickable.height)
@@ -83,13 +83,12 @@ Flickable {
             property int initialHeight
             smooth: !(flickable.movingVertically || flickable.movingHorizontally)
             sourceSize.width: flickable.width*2
-            width: flickable.width
-
+            width: flickable.width * 0.98
             fillMode: Image.PreserveAspectFit
             transformOrigin: Item.TopLeft
             asynchronous: true
             y: Math.max(0, (flickable.height - height) / 2)
-
+            x: Math.max(0, (flickable.width - width) / 2)
             onStatusChanged: {
                 if ( status == Image.Ready){
                     initialWidth = width
