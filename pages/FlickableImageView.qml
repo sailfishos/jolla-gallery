@@ -17,8 +17,6 @@ Item{
     property bool itemScaled
 
 
-    onItemScaledChanged: console.log("Item scale changed: " + itemScaled)
-
     // Make this element to slide in the middle
     y: alignMiddle ? parent.height / 2 : 0
     Behavior on y { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
@@ -230,12 +228,11 @@ Item{
 
         onReleased: {         
             if ( Math.abs(firstPressX-mouseX) < tapThresshold){
-                //flickListView.clicked()
-                if (clickTimer.running){
+                if (clickTimer.running && !flickListView.alignMiddle){
                     clickTimer.stop()
                     ItemContainer.itemAt(bufferSize).scaleToMax(pressX, pressY)
                 } else {
-                     clickTimer.start()
+                     clickTimer.restart()
                 }
                 return
             }
