@@ -59,57 +59,58 @@ Flickable {
         flickable.resizeContent(newWidth, newHeight, center)
     }
 
-    // Rect is a container which is used to provide black bars if the image doesn't fill
-    // the display area fully
-    Rectangle {
-        color: "black"
-        width: Math.max(photo.paintedWidth, flickable.width)
-        height: Math.max(photo.paintedHeight, flickable.height)
-        transformOrigin: Item.TopLeft
+    PinchArea {
+        id: pinchArea
+        enabled: !flickable.alignTop
+        anchors.fill: parent
+        onPinchUpdated: scaleImage(1.0 + pinch.scale - pinch.previousScale, pinch.center)
+        onPinchFinished: flickable.returnToBounds()
 
-        Image {
-            id: photo
-            property int initialWidth
-            property int initialHeight
-            smooth: !(flickable.movingVertically || flickable.movingHorizontally)
-            sourceSize.width: flickable.width*2
-            width: flickable.width * 0.98
-            fillMode: Image.PreserveAspectFit
+        // Rect is a container which is used to provide black bars if the image doesn't fill
+        // the display area fully
+        Rectangle {
+            color: "black"
+            width: Math.max(photo.paintedWidth, flickable.width)
+            height: Math.max(photo.paintedHeight, flickable.height)
             transformOrigin: Item.TopLeft
-            asynchronous: true
-            y: Math.max(0, (flickable.height - height) / 2)
-            x: Math.max(0, (flickable.width - width) / 2)
-            onStatusChanged: {
-                if ( status == Image.Ready){
-                    initialWidth = width
-                    initialHeight = height
+
+            Image {
+                id: photo
+                property int initialWidth
+                property int initialHeight
+                smooth: !(flickable.movingVertically || flickable.movingHorizontally)
+                sourceSize.width: flickable.width*2
+                width: flickable.width * 0.98
+                fillMode: Image.PreserveAspectFit
+                transformOrigin: Item.TopLeft
+                asynchronous: true
+                y: Math.max(0, (flickable.height - height) / 2)
+                x: Math.max(0, (flickable.width - width) / 2)
+                onStatusChanged: {
+                    if ( status == Image.Ready){
+                        initialWidth = width
+                        initialHeight = height
+                    }
+                }
+
+                // We need to handle the second double tap because the top level mouse area
+                // is disabled while interacting with this QML element.
+                // NOTE: onDoubleClicked didn't work here. It worked randomly on N950.
+                MouseArea {
+                    anchors.fill: parent
+                    Timer { id: clickTimer; interval: 200 }
+
+                    onPressed: {
+                        if (clickTimer.running)
+                            resetScale()
+                        else
+                            clickTimer.start()
+                    }
                 }
             }
         }
     }
 
-
-     PinchArea {
-         id: pinchArea
-         enabled: !flickable.alignTop
-         anchors.fill: parent
-         onPinchUpdated: scaleImage(1.0 + pinch.scale - pinch.previousScale, pinch.center)
-         onPinchFinished: flickable.returnToBounds()
-     }
-
-     // We need to handle the second double tap because the top level mouse area
-     // is disabled while interacting with this QML element.
-     MouseArea {
-         anchors.fill: parent
-         Timer { id: clickTimer; interval: 200 }
-
-         onPressed: {
-             if (clickTimer.running)
-                 resetScale()
-             else
-                 clickTimer.start()
-         }
-     }
 
      states: State {
          when: alignTop

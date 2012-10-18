@@ -192,6 +192,7 @@ Item{
         }
     }
 
+    // NOTE: onDoubleClicked didn't work here. It worked randomly on N950.
     MouseArea {
         id: mouseArea
         property real firstPressX
