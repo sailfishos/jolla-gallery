@@ -42,22 +42,12 @@ Flickable {
         var newPhotoWidth  = photo.width * scale
         var newPhotoHeight = photo.height * scale
 
-        var newWidth  =  flickable.contentWidth * scale
-        var newHeight =  flickable.contentHeight * scale
-
         // We need to compare painted size here in order to
         // decide if painted image is larger that the container
         // around it. We can't compare width/height or a sourceSize
         // because they are not related what's visible on a display
-        if (photo.paintedHeight * scale < flickable.height)
-            newHeight = flickable.height
-        else
-            newHeight = newPhotoHeight
-
-        if (photo.paintedWidth * scale < flickable.width)
-            newWidth = flickable.width * 0.98
-        else
-            newWidth = newPhotoWidth
+        var newWidth = photo.paintedWidth * scale < flickable.width ? flickable.width * 0.98 : newPhotoWidth
+        var newHeight = photo.paintedHeight * scale < flickable.height ? flickable.height : newPhotoHeight
 
         // It's enough to check against width if we have reached min or max scale values
         if (newWidth <= flickable.width * 0.97 || flickable.width * 3.51 <= newWidth)
