@@ -43,4 +43,9 @@ Rectangle{
         mediaItem.source = fsMediaItem.source
     }
 
+    function scaleToMax(centerX, centerY)
+    {
+        if (imageItem)
+            mediaItem.scaleToMax(centerX, centerY)
+    }
  }

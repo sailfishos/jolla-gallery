@@ -15,6 +15,7 @@ Item{
     property bool alignMiddle
     property bool itemScaled
 
+
     // Make this element to slide in the middle
     y: alignMiddle ? parent.height / 2 : 0
     Behavior on y { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
@@ -191,29 +192,53 @@ Item{
         }
     }
 
-    MouseArea {       
+    // NOTE: onDoubleClicked didn't work here. It worked randomly on N950.
+    MouseArea {
+        id: mouseArea
         property real firstPressX
         property real pressX
+        property real pressY
         property real tapThresshold: 15
         z: 10
         anchors.fill: parent
         enabled: !itemScaled
 
+
+        Timer {
+            id: clickTimer
+            interval: 200
+            onTriggered: if ( !flickListView.itemScaled ) flickListView.clicked()
+        }
+
         onPressed: {
             firstPressX = mouseX
             pressX = mouseX
+            pressY = mouseY
         }
 
         onPositionChanged: {
+
+            if (parent.itemScaled){
+                return
+            }
+
             leftMostItem.x = leftMostItem.x - (pressX - mouseX)
             pressX = mouseX
         }
 
-        onReleased: {
+        onReleased: {         
             if ( Math.abs(firstPressX-mouseX) < tapThresshold){
-                flickListView.clicked()
+                if (clickTimer.running && !flickListView.alignMiddle){
+                    clickTimer.stop()
+                    ItemContainer.itemAt(bufferSize).scaleToMax(pressX, pressY)
+                } else {
+                     clickTimer.restart()
+                }
                 return
             }
+
+            if ( flickListView.itemScaled)
+                return
 
             // If user has moved too little, return back to beginning
             var delta = Math.abs(firstPressX-mouseX)
@@ -227,6 +252,7 @@ Item{
                 moveToLeft()
             else
                 moveToRight()
+
         }
     }
 }
