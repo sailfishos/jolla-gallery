@@ -39,4 +39,6 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/*.desktop
 %{_datadir}/jolla-gallery/*
 %{_bindir}/jolla-gallery
+%{_libdir}
+
 
