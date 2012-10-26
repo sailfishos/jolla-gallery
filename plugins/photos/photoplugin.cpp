@@ -4,6 +4,7 @@
 #include <QtPlugin>
 #include <QtDebug>
 #include <QtScript/QScriptEngine>
+#include <QDeclarativeEngine>
 
 PhotoPlugin::PhotoPlugin():
     MediaSourceInterface()
@@ -37,6 +38,9 @@ MediaSourceModelInterface *PhotoPlugin::mediaModel()
     qDebug() << "PhotoPlugin::mediaModel ";
     if (!m_model)
         loadSource();
+
+    if (QDeclarativeEngine::objectOwnership(m_model) == QDeclarativeEngine::JavaScriptOwnership)
+        QDeclarativeEngine::setObjectOwnership(m_model, QDeclarativeEngine::CppOwnership);
 
     return m_model;
 }

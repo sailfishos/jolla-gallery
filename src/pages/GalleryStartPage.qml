@@ -45,7 +45,7 @@ Page {
                 font.pixelSize: theme.fontSizeLarge
             }
 
-            onClicked: { window.pageStack.push(Qt.resolvedUrl("GalleryGridPage.qml"), {title: mediaTitle, model: mediaSourceModel.sourceModel(index)} ) }
+            onClicked: { window.pageStack.push(Qt.resolvedUrl("GalleryGridPage.qml"), {title: mediaTitle, model: mediaModel} ) }
         }
     }
 

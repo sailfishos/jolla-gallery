@@ -132,33 +132,11 @@ QVariant DeclarativeMediaModel::data ( const QModelIndex & index, int role) cons
     case MediaTitleRole:
         return mediaSource->title();
     case MediaModelRole:
-        return QVariant();//mediaSource->mediaModel();
+        return QVariant::fromValue<QObject *>(mediaSource->mediaModel());
     default:
         qWarning() << "Unknown MediaModel role: " << role;
         break;
     }
 
     return QVariant();
-}
-
-QObject *DeclarativeMediaModel::sourceModel(int index) const
-{
-    Q_D(const DeclarativeMediaModel);
-    if (d->m_plugins.count() - 1 < index){
-        qWarning() << "MediaModel::currentSource: Index out of range";
-        return 0;
-    }
-
-    MediaSourceInterface * mediaSource = d->m_plugins.at(index);
-    if (!mediaSource && !mediaSource->ready()){
-        qWarning() << "MediaModel null";
-        return 0;
-    }
-
-    // Make sure that model doesn't get deleted by QML side. We don't want that
-    MediaSourceModelInterface * model = mediaSource->mediaModel();
-    if (QDeclarativeEngine::objectOwnership(model) == QDeclarativeEngine::JavaScriptOwnership)
-        QDeclarativeEngine::setObjectOwnership(model, QDeclarativeEngine::CppOwnership);
-
-    return mediaSource->mediaModel();
 }

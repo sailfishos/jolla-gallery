@@ -14,12 +14,11 @@ Image{
     sourceSize.height: 160
     asynchronous: true
     source: "image://nemoThumbnail/" + url
-    scale: mouse.pressed && mouse.containsMouse ? 1.1 : 1
-    opacity: GridView.view.itemSelected && scale === 1 ? 0.3 : 1
+    scale: !GridView.view.moving && mouse.pressed && mouse.containsMouse ? 1.1 : 1
+    opacity: GridView.view.showTitle && secondRow ? 0 : GridView.view.itemSelected && scale === 1 ? 0.1 : 1
     onScaleChanged: GridView.view.itemSelected = scale > 1
-    onSourceChanged: if (GridView.view.showTitle && secondRow) opacity = 0
 
-
+    // Animation for displaying a title
     NumberAnimation on opacity {
         id: opacityAnimation
         duration: 2500
@@ -28,12 +27,32 @@ Image{
         running: thumbnail.GridView.view.showTitle
     }
 
-    Behavior on opacity { id: highlightOpacity; animation:  NumberAnimation { duration: 250 } enabled: !thumbnail.GridView.showTitle}
-    Behavior on scale { NumberAnimation { duration: 150 }}
+    Behavior on opacity { id: highlightOpacity; animation:  NumberAnimation { duration: 200 } enabled: !thumbnail.GridView.showTitle}
+    Behavior on scale { NumberAnimation { duration: 200 }}
+
 
     MouseArea {
         id: mouse
         anchors.fill: parent
-        onClicked: parent.clicked()        
+        onClicked: delayedClick.start()
     }
+
+    Timer {
+        id: delayedClick
+        interval: 200
+        onTriggered: parent.clicked()
+    }
+
+    /*
+    states: State {
+        name: "peakState"
+        when: mouse.released
+        PropertyChanges {
+            target: thumbnail
+            opacity: 0.3
+        }
+    }
+
+    transitions: Transition { PropertyAnimation { properties: "opacity"; duration: 250 }}
+    */
 }

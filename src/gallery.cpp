@@ -27,6 +27,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QmlApplicationViewer viewer;
 
     // TODO: Check what are the best viewport attributes
+
     QGLWidget *gl = new QGLWidget;
     gl->setAttribute(Qt::WA_OpaquePaintEvent);
     gl->setAttribute(Qt::WA_NoSystemBackground);

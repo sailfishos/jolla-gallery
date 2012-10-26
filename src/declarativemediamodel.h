@@ -29,7 +29,6 @@ public:
 
     QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
 
-    Q_INVOKABLE QObject *sourceModel(int index) const;
 
 private:
     DeclarativeMediaModelPrivate * d_ptr;

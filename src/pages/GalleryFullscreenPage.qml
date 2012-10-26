@@ -60,7 +60,7 @@ Page {
 
             MenuItem {
                 text: "Set as wallpaper"
-                onClicked: wallpaper.source = imageList.currentItemUrl()
+                onClicked:{console.log("Changed wallpaper"); wallpaper.source = imageList.currentItemUrl()}
             }
 
             MenuItem {

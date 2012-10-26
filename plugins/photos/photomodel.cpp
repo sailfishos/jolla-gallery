@@ -73,6 +73,5 @@ QScriptValue PhotoModel::get(const QScriptValue &index) const
     QVariant url = data(createIndex(i,0), UrlRole);
     object.setProperty(QLatin1String("url"), scriptEngine->toScriptValue(url.toString()));
     object.setProperty(QLatin1String("mimeType"), scriptEngine->toScriptValue(QString("image")));
-    qDebug() << "dada";
     return object;
 }
