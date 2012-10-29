@@ -17,6 +17,6 @@ ApplicationWindow {
         }
     }
 
-    initialPage: GalleryGridPage {}
+    initialPage: GalleryStartPage {}
 }
 

@@ -43,7 +43,7 @@ Page {
         height: parent.height / 2 // This is a workaround for keeping PullDownMenu up
         model: actionsModel
 
-        header:PullDownMenu {
+        PullDownMenu {
 
             MenuItem {
                 text: "Delete"
@@ -60,7 +60,7 @@ Page {
 
             MenuItem {
                 text: "Set as wallpaper"
-                onClicked: wallpaper.source = imageList.currentItemUrl()
+                onClicked:{console.log("Changed wallpaper"); wallpaper.source = imageList.currentItemUrl()}
             }
 
             MenuItem {

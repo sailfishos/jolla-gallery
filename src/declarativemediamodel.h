@@ -1,0 +1,31 @@
+#ifndef DECLARATIVEMEDIAMODEL_H
+#define DECLARATIVEMEDIAMODEL_H
+
+#include <QAbstractListModel>
+
+class DeclarativeMediaModelPrivate;
+class DeclarativeMediaModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    enum MediaModelRoles {
+        MediaCountRole = Qt::UserRole + 1,
+        MediaQmlSourceIconRole,
+        MediaTitleRole,
+        MediaModelRole
+    };
+
+    explicit DeclarativeMediaModel(QObject *parent = 0);
+
+    virtual ~DeclarativeMediaModel();
+
+    int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
+
+    QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
+
+private:
+    DeclarativeMediaModelPrivate * d_ptr;
+    Q_DECLARE_PRIVATE(DeclarativeMediaModel)
+};
+
+#endif // DECLARATIVEMEDIAMODEL_H
