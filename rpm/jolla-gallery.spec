@@ -13,6 +13,7 @@ BuildRequires:  pkgconfig(QtOpenGL)
 BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(mlite)
 Requires:  jollacomponents
+Requires: libdeclarative-gallery
 
 %description
 The Jolla Gallery application.
