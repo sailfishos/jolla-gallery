@@ -18,10 +18,13 @@ SOURCES += photoplugin.cpp \
     photomodel.cpp
 
 
-# Weird stuff, but this is needed for deployment. Get rid of this!
-include(../../src/qmlapplicationviewer/qmlapplicationviewer.pri)
-
-
+#qml.files = PhotoIcon.qml
+#qml.path = $$DEPLOYMENT_PATH/plugins
 target.path = $$DEPLOYMENT_PATH/plugins
+INSTALLS += target #qml
 
-INSTALLS += target
+OTHER_FILES += \
+    PhotoIcon.qml
+
+RESOURCES += \
+    photoplugin.qrc

@@ -22,17 +22,15 @@ Page {
                 font.pixelSize: theme.fontSizeLarge
             }
 
-            Image {
+            // Load icon from a plugin
+            Loader {
                 id: thumbnail
                 x: width
                 width: parent.width / 4
                 height: parent.width / 4
-                source: mediaIconUrl
-                fillMode: Image.PreserveAspectCrop
-                asynchronous: true
-                clip: true
+                source: mediaQmlSourceIconUrl
+                opacity: delegateItem.down ? 0.5 : 1
             }
-
 
             Label {
                 id: titleLabel

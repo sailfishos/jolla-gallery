@@ -10,7 +10,7 @@ class DeclarativeMediaModel : public QAbstractItemModel
 public:
     enum MediaModelRoles {
         MediaCountRole = Qt::UserRole + 1,
-        MediaIconUrlRole,
+        MediaQmlSourceIconRole,
         MediaTitleRole,
         MediaModelRole
     };

@@ -17,7 +17,7 @@ public:
 
     virtual int count() const = 0;
 
-    virtual QUrl sourceIcon() const = 0;
+    virtual QUrl qmlSourceIcon() const = 0;
 
     virtual QString title() const = 0;
 

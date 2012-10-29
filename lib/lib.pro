@@ -14,9 +14,5 @@ HEADERS += mediasourceinterface.h \
 SOURCES += mediasourceinterface.cpp \
     mediasourcemodelinterface.cpp
 
-# Weird stuff, but this is needed for deployment. Get rid of this!
-include(../src/qmlapplicationviewer/qmlapplicationviewer.pri)
-
-
 target.path = /usr/lib
 INSTALLS += target

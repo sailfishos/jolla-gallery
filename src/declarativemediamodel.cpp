@@ -64,10 +64,10 @@ DeclarativeMediaModel::DeclarativeMediaModel(QObject *parent) :
     d_ptr(new DeclarativeMediaModelPrivate(this))
 {
     QHash<int, QByteArray> roles;
-    roles[MediaCountRole]   = "mediaCount";
-    roles[MediaIconUrlRole] = "mediaIconUrl";
-    roles[MediaTitleRole]   = "mediaTitle";
-    roles[MediaModelRole]   = "mediaModel";
+    roles[MediaCountRole] = "mediaCount";
+    roles[MediaQmlSourceIconRole] = "mediaQmlSourceIconUrl";
+    roles[MediaTitleRole] = "mediaTitle";
+    roles[MediaModelRole] = "mediaModel";
     setRoleNames(roles);
 
     Q_D(DeclarativeMediaModel);
@@ -127,8 +127,8 @@ QVariant DeclarativeMediaModel::data ( const QModelIndex & index, int role) cons
     switch(role){
     case MediaCountRole:
         return mediaSource->count();
-    case MediaIconUrlRole:
-        return mediaSource->sourceIcon();
+    case MediaQmlSourceIconRole:
+        return mediaSource->qmlSourceIcon();
     case MediaTitleRole:
         return mediaSource->title();
     case MediaModelRole:

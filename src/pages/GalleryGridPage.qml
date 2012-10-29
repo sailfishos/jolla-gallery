@@ -15,7 +15,7 @@ Page {
     // Title for the grid
     Label {
         id: titleText
-        y: grid.contentItem.y + grid.pullDownMenu.height + grid.cellHeight + (grid.cellHeight - titleText.paintedHeight) / 2
+        y: grid.contentItem.y + grid.cellHeight + (grid.cellHeight - titleText.paintedHeight) / 2
         anchors { right: grid.right; rightMargin: 10 }
         color: theme.highlightColor
         font.pixelSize: theme.fontSizeExtraLarge
@@ -25,11 +25,35 @@ Page {
 
     GridView {
         id: grid
-        property variant pullDownMenu
-        property bool itemSelected
         property bool showTitle
 
-        onShowTitleChanged: console.log("Item selection changed " + showTitle)
+        // Add little transparency when flicking
+        function setContentItemOpacity()
+        {
+            var velocity = Math.abs(verticalVelocity)
+            if (!flicking){
+                contentItem.opacity = 1
+                return
+            }
+
+            if (1000 < velocity && velocity <= 1500){
+                contentItem.opacity = 0.8
+                return
+            }
+
+            if (1500 < velocity && velocity <= 2200){
+                contentItem.opacity = 0.5
+                return
+            }
+
+            if (2200 < velocity){
+                contentItem.opacity = 0.3
+                return
+            }
+        }
+
+        onVerticalVelocityChanged: setContentItemOpacity()
+        Behavior on contentItem.opacity { NumberAnimation { duration: 200 }}
         cellWidth: parent.width/3.0
         cellHeight: parent.width/3.0
         boundsBehavior: Flickable.StopAtBounds
@@ -37,21 +61,13 @@ Page {
         width: parent.width
         cacheBuffer: cellHeight * 5
 
-
-        header: PullDownMenu {
-            id: __pullDownMenu
+        PullDownMenu {
             // TODO: Localization for the string
             MenuItem {
                 text: "Back"
                 onClicked:  window.pageStack.pop()
             }
-            Component.onCompleted: grid.pullDownMenu = __pullDownMenu
          }
-
-        footer: Item {
-            width: parent.width
-            height: Math.max(0, parent.parent.height - parent.parent.contentHeight)
-        }
 
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.

@@ -16,7 +16,7 @@ public:
 
     int count() const;
 
-    QUrl sourceIcon() const;
+    QUrl qmlSourceIcon() const;
 
     QString title() const;
 

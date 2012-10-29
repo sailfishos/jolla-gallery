@@ -43,7 +43,7 @@ Page {
         height: parent.height / 2 // This is a workaround for keeping PullDownMenu up
         model: actionsModel
 
-        header:PullDownMenu {
+        PullDownMenu {
 
             MenuItem {
                 text: "Delete"

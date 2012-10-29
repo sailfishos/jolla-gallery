@@ -4,7 +4,8 @@
 #include <QtPlugin>
 #include <QtDebug>
 #include <QtScript/QScriptEngine>
-#include <QDeclarativeEngine>
+#include <QtDeclarative/QDeclarativeEngine>
+#include <QDir>
 
 PhotoPlugin::PhotoPlugin():
     MediaSourceInterface()
@@ -21,11 +22,9 @@ int PhotoPlugin::count() const
     return m_model->rowCount();
 }
 
-QUrl PhotoPlugin::sourceIcon() const
+QUrl PhotoPlugin::qmlSourceIcon() const
 {
-    QScriptEngine engine;
-    QScriptValue obj = m_model->get(engine.toScriptValue(0));
-    return QUrl(obj.property("url").toString());
+    return QUrl("qrc:///qml/PhotoIcon.qml");
 }
 
 QString PhotoPlugin::title() const
