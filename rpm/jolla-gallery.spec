@@ -12,9 +12,8 @@ BuildRequires:  pkgconfig(QtGui)
 BuildRequires:  pkgconfig(QtOpenGL)
 BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(mlite)
-BuildRequires:  qt-mobility-devel
+BuildRequires:  pkgconfig(QtGallery)
 
-Requires:  libqtgallery1
 Requires:  jollacomponents
 
 %description
