@@ -19,7 +19,10 @@ PhotoPlugin::~PhotoPlugin()
 
 int PhotoPlugin::count() const
 {
-    return m_model->rowCount();
+    if (m_model)
+        return m_model->rowCount();
+    else
+        return 0;
 }
 
 QUrl PhotoPlugin::qmlSourceIcon() const
