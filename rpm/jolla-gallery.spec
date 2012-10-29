@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.0.19
+Version:    0.0.13
 Release:    1
 Group:      Applications/Multimedia
 License:    TBD
@@ -41,7 +41,8 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/*.desktop
 %{_datadir}/jolla-gallery/*
 %{_bindir}/jolla-gallery
-%{_libdir}
+%{_libdir}/gallery/*
+%{_libdir}/libgallerymediasource.*
 
 %post -n jolla-gallery -p /sbin/ldconfig
 %postun -n jolla-gallery -p /sbin/ldconfig

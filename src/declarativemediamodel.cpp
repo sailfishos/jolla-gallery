@@ -7,7 +7,7 @@
 #include <QtDebug>
 #include <QDeclarativeEngine>
 
-#define PLUGINPATH "/usr/lib/gallery"
+#define PLUGINPATH "/usr/lib/gallery/plugins"
 
 class DeclarativeMediaModelPrivate
 {

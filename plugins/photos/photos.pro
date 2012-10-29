@@ -16,7 +16,7 @@ SOURCES += photoplugin.cpp \
     photomodel.cpp
 
 
-target.path = /usr/lib/gallery
+target.path = /usr/lib/gallery/plugins
 INSTALLS += target
 
 OTHER_FILES += \
