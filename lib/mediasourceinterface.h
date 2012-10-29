@@ -15,6 +15,8 @@ class Q_DECL_EXPORT MediaSourceInterface: public QObject
 public:
     MediaSourceInterface();
 
+    virtual ~MediaSourceInterface();
+
     virtual int count() const = 0;
 
     virtual QUrl qmlSourceIcon() const = 0;

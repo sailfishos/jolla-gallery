@@ -16,6 +16,12 @@ MediaSourceInterface::MediaSourceInterface():
 {
 }
 
+MediaSourceInterface::~MediaSourceInterface()
+{
+    delete d_ptr;
+    d_ptr = 0;
+}
+
 bool MediaSourceInterface::ready() const
 {
     Q_D(const MediaSourceInterface);

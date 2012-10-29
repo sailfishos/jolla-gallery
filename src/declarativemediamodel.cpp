@@ -60,7 +60,7 @@ public:
 
 
 DeclarativeMediaModel::DeclarativeMediaModel(QObject *parent) :
-    QAbstractItemModel(parent),
+    QAbstractListModel(parent),
     d_ptr(new DeclarativeMediaModelPrivate(this))
 {
     QHash<int, QByteArray> roles;
@@ -81,18 +81,6 @@ DeclarativeMediaModel::~DeclarativeMediaModel()
 }
 
 
-QModelIndex DeclarativeMediaModel::index ( int row, int column, const QModelIndex & parent ) const
-{
-    Q_UNUSED(parent)
-    return createIndex(row, column);
-}
-
-QModelIndex DeclarativeMediaModel::parent ( const QModelIndex & index ) const
-{
-    Q_UNUSED(index)
-    return QModelIndex();
-}
-
 int DeclarativeMediaModel::rowCount ( const QModelIndex & parent ) const
 {
     Q_UNUSED(parent)
@@ -104,12 +92,6 @@ int DeclarativeMediaModel::rowCount ( const QModelIndex & parent ) const
     }
 
     return count;
-}
-
-int DeclarativeMediaModel::columnCount ( const QModelIndex & parent ) const
-{
-    Q_UNUSED(parent)
-    return 1;
 }
 
 QVariant DeclarativeMediaModel::data ( const QModelIndex & index, int role) const
