@@ -1,7 +1,7 @@
 import QtQuick 1.1
 import com.jolla.components 1.0
 import QtMobility.gallery 1.1
-import "models"
+
 
 /**
   * GalleryGridPage displays image and video thumbnails on a grid. By

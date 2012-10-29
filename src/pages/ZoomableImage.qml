@@ -79,7 +79,7 @@ Flickable {
                 property int initialWidth
                 property int initialHeight
                 smooth: !(flickable.movingVertically || flickable.movingHorizontally)
-                sourceSize.width: flickable.width*2
+                sourceSize.width: flickable.width*1.5
                 width: flickable.width * 0.98
                 fillMode: Image.PreserveAspectFit
                 transformOrigin: Item.TopLeft
