@@ -2,7 +2,7 @@ Name:       jolla-gallery
 Summary:    Jolla Gallery application
 Version:    0.0.19
 Release:    1
-Group:      System/Applications
+Group:      Applications/Multimedia
 License:    TBD
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
@@ -42,5 +42,8 @@ desktop-file-install --delete-original       \
 %{_datadir}/jolla-gallery/*
 %{_bindir}/jolla-gallery
 %{_libdir}
+
+%post -n jolla-gallery -p /sbin/ldconfig
+%postun -n jolla-gallery -p /sbin/ldconfig
 
 
