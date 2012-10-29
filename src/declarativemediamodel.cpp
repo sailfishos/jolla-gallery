@@ -7,7 +7,7 @@
 #include <QtDebug>
 #include <QDeclarativeEngine>
 
-#define PLUGINPATH "/usr/share/jolla-gallery/plugins"
+#define PLUGINPATH "/usr/lib/gallery"
 
 class DeclarativeMediaModelPrivate
 {
