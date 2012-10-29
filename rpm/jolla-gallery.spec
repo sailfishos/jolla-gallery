@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.0.14
+Version:    0.0.15
 Release:    1
 Group:      System/Applications
 License:    TBD
@@ -12,7 +12,7 @@ BuildRequires:  pkgconfig(QtGui)
 BuildRequires:  pkgconfig(QtOpenGL)
 BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(mlite)
-Buildrequires:  pkgconfig(libdeclarative-gallery)
+Requires:  pkgconfig(libqtgallery1)
 Requires:  jollacomponents
 
 %description
