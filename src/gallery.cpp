@@ -22,18 +22,10 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
 
-    app->setGraphicsSystem("opengl");
-
     QmlApplicationViewer viewer;
-
-    // TODO: Check what are the best viewport attributes
-
-    QGLWidget *gl = new QGLWidget;
-    gl->setAttribute(Qt::WA_OpaquePaintEvent);
-    gl->setAttribute(Qt::WA_NoSystemBackground);
-    gl->setAutoFillBackground(false);
-    viewer.setViewport(gl);
-    viewer.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    viewer.viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    viewer.viewport()->setAttribute(Qt::WA_NoSystemBackground);
+    viewer.viewport()->setAutoFillBackground(false);
 
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationLockPortrait);
     QString path;
