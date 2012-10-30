@@ -2,6 +2,6 @@
 Type=Application
 Name=Jolla Gallery
 Icon=icons-Applications-photos
-Exec=/usr/bin/jolla-gallery -fullscreen
+Exec=invoker --type=d -s /usr/bin/jolla-gallery
 Comment=Jolla Gallery
 
