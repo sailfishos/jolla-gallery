@@ -13,11 +13,12 @@ Page {
     property alias model: imageList.model
     property alias currentIndex: imageList.currentIndex
 
+    clip: imageList.alignMiddle
+    backNavigation: imageList.alignMiddle
     ListModel {
         id: actionsModel
         ListElement {
             name: "Email"
-            title: "Share"
         }
 
         ListElement {
@@ -44,7 +45,7 @@ Page {
         model: actionsModel
 
         PullDownMenu {
-
+            bottomMargin: 0
             MenuItem {
                 text: "Delete"
                 onClicked: {
@@ -57,33 +58,19 @@ Page {
                     console.log("Delete clicked")
                 }
             }
-
             MenuItem {
                 text: "Set as wallpaper"
                 onClicked:{console.log("Changed wallpaper"); wallpaper.source = imageList.currentItemUrl()}
             }
-
-            MenuItem {
-                text: "Show all"
-                onClicked: {
-                    pageStack.pop();
-                    console.log("all images")
-                }
-            }
+            visibleChildren: PageHeader {  title: "Share" }
          }
 
         delegate: BackgroundItem {
             width: menuList.width
-
             Label {
-                text: name                
-                anchors { left: parent.left; verticalCenter: parent.verticalCenter }
-            }
-
-            Label {
-                text: title === undefined ? "" : title
-                color: theme.highlightColor
-                anchors { right: parent.right; verticalCenter: parent.verticalCenter }
+                x: 26
+                text: name
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
     }
