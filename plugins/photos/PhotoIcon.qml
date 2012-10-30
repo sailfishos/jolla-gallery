@@ -26,9 +26,9 @@ Item {
 
     Timer {
         property int iconIndex: 1
-        interval: 5000
+        interval: 10000
         repeat: true
-        running: true
+        running: window.applicationActive
         onTriggered: {
             var modelIndex = Math.floor((Math.random()*mediaModel.count));
             if ( iconIndex % 2 == 0){

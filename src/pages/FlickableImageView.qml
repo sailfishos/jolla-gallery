@@ -198,7 +198,7 @@ Item{
         property real firstPressX
         property real pressX
         property real pressY
-        property real tapThresshold: 15
+        property real tapThresshold: 10
         z: 10
         anchors.fill: parent
         enabled: !itemScaled
