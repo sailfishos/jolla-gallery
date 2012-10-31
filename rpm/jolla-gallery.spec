@@ -16,6 +16,7 @@ BuildRequires:  pkgconfig(QtGallery)
 BuildRequires:  pkgconfig(qdeclarative-boostable)
 
 Requires:  jollacomponents
+Requires:  libdeclarative-gallery
 
 %description
 The Jolla Gallery application.
