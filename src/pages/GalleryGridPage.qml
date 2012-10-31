@@ -61,14 +61,6 @@ Page {
         width: parent.width
         cacheBuffer: cellHeight * 5
 
-        PullDownMenu {
-            // TODO: Localization for the string
-            MenuItem {
-                text: "Back"
-                onClicked:  window.pageStack.pop()
-            }
-         }
-
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.
         delegate: GridImageThumbnail { onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} ) }
