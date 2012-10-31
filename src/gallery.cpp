@@ -1,43 +1,37 @@
-#include <QtGui/QApplication>
-#include "qmlapplicationviewer.h"
+#include <QApplication>
+#include <QDeclarativeView>
+#include <QDeclarativeEngine>
+#include <QDeclarativeContext>
+#include <QtDeclarative>
+#include <QDir>
 #include "declarativewallpaper.h"
 #include "declarativemediamodel.h"
 
-#include <QDir>
-#include <QDeclarativeError>
-#include <QDeclarativeEngine>
-#include <QDeclarativeComponent>
-#include <QDeclarativeContext>
-#include <QDebug>
-#include <QDeclarativeItem>
-
-#include <QtOpenGL/QGLWidget>
-#include <QtOpenGL/qgl.h>
-
+#ifdef HAS_BOOSTER
+#include <MDeclarativeCache>
+#endif
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
-
-    QScopedPointer<QApplication> app(createApplication(argc, argv));
+#ifdef HAS_BOOSTER
+    QApplication *app = MDeclarativeCache::qApplication(argc, argv);
+    QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
+#else
+    QApplication a(argc, argv);
+    QApplication *app = &a;
+    QDeclarativeView *view = new QDeclarativeView;
+#endif
 
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
 
-    app->setGraphicsSystem("opengl");
+    view->setAttribute(Qt::WA_OpaquePaintEvent);
+    view->setAttribute(Qt::WA_NoSystemBackground);
+    view->setAutoFillBackground(false);
+    view->viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+    view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
+    view->viewport()->setAutoFillBackground(false);
 
-    QmlApplicationViewer viewer;
-
-    // TODO: Check what are the best viewport attributes
-
-    QGLWidget *gl = new QGLWidget;
-    gl->setAttribute(Qt::WA_OpaquePaintEvent);
-    gl->setAttribute(Qt::WA_NoSystemBackground);
-    gl->setAutoFillBackground(false);
-    viewer.setViewport(gl);
-    viewer.setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-
-    viewer.setOrientation(QmlApplicationViewer::ScreenOrientationLockPortrait);
     QString path;
-
     if (app->arguments().contains("-desktop")) {
         path = app->applicationDirPath() + QDir::separator();
     } else {
@@ -45,17 +39,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     }
 
     DeclarativeWallpaper wallpaper;
-    viewer.rootContext()->setContextProperty("wallpaper", &wallpaper);
+    view->rootContext()->setContextProperty("wallpaper", &wallpaper);
 
-    viewer.setMainQmlFile(path +  QLatin1String("gallery.qml"));
+    view->setSource(path + QLatin1String("gallery.qml"));
 
     if (app->arguments().contains("-desktop"))
     {
-        viewer.setFixedSize(480, 854);
-        viewer.rootObject()->setProperty("_desktop", true);
-        viewer.show();
+        view->setFixedSize(480, 854);
+        view->rootObject()->setProperty("_desktop", true);
+        view->show();
     } else {
-        viewer.showFullScreen();
+        view->showFullScreen();
     }
 
     return app->exec();
