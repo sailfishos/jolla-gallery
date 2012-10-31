@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.0.13
+Version:    0.0.15
 Release:    1
 Group:      Applications/Multimedia
 License:    TBD
@@ -16,6 +16,7 @@ BuildRequires:  pkgconfig(QtGallery)
 BuildRequires:  pkgconfig(qdeclarative-boostable)
 
 Requires:  jollacomponents
+Requires:  libdeclarative-gallery
 
 %description
 The Jolla Gallery application.
