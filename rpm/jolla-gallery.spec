@@ -43,8 +43,6 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/*.desktop
 %{_datadir}/jolla-gallery/*
 %{_bindir}/jolla-gallery
-%{_libdir}/gallery/*
-%{_libdir}/libgallerymediasource.*
 
 %post -n jolla-gallery -p /sbin/ldconfig
 %postun -n jolla-gallery -p /sbin/ldconfig

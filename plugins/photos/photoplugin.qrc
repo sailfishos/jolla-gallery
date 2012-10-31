@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/qml">
-        <file>PhotoIcon.qml</file>
-    </qresource>
-</RCC>

@@ -1,59 +1,58 @@
 #include "declarativemediamodel.h"
-#include "mediasourceinterface.h"
-#include "mediasourcemodelinterface.h"
-#include <QDir>
+#include "declarativemediasource.h"
+#include <QDirIterator>
 #include <QList>
-#include <QPluginLoader>
 #include <QtDebug>
+#include <QDeclarativeContext>
+#include <QDeclarativeComponent>
 #include <QDeclarativeEngine>
 
-#define PLUGINPATH "/usr/lib/gallery/plugins"
+#define SOURCES_PATH "/usr/share/jolla-gallery/mediasources"
 
 class DeclarativeMediaModelPrivate
 {
 public:
 
     DeclarativeMediaModelPrivate(DeclarativeMediaModel * parent):
-        q_ptr(parent)
+        q_ptr(parent),
+        m_componentComplete(false)
     {
     }
 
     ~DeclarativeMediaModelPrivate()
     {
-        qDeleteAll(m_plugins);
+        qDeleteAll(m_pluginSources);
     }
 
-    void loadPlugins()
+
+    static void source_append(QDeclarativeListProperty<DeclarativeMediaSource> *property, DeclarativeMediaSource *source)
     {
-        Q_Q(DeclarativeMediaModel);
-        QDir dir(PLUGINPATH);
-        QStringList entries = dir.entryList(QStringList() << "*.so",
-                          QDir::Files | QDir::NoDotAndDotDot, QDir::Name);
+        DeclarativeMediaModelPrivate *d = static_cast<DeclarativeMediaModelPrivate *>(property->data);
+        DeclarativeMediaModel *q = static_cast<DeclarativeMediaModel *>(property->object);
+        d->m_staticSources.append(source);
 
-        if (entries.isEmpty()){
-            qWarning() << "Failed to load MediaModel source plugins.";
-            return;
-        }
-
-        QPluginLoader loader;
-        loader.setLoadHints(QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint);
-        foreach (const QString& entry, entries) {
-            loader.setFileName(dir.absoluteFilePath(entry));
-            MediaSourceInterface * source = qobject_cast<MediaSourceInterface*>(loader.instance());
-
-            if (source == 0){
-                qWarning() << "Failed to load MediaSourcePlugin: " << loader.errorString();
-                return;
-            }
-            // TODO: Replace this a bit lighter approach, but for now this is the easiest.
-            QObject::connect(source,SIGNAL(sourceReady()),q,SIGNAL(modelReset()));
-            source->loadSource();
-            m_plugins << source;
-        }
+        if (source->isReady())
+            q->updateActiveSources();
     }
 
-    QList<MediaSourceInterface*> m_plugins;
+    static int source_count(QDeclarativeListProperty<DeclarativeMediaSource> *property)
+    {
+        DeclarativeMediaModelPrivate *d = static_cast<DeclarativeMediaModelPrivate *>(property->data);
+        return d->m_activeSources.count();
+    }
+
+    static DeclarativeMediaSource *source_at(QDeclarativeListProperty<DeclarativeMediaSource> *property, int index)
+    {
+        DeclarativeMediaModelPrivate *d = static_cast<DeclarativeMediaModelPrivate *>(property->data);
+        return d->m_activeSources.at(index);
+    }
+
     DeclarativeMediaModel *q_ptr;
+    QList<DeclarativeMediaSource *> m_staticSources;
+    QList<DeclarativeMediaSource *> m_pluginSources;
+    QList<DeclarativeMediaSource*> m_activeSources;
+    bool m_componentComplete;
+
     Q_DECLARE_PUBLIC(DeclarativeMediaModel)
 };
 
@@ -64,14 +63,8 @@ DeclarativeMediaModel::DeclarativeMediaModel(QObject *parent) :
     d_ptr(new DeclarativeMediaModelPrivate(this))
 {
     QHash<int, QByteArray> roles;
-    roles[MediaCountRole] = "mediaCount";
-    roles[MediaQmlSourceIconRole] = "mediaQmlSourceIconUrl";
-    roles[MediaTitleRole] = "mediaTitle";
-    roles[MediaModelRole] = "mediaModel";
+    roles[MediaRole] = "media";
     setRoleNames(roles);
-
-    Q_D(DeclarativeMediaModel);
-    d->loadPlugins();
 }
 
 DeclarativeMediaModel::~DeclarativeMediaModel()
@@ -80,45 +73,128 @@ DeclarativeMediaModel::~DeclarativeMediaModel()
     d_ptr = 0;
 }
 
+void DeclarativeMediaModel::classBegin()
+{
+}
+
+void DeclarativeMediaModel::componentComplete()
+{
+    Q_D(DeclarativeMediaModel);
+    if (d->m_componentComplete)
+        return;
+    d->m_componentComplete = true;
+
+    QDeclarativeContext *context = qmlContext(this);
+
+    QDirIterator dir(QLatin1String(SOURCES_PATH));
+
+    while (dir.hasNext()) {
+        const QString fileName = dir.next();
+        if (!fileName.endsWith(QLatin1String(".qml")))
+            continue;
+
+        QDeclarativeComponent component(context->engine(), fileName);
+        if (component.isReady()) {
+            QObject *object = component.create();   // Create in the root context.
+            if (DeclarativeMediaSource *mediaSource = qobject_cast<DeclarativeMediaSource *>(object)) {
+                d->m_pluginSources.append(mediaSource);
+                if (!mediaSource->isReady())
+                    QObject::connect(mediaSource, SIGNAL(readyChanged()), this, SLOT(updateActiveSources()));
+            } else {
+                delete object;
+            }
+        }
+    }
+
+    updateActiveSources();
+}
+
+
+QDeclarativeListProperty<DeclarativeMediaSource> DeclarativeMediaModel::sources()
+{
+    Q_D(DeclarativeMediaModel);
+    return QDeclarativeListProperty<DeclarativeMediaSource>(
+                this,
+                d,
+                DeclarativeMediaModelPrivate::source_append,
+                DeclarativeMediaModelPrivate::source_count,
+                DeclarativeMediaModelPrivate::source_at);
+}
+
+QModelIndex DeclarativeMediaModel::index(int row, int column, const QModelIndex &parent) const
+{
+    Q_D(const DeclarativeMediaModel);
+    return !parent.isValid() && row >= 0 && row < d->m_activeSources.count() && column == 0
+            ? createIndex(row, 0)
+            : QModelIndex();
+}
 
 int DeclarativeMediaModel::rowCount ( const QModelIndex & parent ) const
 {
-    Q_UNUSED(parent)
     Q_D(const DeclarativeMediaModel);
-    int count = 0;
-    Q_FOREACH(MediaSourceInterface * plugin, d->m_plugins){
-        if (plugin->ready())
-            ++count;
-    }
-
-    return count;
+    return !parent.isValid()
+            ? d->m_activeSources.count()
+            : 0;
 }
 
 QVariant DeclarativeMediaModel::data ( const QModelIndex & index, int role) const
 {
     Q_D(const DeclarativeMediaModel);
-    if (d->m_plugins.count() - 1 > index.row()){
+    if (!index.isValid()) {
         qWarning() << "MediaModel::data: Index out of range";
         return QVariant();
     }
 
-    MediaSourceInterface * mediaSource = d->m_plugins.at(index.row());
-    if (!mediaSource->ready())
-        return QVariant();
-
-    switch(role){
-    case MediaCountRole:
-        return mediaSource->count();
-    case MediaQmlSourceIconRole:
-        return mediaSource->qmlSourceIcon();
-    case MediaTitleRole:
-        return mediaSource->title();
-    case MediaModelRole:
-        return QVariant::fromValue<QObject *>(mediaSource->mediaModel());
-    default:
-        qWarning() << "Unknown MediaModel role: " << role;
-        break;
-    }
+    DeclarativeMediaSource *mediaSource = d->m_activeSources.at(index.row());
+    if (role == MediaRole)
+        return QVariant::fromValue<QObject *>(mediaSource);
 
     return QVariant();
+}
+
+
+void DeclarativeMediaModel::updateActiveSources()
+{
+    Q_D(DeclarativeMediaModel);
+    if (!d->m_componentComplete)
+        return;
+
+    bool changed = false;
+    int activeIndex = 0;
+    DeclarativeMediaSource *nextActiveSource = !d->m_activeSources.isEmpty()
+            ? d->m_activeSources.first()
+            : 0;
+    for (int i = 0; i < d->m_staticSources.count(); ++i) {
+        DeclarativeMediaSource *source = d->m_staticSources.at(i);
+        if (nextActiveSource == source) {
+            ++activeIndex;
+            nextActiveSource = activeIndex < d->m_activeSources.count()
+                    ? d->m_activeSources.at(activeIndex)
+                    : 0;
+        } else if (d->m_staticSources.at(i)->isReady()) {
+            beginInsertRows(QModelIndex(), activeIndex, activeIndex);
+            d->m_activeSources.insert(activeIndex, source);
+            ++activeIndex;
+            endInsertRows();
+            changed = true;
+        }
+    }
+
+    for (int i = 0; i < d->m_pluginSources.count(); ++i) {
+        DeclarativeMediaSource *source = d->m_pluginSources.at(i);
+        if (nextActiveSource == source) {
+            ++activeIndex;
+            nextActiveSource = activeIndex < d->m_activeSources.count()
+                    ? d->m_activeSources.at(activeIndex)
+                    : 0;
+        } else if (d->m_pluginSources.at(i)->isReady()) {
+            beginInsertRows(QModelIndex(), activeIndex, activeIndex);
+            d->m_activeSources.insert(activeIndex, source);
+            ++activeIndex;
+            endInsertRows();
+            changed = true;
+        }
+    }
+    if (changed)
+        emit sourcesChanged();
 }

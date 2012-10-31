@@ -13,8 +13,6 @@ contains(CONFIG, desktop) {
 
 CONFIG += link_pkgconfig
 PKGCONFIG += mlite
-INCLUDEPATH += ../lib
-LIBS += -lgallerymediasource -L../lib
 
 OTHER_FILES += \
     *.qml \
@@ -23,11 +21,13 @@ OTHER_FILES += \
 
 HEADERS += \
     declarativewallpaper.h \
-    declarativemediamodel.h
+    declarativemediamodel.h \
+    declarativemediasource.h
 
 SOURCES += gallery.cpp \
     declarativewallpaper.cpp \
-    declarativemediamodel.cpp
+    declarativemediamodel.cpp \
+    declarativemediasource.cpp
 
 INSTALLS += target qml
 
@@ -38,4 +38,3 @@ packagesExist(qdeclarative-boostable) {
 } else {
     warning("qdeclarative-boostable not available; startup times will be slower")
 }
-
