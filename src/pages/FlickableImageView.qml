@@ -202,7 +202,7 @@ Item{
         z: 10
         anchors.fill: parent
         enabled: !itemScaled
-
+        preventStealing: true
 
         Timer {
             id: clickTimer
