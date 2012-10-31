@@ -17,7 +17,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QApplication> app(MDeclarativeCache::qApplication(argc, argv));
     QScopedPointer<QDeclarativeView> view(MDeclarativeCache::qDeclarativeView());
 #else
-    QScopedPointer<QApplication> app(QApplication(argc, argv));
+    QScopedPointer<QApplication> app(new QApplication(argc, argv));
     QScopedPointer<QDeclarativeView> view(new QDeclarativeView);
 #endif
 
