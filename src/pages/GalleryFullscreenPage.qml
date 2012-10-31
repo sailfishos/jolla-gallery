@@ -15,6 +15,7 @@ Page {
 
     clip: imageList.alignMiddle
     backNavigation: imageList.alignMiddle
+
     ListModel {
         id: actionsModel
         ListElement {
