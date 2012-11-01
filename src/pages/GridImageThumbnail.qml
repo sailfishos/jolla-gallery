@@ -14,7 +14,7 @@ Image {
     sourceSize.height: 160
     asynchronous: true
     source: model.thumbnailUrl === undefined ? "image://nemoThumbnail/" + model.url : model.thumbnailUrl
-    scale: !GridView.view.movingVertically && mouse.pressed && mouse.containsMouse ? 1.1 : 1
+    scale: !GridView.view.movingVertically && !GridView.view.flicking && mouse.pressed && mouse.containsMouse ? 1.1 : 1
     opacity: GridView.view.showTitle && secondRow ? 0 : GridView.view.itemSelected && !GridView.view.flicking && scale === 1.0 ? 0.2 : 1
     z: scale > 1 ? 10 : 0
     smooth: scale != 1.0
