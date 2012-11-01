@@ -29,22 +29,11 @@ Page {
         property bool itemSelected
         flickDeceleration: 1400
 
-        function setContentItemOpacity()
-        {
-            if (!flicking ){
-                contentItem.opacity = 1
-            }else{
-                contentItem.opacity = Math.max(0.6, 1.0 - (Math.abs(verticalVelocity) / 6000.0))
-            }
-        }
-
         function showFullscreenImage(index)
         {
             clickTimer.index = index
             clickTimer.start()
         }
-
-        onVerticalVelocityChanged: setContentItemOpacity()
 
         cellWidth: parent.width/3.0
         cellHeight: parent.width/3.0
