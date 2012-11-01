@@ -17,7 +17,7 @@ Item {
         // Just show the first item from the model in the beginning.
         // after everything's loaded, we use timer to make a slideshow
         // effect.
-        source: mediaModel.get(0).url
+        source: media.count > 0 ? "image://nemoThumbnail/" + media.model.get(0).url : ""
         asynchronous: true
         sourceSize.width: thumbnail.width
         sourceSize.height: thumbnail.height
@@ -28,15 +28,15 @@ Item {
         property int iconIndex: 1
         interval: 10000
         repeat: true
-        running: window.applicationActive
+        running: window.applicationActive && media.count > 1
         onTriggered: {
-            var modelIndex = Math.floor((Math.random()*mediaModel.count));
+            var modelIndex = Math.floor((Math.random()*media.model.count));
             if ( iconIndex % 2 == 0){
-                icon2.source = "image://nemoThumbnail/" + mediaModel.get(modelIndex).url
+                icon2.source = "image://nemoThumbnail/" + media.model.get(modelIndex).url
                 icon1.opacity = 0
                 icon2.opacity = 1
             } else {
-                icon1.source = "image://nemoThumbnail/" + mediaModel.get(modelIndex).url
+                icon1.source = "image://nemoThumbnail/" + media.model.get(modelIndex).url
                 icon2.opacity = 0
                 icon1.opacity = 1
             }
