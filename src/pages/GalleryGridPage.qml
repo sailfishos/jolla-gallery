@@ -26,8 +26,9 @@ Page {
     GridView {
         id: grid
         property bool showTitle
+        property bool itemSelected
         flickDeceleration: 1400
-        // Add little transparency when flicking
+
         function setContentItemOpacity()
         {
             if (!flicking ){
@@ -35,6 +36,12 @@ Page {
             }else{
                 contentItem.opacity = Math.max(0.6, 1.0 - (Math.abs(verticalVelocity) / 6000.0))
             }
+        }
+
+        function showFullscreenImage(index)
+        {
+            clickTimer.index = index
+            clickTimer.start()
         }
 
         onVerticalVelocityChanged: setContentItemOpacity()
@@ -48,9 +55,16 @@ Page {
 
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.
-        delegate: GridImageThumbnail { onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} ) }
+        delegate: GridImageThumbnail { onClicked: grid.showFullscreenImage(index)}
 
         ScrollBar {}
         ScrollDecorator {}
+
+        Timer {
+            id: clickTimer
+            property int index
+            interval: 200
+            onTriggered: { console.log("Switch: " ); window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} ) }
+        }
     }
 }

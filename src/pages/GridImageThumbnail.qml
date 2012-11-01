@@ -13,11 +13,14 @@ Image {
     sourceSize.width: 160
     sourceSize.height: 160
     asynchronous: true
-    source: model.thumbnailUrl == undefined ? "image://nemoThumbnail/" + model.url : model.thumbnailUrl
+    source: model.thumbnailUrl === undefined ? "image://nemoThumbnail/" + model.url : model.thumbnailUrl
     scale: !GridView.view.movingVertically && mouse.pressed && mouse.containsMouse ? 1.1 : 1
-    opacity: GridView.view.showTitle && secondRow ? 0 : 1
+    opacity: GridView.view.showTitle && secondRow ? 0 : GridView.view.itemSelected && !GridView.view.flicking && scale === 1.0 ? 0.2 : 1
     z: scale > 1 ? 10 : 0
     smooth: scale != 1.0
+
+    onScaleChanged: scale != 1 ? GridView.view.itemSelected = true : GridView.view.itemSelected = false
+
 
     // Animation for displaying a title
     NumberAnimation on opacity {
@@ -28,7 +31,8 @@ Image {
         running: thumbnail.GridView.view.showTitle
     }
 
-    Behavior on scale { NumberAnimation { duration: 200 }}
+    Behavior on scale { NumberAnimation { duration: 100 }}
+    Behavior on opacity { NumberAnimation { duration: 100 }}
 
     MouseArea {
         id: mouse
