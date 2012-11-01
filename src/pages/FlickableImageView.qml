@@ -30,12 +30,18 @@ Item{
         // This creates 1 + 2*bufferSize number of images
         for (var i=0; i < 1+2*bufferSize; i++){
             var component = Qt.createComponent("MediaItemContainer.qml");
-            if (component.status === Component.Ready) {
+
+            if (component.status === Component.Error){
+                console.log("Failed to load MediaItemContainer: " + component.errorString())
+                return
+            }
+
+            if (component.status === Component.Ready){
                 var mediaItemContainer = component.createObject(flickListView);
 
                 if (mediaItemContainer === null){
-                    console.log("Failed to create FS Image")
-                    return;
+                    console.log("Failed to create FS Image ")
+                    return
                 }
 
                 mediaItemContainer.width  = flickListView.width
@@ -167,10 +173,11 @@ Item{
 
     function modelIndex(index)
     {
-        if (index < 0)
+        if (index < 0){
             return (index+model.count) % model.count
-        else
-            return (index%model.count)
+        } else {
+            return (index % model.count)
+        }
     }
 
     function currentItemUrl()
@@ -178,7 +185,7 @@ Item{
         return model.get(currentIndex).url
     }
 
-    PropertyAnimation{
+    PropertyAnimation {
         id: flickAnimation
         property: "x"
         duration: flickAnimationDuration
@@ -217,7 +224,6 @@ Item{
         }
 
         onPositionChanged: {
-
             if (parent.itemScaled){
                 return
             }

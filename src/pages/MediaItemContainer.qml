@@ -23,12 +23,13 @@ Rectangle{
             mediaItem = null
         }
 
-        if (mediaItem == null){
-            var component;
-            if (imageItem)
-                component = Qt.createComponent("ZoomableImage.qml");
-            else
-                component = Qt.createComponent("VideoPlayer.qml")
+        if (mediaItem === null){
+            var component = Qt.createComponent(imageItem ? "ZoomableImage.qml" : "VideoPlayer.qml");
+
+            if (component.status === Component.Error) {
+                console.log("Failed to load QML element " + component.errorString)
+                return
+            }
 
             if (component.status === Component.Ready) {
                 mediaItem = component.createObject(fsMediaItem);
