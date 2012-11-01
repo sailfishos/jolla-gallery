@@ -14,15 +14,12 @@ Image {
     sourceSize.height: 160
     asynchronous: true
     source: model.thumbnailUrl === undefined ? "image://nemoThumbnail/" + model.url : model.thumbnailUrl
-    scale: !GridView.view.movingVertically && !GridView.view.flicking && mouse.pressed && mouse.containsMouse ? 1.1 : 1
-    opacity: GridView.view.showTitle && secondRow ? 0 : GridView.view.itemSelected && !GridView.view.flicking && scale === 1.0 ? 0.2 : 1
-    z: scale > 1 ? 10 : 0
+    opacity: GridView.view.showTitle && secondRow ? 0 : 1
+    z: scale > 1 ? 100 : 0
     smooth: scale != 1.0
 
-    onScaleChanged: scale != 1 ? GridView.view.itemSelected = true : GridView.view.itemSelected = false
-
-
-    // Animation for displaying a title
+    // Animation for displaying a title. Used only once for the
+    // second row items.
     NumberAnimation on opacity {
         id: opacityAnimation
         duration: 1500
@@ -31,12 +28,40 @@ Image {
         running: thumbnail.GridView.view.showTitle
     }
 
-    Behavior on scale { NumberAnimation { duration: 100 }}
-    Behavior on opacity { NumberAnimation { duration: 100 }}
+    Behavior on scale { NumberAnimation { duration: 150 }}
 
     MouseArea {
-        id: mouse
         anchors.fill: parent
         onClicked: parent.clicked()
+
+        // Indicate selection by scaling the thumbnail, but it's allowed to do
+        // when grid is not moving and contains mouse
+        onPressed: {
+            if (!thumbnail.GridView.view.movingVertically && !thumbnail.GridView.view.flicking && containsMouse){
+                thumbnail.scale = 1.1
+                thumbnail.GridView.view.itemSelected = true
+                thumbnail.state = "highlight"
+            }
+        }
+
+        // Cancel selection on release or on cancel
+        onReleased: {
+            thumbnail.scale = 1.0
+            thumbnail.GridView.view.itemSelected = false
+            thumbnail.state = ""
+        }
+
+        onCanceled: {
+            thumbnail.scale = 1.0
+            thumbnail.GridView.view.itemSelected = false
+            thumbnail.state = ""
+        }
     }
+
+    states: State {
+        name: "highlight"
+        ParentChange { target:thumbnail; parent: thumbnail.GridView.view.overlay;  }
+    }
+
+
 }
