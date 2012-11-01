@@ -35,13 +35,15 @@ Page {
 
             Label {
                 id: titleLabel
+                width: parent.width
+                elide: Text.ElideRight
+                font.pixelSize: theme.fontSizeLarge
+                text: media.title
                 anchors {
                     left: thumbnail.right
                     leftMargin: 20
                     verticalCenter: parent.verticalCenter
                 }
-                text: media.title
-                font.pixelSize: theme.fontSizeLarge
             }
 
             onClicked: { window.pageStack.push(Qt.resolvedUrl("GalleryGridPage.qml"), {title: media.title, model: media.model} ) }

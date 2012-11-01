@@ -16,12 +16,11 @@
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
 #ifdef HAS_BOOSTER
-    QApplication *app = MDeclarativeCache::qApplication(argc, argv);
-    QDeclarativeView *view = MDeclarativeCache::qDeclarativeView();
+    QScopedPointer<QApplication> app(MDeclarativeCache::qApplication(argc, argv));
+    QScopedPointer<QDeclarativeView> view(MDeclarativeCache::qDeclarativeView());
 #else
-    QApplication a(argc, argv);
-    QApplication *app = &a;
-    QDeclarativeView *view = new QDeclarativeView;
+    QScopedPointer<QApplication> app(new QApplication(argc, argv));
+    QScopedPointer<QDeclarativeView> view(new QDeclarativeView);
 #endif
 
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");

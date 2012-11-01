@@ -5,7 +5,7 @@ import org.nemomobile.thumbnailer 1.0
   * GridThumbnail is for displaying either photo or video thumbnail.
   * NOTE: At the moment it only supports photothumbnails.
   */
-Image{
+Image {
     id: thumbnail
     signal clicked    
     property bool secondRow: index <= 5 && 3 <= index
@@ -17,6 +17,7 @@ Image{
     scale: !GridView.view.movingVertically && mouse.pressed && mouse.containsMouse ? 1.1 : 1
     opacity: GridView.view.showTitle && secondRow ? 0 : 1
     z: scale > 1 ? 10 : 0
+    smooth: scale != 1.0
 
     // Animation for displaying a title
     NumberAnimation on opacity {
