@@ -26,34 +26,19 @@ Page {
     GridView {
         id: grid
         property bool showTitle
-
+        flickDeceleration: 1400
         // Add little transparency when flicking
         function setContentItemOpacity()
         {
-            var velocity = Math.abs(verticalVelocity)
-            if (!flicking){
+            if (!flicking ){
                 contentItem.opacity = 1
-                return
-            }
-
-            if (1000 < velocity && velocity <= 1500){
-                contentItem.opacity = 0.8
-                return
-            }
-
-            if (1500 < velocity && velocity <= 2200){
-                contentItem.opacity = 0.5
-                return
-            }
-
-            if (2200 < velocity){
-                contentItem.opacity = 0.3
-                return
+            }else{
+                contentItem.opacity = Math.max(0.6, 1.0 - (Math.abs(verticalVelocity) / 6000.0))
             }
         }
 
         onVerticalVelocityChanged: setContentItemOpacity()
-        Behavior on contentItem.opacity { NumberAnimation { duration: 200 }}
+
         cellWidth: parent.width/3.0
         cellHeight: parent.width/3.0
         boundsBehavior: Flickable.StopAtBounds
