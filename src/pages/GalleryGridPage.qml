@@ -53,7 +53,7 @@ Page {
             id: clickTimer
             property int index
             interval: 200
-            onTriggered: { console.log("Switch: " ); window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} ) }
+            onTriggered: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
         }
     }
 }
