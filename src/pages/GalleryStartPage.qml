@@ -1,9 +1,10 @@
 import QtQuick 1.1
 import com.jolla.components 1.0
 import com.jolla.gallery 1.0
+import QtMobility.gallery 1.1
+
 
 Page {
-
 
     Component {
         id: delegate
@@ -18,7 +19,7 @@ Page {
                     rightMargin: 20
                     verticalCenter: parent.verticalCenter
                 }
-                text: mediaCount
+                text: media.count
                 font.pixelSize: theme.fontSizeLarge
             }
 
@@ -28,7 +29,7 @@ Page {
                 x: width
                 width: parent.width / 4
                 height: parent.width / 4
-                source: mediaQmlSourceIconUrl
+                source: media.icon
                 opacity: delegateItem.down ? 0.5 : 1
             }
 
@@ -36,8 +37,8 @@ Page {
                 id: titleLabel
                 width: parent.width
                 elide: Text.ElideRight
-                text: mediaTitle
                 font.pixelSize: theme.fontSizeLarge
+                text: media.title
                 anchors {
                     left: thumbnail.right
                     leftMargin: 20
@@ -45,15 +46,21 @@ Page {
                 }
             }
 
-            onClicked: { window.pageStack.push(Qt.resolvedUrl("GalleryGridPage.qml"), {title: mediaTitle, model: mediaModel} ) }
+            onClicked: { window.pageStack.push(Qt.resolvedUrl("GalleryGridPage.qml"), {title: media.title, model: media.model} ) }
         }
     }
-
 
     JollaListView {
         anchors.fill: parent
         delegate: delegate
-        model: MediaSourceModel { id: mediaSourceModel}
+        model: MediaSourceModel {
+            id: mediaSourceModel
+            DocumentGallerySource {
+                title: "Photos"
+                icon: "PhotoIcon.qml"
+                type: DocumentGallery.Image
+            }
+        }
 
         ListView.onAdd: console.log("Adding an item")
     }

@@ -1,0 +1,78 @@
+
+#include "declarativemediasource.h"
+
+DeclarativeMediaSource::DeclarativeMediaSource()
+    : m_count(0)
+    , m_ready(false)
+
+{
+}
+
+DeclarativeMediaSource::~DeclarativeMediaSource()
+{
+}
+
+int DeclarativeMediaSource::count() const
+{
+    return m_count;
+}
+
+void DeclarativeMediaSource::setCount(int count)
+{
+    if (m_count != count) {
+        m_count = count;
+        emit countChanged();
+    }
+}
+
+QUrl DeclarativeMediaSource::icon() const
+{
+    return m_icon;
+}
+
+void DeclarativeMediaSource::setIcon(const QUrl &url)
+{
+    if (m_icon != url) {
+        m_icon = url;
+        emit iconChanged();
+    }
+}
+
+QString DeclarativeMediaSource::title() const
+{
+    return m_title;
+}
+
+void DeclarativeMediaSource::setTitle(const QString &title)
+{
+    if (m_title != title) {
+        m_title = title;
+        emit titleChanged();
+    }
+}
+
+QObject *DeclarativeMediaSource::model() const
+{
+    return m_model.data();
+}
+
+void DeclarativeMediaSource::setModel(QObject *model)
+{
+    if (m_model.data() != model) {
+        m_model = model;
+        emit modelChanged();
+    }
+}
+
+bool DeclarativeMediaSource::isReady() const
+{
+    return m_ready;
+}
+
+void DeclarativeMediaSource::setReady(bool ready)
+{
+    if (ready != m_ready) {
+        m_ready = ready;
+        emit readyChanged();
+    }
+}

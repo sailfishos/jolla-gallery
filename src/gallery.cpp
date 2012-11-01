@@ -1,3 +1,4 @@
+
 #include <QApplication>
 #include <QDeclarativeView>
 #include <QDeclarativeEngine>
@@ -6,6 +7,7 @@
 #include <QDir>
 #include "declarativewallpaper.h"
 #include "declarativemediamodel.h"
+#include "declarativemediasource.h"
 
 #ifdef HAS_BOOSTER
 #include <MDeclarativeCache>
@@ -21,7 +23,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QDeclarativeView> view(new QDeclarativeView);
 #endif
 
-
+    qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
 
     view->setAttribute(Qt::WA_OpaquePaintEvent);
