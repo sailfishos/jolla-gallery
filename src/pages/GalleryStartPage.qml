@@ -61,7 +61,5 @@ Page {
                 type: DocumentGallery.Image
             }
         }
-
-        ListView.onAdd: console.log("Adding an item")
     }
 }

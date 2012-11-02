@@ -62,6 +62,4 @@ Image {
         name: "highlight"
         ParentChange { target:thumbnail; parent: thumbnail.GridView.view.overlay;  }
     }
-
-
 }

@@ -37,6 +37,9 @@ Page {
         width: parent.width
         cacheBuffer: cellHeight * 5
 
+        onItemSelectedChanged: contentItem.opacity = itemSelected ? 0.2 : 1
+
+        // opacity: grid.itemSelected ? 0.2 : 1
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.
         delegate: GridImageThumbnail { onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )}
@@ -44,17 +47,11 @@ Page {
         ScrollBar {}
         ScrollDecorator {}
 
-        // This is a transparent overlay for displaying on all the other thumbnails
-        // except the selected one. It displays the current background image with a
-        // little transparency.
-        Image {
-            id: __overlay
-            anchors.fill: grid
-            opacity: grid.itemSelected ? 0.8 : 0
-            Behavior on opacity { NumberAnimation { duration: 200 }}
-            source: theme.backgroundImage
-        }
+        Behavior on contentItem.opacity { NumberAnimation { duration: 200 }}
+
+        // This is an overlay layer which is used when a thumbnail has been selected.
+        // The thumbnail's parent is changed to this overlay and all the other thumbs in the
+        // overlay are still children of the contentItem and little transparent.
+        Item { id: __overlay; anchors.fill: parent}
     }
-
-
 }
