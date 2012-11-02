@@ -39,7 +39,6 @@ Page {
 
         onItemSelectedChanged: contentItem.opacity = itemSelected ? 0.2 : 1
 
-        // opacity: grid.itemSelected ? 0.2 : 1
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.
         delegate: GridImageThumbnail { onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )}
