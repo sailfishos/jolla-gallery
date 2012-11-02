@@ -8,6 +8,7 @@ Rectangle {
     property string mimeType
     property bool itemScaled: mediaItem !== null && mediaItem.itemScaled
     property QtObject mediaItem: null
+    property bool imageItem: mimeType.substring(0,5) != "video"
     color: "black"
 
     Component {
@@ -36,7 +37,7 @@ Rectangle {
     {
         // Destroy the old media item if the type is different, otherwise
         // the old media item is reused.
-        if (mediaItem !== null && mediaItem.mimeType !== mimeType){
+        if (mediaItem !== null && mediaItem.mimeType != mimeType){
             mediaItem.destroy()
             mediaItem = null
         }
@@ -45,7 +46,7 @@ Rectangle {
         fsMediaItem.mimeType = mimeType
 
         if (mediaItem == null){
-            mediaItem = mimeType.substring(0,5) !== "video"
+            mediaItem = imageItem
                     ? imageComponent.createObject(fsMediaItem)
                     : videoComponent.createObject(fsMediaItem)
         }

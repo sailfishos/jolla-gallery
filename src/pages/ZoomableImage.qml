@@ -8,15 +8,14 @@ Flickable {
     property bool itemScaled: false
     property bool alignTop: false
     property alias source: photo.source
-    property bool isPortrait: window.isPortrait
+    property real minimumDimension: Math.min(window.width, window.height)
+    property real maximumDimension: Math.max(window.width, window.height)
 
     flickableDirection: Flickable.HorizontalAndVerticalFlick
-    contentWidth: width
-    contentHeight: height
     boundsBehavior: Flickable.StopAtBounds
 
-    onSourceChanged: resetScale()
-    onIsPortraitChanged: resetScale()
+    contentWidth: Math.max(width, photo.width)
+    contentHeight: Math.max(height, photo.height)
 
     function scaleToMax(centerX, centerY)
     {
@@ -28,11 +27,10 @@ Flickable {
 
     function resetScale()
     {
-        if (itemScaled){
+        if (itemScaled) {
+            photo.scale = photo.fittedScale
             contentX = 0
             contentY = 0
-            contentWidth = width
-            contentHeight = height
             itemScaled = false
         }
     }
@@ -41,33 +39,37 @@ Flickable {
     {
         var newWidth
         var newHeight
+        var oldWidth = contentWidth
+        var oldHeight = contentHeight
 
         if (window.isPortrait) {
             // Scale and bounds check the width, and then apply the same scale to height.
             newWidth = contentWidth * scale
-            if (newWidth <= flickable.width) {
+            if (newWidth <= minimumDimension) {
                 resetScale()
                 return
             } else {
-                newWidth = Math.min(newWidth, photo.sourceSize.width)
-                newHeight = Math.max(photo.paintedHeight * newWidth / contentWidth, flickable.height)
+                newWidth = Math.min(newWidth, minimumDimension * 3.5)
+                photo.scale = newWidth / photo.implicitWidth
+                newHeight = Math.max(photo.height, maximumDimension)
             }
         } else {
             // Scale and bounds check the height, and then apply the same scale to width.
-            newHeight = photo.paintedHeight * scale
-            if (newHeight <= flickable.height) {
+            newHeight = contentHeight * scale
+            if (newHeight <= minimumDimension) {
                 resetScale()
                 return
             } else {
-                newHeight = Math.min(newHeight, photo.sourceSize.height)
-                newWidth = Math.max(photo.paintedWidth * newHeight / contentHeight, flickable.width)
+                newHeight = Math.min(newHeight, minimumDimension * 3.5)
+                photo.scale = newHeight / photo.implicitHeight
+                newWidth = Math.max(photo.width, maximumDimension)
             }
         }
+        // Fixup contentX and contentY
+        contentX += (center.x * newWidth / oldWidth) - center.x
+        contentY += (center.y * newHeight / oldHeight) - center.y
 
         itemScaled = true
-
-        // Finally set the new content size
-        flickable.resizeContent(newWidth, newHeight, center)
     }
 
     PinchArea {
@@ -79,17 +81,39 @@ Flickable {
 
         Image {
             id: photo
+
+            property real fittedScale
+            property real scale
+            property bool isPortrait: window.isPortrait
+
+            function updateScale() {
+                if (status != Image.Ready)
+                    return
+                fittedScale = window.isPortrait
+                        ? minimumDimension / photo.implicitWidth
+                        : minimumDimension / photo.implicitHeight
+                if (!itemScaled || scale < fittedScale) {
+                    scale = fittedScale
+                    contentX = 0
+                    contentY = 0
+                    itemScaled = false
+                }
+            }
+
             smooth: !(flickable.movingVertically || flickable.movingHorizontally)
-            sourceSize.width: window.isPortrait ? flickable.width*1.5 : undefined
-            sourceSize.height: window.isPortrait ? undefined : flickable.height*1.5
+            width: implicitWidth * scale
+            height: implicitHeight * scale
+            sourceSize.width: minimumDimension * 1.5
             fillMode: Image.PreserveAspectFit
             asynchronous: true
+            anchors.centerIn: parent
 
-            anchors {
-                left: window.isPortrait ? parent.left : undefined
-                horizontalCenter: parent.horizontalCenter
-                top: window.isPortrait ? undefined : parent.top
-                verticalCenter: parent.verticalCenter
+            onStatusChanged: updateScale()
+            onIsPortraitChanged: updateScale()
+            onSourceChanged: {
+                fittedScale = 0
+                itemScaled = false
+                updateScale()
             }
 
             // We need to handle the second double tap because the top level mouse area
