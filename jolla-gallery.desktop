@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Jolla Gallery
-Icon=icons-Applications-photos
+Name=Gallery
+Icon=icon-launcher-gallery
 Exec=invoker --type=d -s /usr/bin/jolla-gallery
 Comment=Jolla Gallery
 

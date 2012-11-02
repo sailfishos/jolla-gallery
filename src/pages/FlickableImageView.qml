@@ -14,6 +14,7 @@ Item{
     property int flickAnimationDuration: 150
     property bool alignMiddle
     property bool itemScaled
+    property bool enableZoom: leftMostItem.x === -bufferSize * flickListView.width
 
 
     // Make this element to slide in the middle
@@ -232,7 +233,8 @@ Item{
             pressX = mouseX
         }
 
-        onReleased: {         
+        onReleased: {
+
             if ( Math.abs(firstPressX-mouseX) < tapThresshold){
                 if (clickTimer.running && !flickListView.alignMiddle){
                     clickTimer.stop()

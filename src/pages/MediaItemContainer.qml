@@ -7,7 +7,8 @@ Rectangle{
     property url source
     property string mimeType
     property bool itemScaled
-    property bool  alignTop: parent.alignMiddle
+    property bool alignTop: parent.alignMiddle
+    property bool enableZoom: parent.enableZoom
     property bool imageItem: mimeType.substring(0,5) !== "video"
     property QtObject mediaItem: null
     color: "black"

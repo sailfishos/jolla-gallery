@@ -7,6 +7,7 @@ Flickable {
 
     property bool itemScaled: photo.width > flickable.width
     property bool alignTop: parent.alignTop
+    property bool enableZoom: parent.enableZoom
     property alias source: photo.source
 
     flickableDirection: Flickable.HorizontalAndVerticalFlick
@@ -61,7 +62,7 @@ Flickable {
 
     PinchArea {
         id: pinchArea
-        enabled: !flickable.alignTop
+        enabled: !flickable.alignTop && flickable.enableZoom
         anchors.fill: parent
         onPinchUpdated: scaleImage(1.0 + pinch.scale - pinch.previousScale, pinch.center)
         onPinchFinished: flickable.returnToBounds()
