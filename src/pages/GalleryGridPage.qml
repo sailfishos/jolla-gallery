@@ -41,7 +41,7 @@ Page {
 
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.
-        delegate: GridImageThumbnail { onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )}
+        delegate: GridImageThumbnail { onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} ) }
 
         ScrollBar {}
         ScrollDecorator {}
