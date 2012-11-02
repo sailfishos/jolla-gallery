@@ -8,7 +8,9 @@ import org.nemomobile.thumbnailer 1.0
 Image {
     id: thumbnail
     signal clicked    
-    property bool secondRow: index <= 5 && 3 <= index
+    property bool secondRow: window.isPortrait
+            ? index <= 5 && 3 <= index
+            : index <= 9 && 5 <= index
 
     sourceSize.width: 160
     sourceSize.height: 160

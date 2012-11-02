@@ -2,19 +2,37 @@ import QtQuick 1.1
 import com.jolla.components 1.0
 
 
-Rectangle{
+Rectangle {
     id: fsMediaItem
     property url source
     property string mimeType
-    property bool itemScaled
-    property bool  alignTop: parent.alignMiddle
-    property bool imageItem: mimeType.substring(0,5) !== "video"
+    property bool itemScaled: mediaItem !== null && mediaItem.itemScaled
     property QtObject mediaItem: null
     color: "black"
 
-    onItemScaledChanged: parent.itemScaled = itemScaled
+    Component {
+        id: imageComponent
 
-    function loadMediaContent()
+        ZoomableImage {
+            anchors.fill: parent
+            source: fsMediaItem.source
+            alignTop: fsMediaItem.parent.alignMiddle
+        }
+    }
+
+    Component {
+        id: videoComponent
+
+        VideoPlayer {
+            property bool itemScaled: false
+
+            anchors.fill: parent
+            source: fsMediaItem.source
+
+        }
+    }
+
+    function loadMediaContent(source, mimeType)
     {
         // Destroy the old media item if the type is different, otherwise
         // the old media item is reused.
@@ -23,25 +41,14 @@ Rectangle{
             mediaItem = null
         }
 
-        if (mediaItem === null){
-            var component = Qt.createComponent(imageItem ? "ZoomableImage.qml" : "VideoPlayer.qml");
+        fsMediaItem.source = source
+        fsMediaItem.mimeType = mimeType
 
-            if (component.status === Component.Error) {
-                console.log("Failed to load QML element " + component.errorString)
-                return
-            }
-
-            if (component.status === Component.Ready) {
-                mediaItem = component.createObject(fsMediaItem);
-                mediaItem.width  = fsMediaItem.width
-                mediaItem.height = fsMediaItem.height
-            }
+        if (mediaItem == null){
+            mediaItem = mimeType.substring(0,5) !== "video"
+                    ? imageComponent.createObject(fsMediaItem)
+                    : videoComponent.createObject(fsMediaItem)
         }
-
-        // Finally set the source and make sure id we reuse the item
-        // it's not scaled
-        itemScaled = false
-        mediaItem.source = fsMediaItem.source
     }
 
     function scaleToMax(centerX, centerY)

@@ -41,8 +41,8 @@ Page {
 
     JollaListView {
         id: menuList
-        width: parent.width
-        height: parent.height / 2 // This is a workaround for keeping PullDownMenu up
+
+        anchors { top: parent.top; left: parent.left }
         model: actionsModel
 
         PullDownMenu {
@@ -79,8 +79,67 @@ Page {
     // Element for handling the actual flicking and image buffering
     FlickableImageView {
         id: imageList
-        width: fullscreenPage.width
-        height: fullscreenPage.height
+        anchors { bottom: parent.bottom; right: parent.right }
         onClicked: alignMiddle = !alignMiddle
     }
+
+    states: [
+        State {
+            name: "portrait"
+            when: window.isPortrait && !imageList.alignMiddle
+            AnchorChanges {
+                target: menuList
+                anchors { bottom: parent.verticalCenter; right: parent.right }
+            }
+            AnchorChanges {
+                target: imageList
+                anchors { top: parent.top; left:parent.left }
+            }
+        }, State {
+            name: "portrait-menu"
+            extend: "portrait"
+            when: window.isPortrait && imageList.alignMiddle
+            AnchorChanges {
+                target: imageList
+                anchors.top: parent.verticalCenter
+            }
+            PropertyChanges { target: imageList; clip: true }
+        }, State {
+            name: "landscape"
+            when: !window.isPortrait && !imageList.alignMiddle
+            AnchorChanges {
+                target: menuList
+                anchors { bottom: parent.bottom; right: parent.horizontalCenter }
+            }
+            AnchorChanges {
+                target: imageList
+                anchors { top: parent.top; left:parent.left }
+            }
+        }, State {
+            name: "landscape-menu"
+            extend: "landscape"
+            when: !window.isPortrait && imageList.alignMiddle
+            AnchorChanges {
+                target: imageList
+                anchors.left: parent.horizontalCenter
+            }
+            PropertyChanges { target: imageList; clip: true }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            from: "portrait"; to: "portrait-menu"; reversible: true
+            SequentialAnimation {
+                PropertyAction { target: imageList; property: "clip" }
+                AnchorAnimation { duration: 300; easing.type: Easing.OutCubic }
+            }
+        }, Transition {
+            from: "landscape"; to: "landscape-menu"; reversible: true
+            SequentialAnimation {
+                PropertyAction { target: imageList; property: "clip" }
+                AnchorAnimation { duration: 300; easing.type: Easing.OutCubic }
+            }
+        }
+    ]
 }

@@ -54,8 +54,8 @@ Page {
 
         onVerticalVelocityChanged: setContentItemOpacity()
         Behavior on contentItem.opacity { NumberAnimation { duration: 200 }}
-        cellWidth: parent.width/3.0
-        cellHeight: parent.width/3.0
+        cellWidth: 160
+        cellHeight: 160
         boundsBehavior: Flickable.StopAtBounds
         height: parent.height
         width: parent.width

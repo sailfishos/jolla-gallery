@@ -27,8 +27,8 @@ Page {
             Loader {
                 id: thumbnail
                 x: width
-                width: parent.width / 4
-                height: parent.width / 4
+                width: 160
+                height: 160
                 source: media.icon
                 opacity: delegateItem.down ? 0.5 : 1
             }
