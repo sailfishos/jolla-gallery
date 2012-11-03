@@ -54,8 +54,8 @@ Page {
 
         onVerticalVelocityChanged: setContentItemOpacity()
         Behavior on contentItem.opacity { NumberAnimation { duration: 200 }}
-        cellWidth: 160
-        cellHeight: 160
+        cellWidth: window.isPortrait ? width / 3 : Math.floor(width / 5.0)
+        cellHeight: cellWidth
         boundsBehavior: Flickable.StopAtBounds
         height: parent.height
         width: parent.width
@@ -63,7 +63,11 @@ Page {
 
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.
-        delegate: GridImageThumbnail { onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} ) }
+        delegate: GridImageThumbnail {
+            width: grid.cellWidth
+            height: grid.cellHeight
+            onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
+        }
 
         ScrollBar {}
         ScrollDecorator {}
