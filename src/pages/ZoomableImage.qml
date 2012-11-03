@@ -6,7 +6,8 @@ Flickable {
     id: flickable
 
     property bool itemScaled: false
-    property bool alignTop: false
+    property bool alignTop
+    property bool enableZoom: parent.enableZoom
     property alias source: photo.source
     property real minimumDimension: Math.min(window.width, window.height)
     property real maximumDimension: Math.max(window.width, window.height)
@@ -74,7 +75,7 @@ Flickable {
 
     PinchArea {
         id: pinchArea
-        enabled: !flickable.alignTop && photo.status == Image.Ready
+        enabled: !flickable.alignTop && flickable.enableZoom && photo.status == Image.Ready
         anchors.fill: parent
         onPinchUpdated: scaleImage(1.0 + pinch.scale - pinch.previousScale, pinch.center)
         onPinchFinished: flickable.returnToBounds()

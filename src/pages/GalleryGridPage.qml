@@ -26,40 +26,18 @@ Page {
     GridView {
         id: grid
         property bool showTitle
+        property bool itemSelected
+        property Item overlay: __overlay
 
-        // Add little transparency when flicking
-        function setContentItemOpacity()
-        {
-            var velocity = Math.abs(verticalVelocity)
-            if (!flicking){
-                contentItem.opacity = 1
-                return
-            }
-
-            if (1000 < velocity && velocity <= 1500){
-                contentItem.opacity = 0.8
-                return
-            }
-
-            if (1500 < velocity && velocity <= 2200){
-                contentItem.opacity = 0.5
-                return
-            }
-
-            if (2200 < velocity){
-                contentItem.opacity = 0.3
-                return
-            }
-        }
-
-        onVerticalVelocityChanged: setContentItemOpacity()
-        Behavior on contentItem.opacity { NumberAnimation { duration: 200 }}
+        flickDeceleration: 1400
         cellWidth: window.isPortrait ? width / 3 : Math.floor(width / 5.0)
         cellHeight: cellWidth
         boundsBehavior: Flickable.StopAtBounds
         height: parent.height
         width: parent.width
         cacheBuffer: cellHeight * 5
+
+        onItemSelectedChanged: contentItem.opacity = itemSelected ? 0.2 : 1
 
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.
@@ -71,5 +49,12 @@ Page {
 
         ScrollBar {}
         ScrollDecorator {}
+
+        Behavior on contentItem.opacity { NumberAnimation { duration: 200 }}
+
+        // This is an overlay layer which is used when a thumbnail has been selected.
+        // The thumbnail's parent is changed to this overlay and all the other thumbs in the
+        // overlay are still children of the contentItem and little transparent.
+        Item { id: __overlay; anchors.fill: parent}
     }
 }

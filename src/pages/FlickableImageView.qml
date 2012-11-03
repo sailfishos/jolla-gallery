@@ -12,6 +12,8 @@ Rectangle {
     property int bufferSize: 2
     property int flickAnimationDuration: 150
     property bool alignMiddle
+    property bool itemScaled: currentItem !== null && currentItem.itemScaled
+    property bool enableZoom: leftMostItem.x === -bufferSize * flickListView.width
 
     color: "black"
 
@@ -211,7 +213,8 @@ Rectangle {
             pressX = mouseX
         }
 
-        onReleased: {         
+        onReleased: {
+
             if ( Math.abs(firstPressX-mouseX) < tapThresshold){
                 if (clickTimer.running && !flickListView.alignMiddle){
                     clickTimer.stop()
