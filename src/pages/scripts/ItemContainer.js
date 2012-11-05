@@ -23,6 +23,10 @@ function addItem(item)
     items.push(item)
 }
 
+function prependItem(item)
+{
+    items.unshift(item)
+}
 
 // Make the first item last
 function rotateBeginning()

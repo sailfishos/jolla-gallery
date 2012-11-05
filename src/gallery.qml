@@ -5,8 +5,7 @@ import "pages"
 ApplicationWindow {
     id: window
 
-    // Only portrait is supported atm.
-    lockOrientation: true
+    lockOrientation: false
 
     cover: undefined
     initialPage: GalleryStartPage {}

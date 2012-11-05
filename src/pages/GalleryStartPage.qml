@@ -10,6 +10,7 @@ Page {
         id: delegate
         BackgroundItem {
             id: delegateItem
+            width: parent.width
             height: thumbnail.height
 
             Label {
@@ -27,20 +28,20 @@ Page {
             Loader {
                 id: thumbnail
                 x: width
-                width: parent.width / 4
-                height: parent.width / 4
+                width: 160
+                height: width
                 source: media.icon
                 opacity: delegateItem.down ? 0.5 : 1
             }
 
             Label {
                 id: titleLabel
-                width: parent.width
                 elide: Text.ElideRight
                 font.pixelSize: theme.fontSizeLarge
                 text: media.title
                 anchors {
                     left: thumbnail.right
+                    right: parent.right
                     leftMargin: 20
                     verticalCenter: parent.verticalCenter
                 }

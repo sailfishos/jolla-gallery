@@ -1,25 +1,30 @@
 import QtQuick 1.1
 import "scripts/ItemContainer.js" as ItemContainer
 
-Item{
+Rectangle {
     id: flickListView    
     signal clicked
 
-    property QtObject leftMostItem
-    property QtObject rightMostItem
+    property alias currentItem: flickAnimation.target
     property int currentIndex
     property variant model
     property int moveDirection // -1 left, 0 nothing, 1 right
     property int bufferSize: 2
     property int flickAnimationDuration: 150
     property bool alignMiddle
-    property bool itemScaled
-    property bool enableZoom: leftMostItem.x === -bufferSize * flickListView.width
+    property bool itemScaled: currentItem !== null && currentItem.itemScaled
+    property bool enableZoom: currentItem.x === 0
 
+    color: "black"
 
-    // Make this element to slide in the middle
-    y: alignMiddle ? parent.height / 2 : 0
-    Behavior on y { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+    Component {
+        id: mediaItemComponent
+
+        MediaItemContainer {
+            anchors { top: flickListView.top; bottom: flickListView.bottom; margins: 4 }
+            width: flickListView.width
+        }
+    }
 
     // Create fullscreen images
     Component.onCompleted: createFSImageItems()
@@ -27,64 +32,43 @@ Item{
     // Create Fullscreen image items based on buffer size
     function createFSImageItems()
     {
-        // First create "empty" images to make sure that they are ordered properly
-        // This creates 1 + 2*bufferSize number of images
-        for (var i=0; i < 1+2*bufferSize; i++){
-            var component = Qt.createComponent("MediaItemContainer.qml");
-
-            if (component.status === Component.Error){
-                console.log("Failed to load MediaItemContainer: " + component.errorString())
-                return
-            }
-
-            if (component.status === Component.Ready){
-                var mediaItemContainer = component.createObject(flickListView);
-
-                if (mediaItemContainer === null){
-                    console.log("Failed to create FS Image ")
-                    return
-                }
-
-                mediaItemContainer.width  = flickListView.width
-                mediaItemContainer.height = flickListView.height
-
-                ItemContainer.addItem(mediaItemContainer)
-
-                // Make the first item to go left most
-                if (i == 0){
-                    mediaItemContainer.x = (i - bufferSize) * width
-                    leftMostItem = mediaItemContainer
-                }
-
-                // Anchor items so that all the items are achored to
-                // the left item execpte the first one
-                if (i > 0) {
-                    var obj = ItemContainer.itemAt(i-1)
-                    mediaItemContainer.anchors.left = obj.right
-                }
-            }
+        currentItem = mediaItemComponent.createObject(flickListView, { z: 1 })
+        if (currentItem === null) {
+            console.log("Failed to create FS Image")
+            return
         }
 
-        // Next make images to load their sources starting from the current index
-        // to make sure it's loaded first
-        for (var i=0; i < 1+2*bufferSize; i++){
+        // Create the center item and load its content first.
+        ItemContainer.addItem(currentItem)
 
-            // modelItemIndex is an index to get items from a model
-            var modelItemIndex = currentIndex + i
-            if (modelItemIndex > currentIndex + bufferSize)
-                modelItemIndex = currentIndex - ((currentIndex + i) % (currentIndex + bufferSize))
+        var modelItem = model.get(modelIndex(currentIndex))
+        currentItem.loadMediaContent(modelItem.url, modelItem.mimeType)
 
-            // bufferItemIndex is index for an item in a ItemContainer (buffer)
-            var bufferItemIndex = i + bufferSize
-            if (bufferItemIndex >= 1+2*bufferSize)
-                bufferItemIndex = (i + bufferSize) % bufferSize
+        var previousLeftItem = currentItem
+        var previousRightItem = currentItem
 
-            var modelItem = model.get(modelIndex(modelItemIndex))
+        // Create 2 * bufferSize items and load their content radiating
+        // out from the center item.
+        for (var i=1; i <= bufferSize; i++){
+            var leftItem = mediaItemComponent.createObject(flickListView);
+            var rightItem = mediaItemComponent.createObject(flickListView);
 
-            var mediaItemContainer = ItemContainer.itemAt(bufferItemIndex)
-            mediaItemContainer.source = modelItem.url
-            mediaItemContainer.mimeType = modelItem.mimeType
-            mediaItemContainer.loadMediaContent()
+            ItemContainer.prependItem(leftItem)
+            ItemContainer.addItem(rightItem)
+
+            // Anchor items so that all the items are anchored outwards
+            // of the center item.
+            leftItem.anchors.right =  previousLeftItem.left
+            rightItem.anchors.left = previousRightItem.right
+
+            modelItem = model.get(modelIndex(currentIndex - i))
+            leftItem.loadMediaContent(modelItem.url, modelItem.mimeType)
+
+            modelItem = model.get(modelIndex(currentIndex + i))
+            rightItem.loadMediaContent(modelItem.url, modelItem.mimeType)
+
+            previousLeftItem = leftItem
+            previousRightItem = rightItem
         }
     }
 
@@ -94,9 +78,15 @@ Item{
         if (flickAnimation.running)
             return
 
+        var previousCurrentItem = currentItem
+        currentItem = ItemContainer.itemAt(bufferSize + 1)
+
+        currentItem.anchors.left = undefined
+        currentItem.z = 1
+        previousCurrentItem.anchors.right = currentItem.left
+        previousCurrentItem.z = 0
+
         moveDirection = -1
-        flickAnimation.target = ItemContainer.itemAt(0)
-        flickAnimation.to = (flickListView.width * -bufferSize)-flickListView.width
 
         currentIndex = modelIndex(currentIndex + 1)
         flickAnimation.start()
@@ -108,9 +98,15 @@ Item{
         if (flickAnimation.running)
             return
 
+        var previousCurrentItem = currentItem
+        currentItem = ItemContainer.itemAt(bufferSize - 1)
+
+        currentItem.anchors.right = undefined
+        currentItem.z = 1
+        previousCurrentItem.anchors.left = currentItem.right
+        previousCurrentItem.z = 0
+
         moveDirection = 1
-        flickAnimation.target = ItemContainer.itemAt(0)
-        flickAnimation.to = -flickListView.width
 
         currentIndex = modelIndex(currentIndex - 1)
         flickAnimation.start()
@@ -122,54 +118,40 @@ Item{
             return
 
         moveDirection = 0
-        flickAnimation.target = ItemContainer.itemAt(0)
-        flickAnimation.to = (flickListView.width * -bufferSize)
 
         flickAnimation.start()
     }
 
     function swapRight()
     {
+        var previousLeftMost = ItemContainer.first()
         ItemContainer.rotateEnd()
 
+        // Un-anchor the now left most item from the right most item and anchor it
+        // to the previously left most item.
         var leftMost = ItemContainer.first()
         leftMost.anchors.left = undefined
-        leftMostItem = leftMost
-        leftMostItem.x = flickListView.width*-bufferSize
-        leftMostItem.anchors.left = undefined
-
-        var secondLeftMost = ItemContainer.itemAt(1)
-        secondLeftMost.anchors.left = leftMostItem.right
+        leftMost.anchors.right = previousLeftMost.left
 
         // Make it load new content
         var modelItem = model.get(modelIndex((0 - bufferSize) + currentIndex))
-        leftMostItem.source   = modelItem.url
-        leftMostItem.mimeType = modelItem.mimeType
-        leftMostItem.loadMediaContent()
+        leftMost.loadMediaContent(modelItem.url, modelItem.mimeType)
     }
 
     function swapLeft()
     {
-
+        var previousRightMost = ItemContainer.last()
         ItemContainer.rotateBeginning()
 
-        // First make sure to update the first item anchors
-        leftMostItem = ItemContainer.first()
-        leftMostItem.anchors.left = undefined
-
-        rightMostItem = ItemContainer.last()
-        var secondRightMost = ItemContainer.itemAt(2*bufferSize-1)
-
-        secondRightMost.anchors.right = undefined
-        rightMostItem.anchors.left = secondRightMost.right
-        rightMostItem.x = flickListView*bufferSize
-        rightMostItem.anchors.right = undefined
+        // Un-anchor the now right most item from the left most item and anchor it
+        // to the previously right most item.
+        var rightMost = ItemContainer.last()
+        rightMost.anchors.right = undefined
+        rightMost.anchors.left = previousRightMost.right
 
         // Make it load new content
         var modelItem = model.get(modelIndex(bufferSize + currentIndex))
-        rightMostItem.source   = modelItem.url
-        rightMostItem.mimeType = modelItem.mimeType
-        rightMostItem.loadMediaContent()
+        rightMost.loadMediaContent(modelItem.url, modelItem.mimeType)
     }
 
     function modelIndex(index)
@@ -189,6 +171,7 @@ Item{
     PropertyAnimation {
         id: flickAnimation
         property: "x"
+        to: 0
         duration: flickAnimationDuration
         alwaysRunToEnd: true
         easing.type: Easing.OutQuad
@@ -209,7 +192,7 @@ Item{
         property real tapThresshold: 10
         z: 10
         anchors.fill: parent
-        enabled: !itemScaled
+        enabled: currentItem !== null && !currentItem.itemScaled
         preventStealing: true
 
         Timer {
@@ -225,11 +208,11 @@ Item{
         }
 
         onPositionChanged: {
-            if (parent.itemScaled){
+            if (currentItem.itemScaled){
                 return
             }
 
-            leftMostItem.x = leftMostItem.x - (pressX - mouseX)
+            currentItem.x = currentItem.x - (pressX - mouseX)
             pressX = mouseX
         }
 
@@ -238,7 +221,7 @@ Item{
             if ( Math.abs(firstPressX-mouseX) < tapThresshold){
                 if (clickTimer.running && !flickListView.alignMiddle){
                     clickTimer.stop()
-                    ItemContainer.itemAt(bufferSize).scaleToMax(pressX, pressY)
+                    currentItem.scaleToMax(pressX, pressY)
                 } else {
                      clickTimer.restart()
                 }
