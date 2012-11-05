@@ -13,7 +13,7 @@ Rectangle {
     property int flickAnimationDuration: 150
     property bool alignMiddle
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
-    property bool enableZoom: leftMostItem.x === -bufferSize * flickListView.width
+    property bool enableZoom: currentItem.x === 0
 
     color: "black"
 
