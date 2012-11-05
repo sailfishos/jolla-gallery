@@ -68,7 +68,12 @@ Flickable {
         }
         // Fixup contentX and contentY
         contentX += (center.x * newWidth / oldWidth) - center.x
-        contentY += (center.y * newHeight / oldHeight) - center.y
+
+        // If photo height is greater than view height, do Y centering only after that
+        // otherwise it shoots to the skies.
+        if ( photo.height > height) {
+            contentY += (center.y * newHeight / oldHeight) - center.y
+        }
 
         itemScaled = true
     }
