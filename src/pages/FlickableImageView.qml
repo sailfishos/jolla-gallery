@@ -66,6 +66,9 @@ Rectangle {
 
             modelItem = model.get(modelIndex(currentIndex + i))
             rightItem.loadMediaContent(modelItem.url, modelItem.mimeType)
+
+            previousLeftItem = leftItem
+            previousRightItem = rightItem
         }
     }
 
