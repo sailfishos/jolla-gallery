@@ -1,7 +1,7 @@
 import QtQuick 1.1
 import "scripts/ItemContainer.js" as ItemContainer
 
-Rectangle {
+Item {
     id: flickListView    
     signal clicked
 
@@ -10,12 +10,13 @@ Rectangle {
     property variant model
     property int moveDirection // -1 left, 0 nothing, 1 right
     property int bufferSize: 2
-    property int flickAnimationDuration: 150
+    property int flickAnimationDuration: 400
     property bool alignMiddle
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem.x === 0
+    property variant prevItem
+    property variant nextItem
 
-    color: "black"
 
     Component {
         id: mediaItemComponent
@@ -43,6 +44,7 @@ Rectangle {
 
         var modelItem = model.get(modelIndex(currentIndex))
         currentItem.loadMediaContent(modelItem.url, modelItem.mimeType)
+        currentItem.opacity = 1
 
         var previousLeftItem = currentItem
         var previousRightItem = currentItem
@@ -70,6 +72,9 @@ Rectangle {
             previousLeftItem = leftItem
             previousRightItem = rightItem
         }
+
+        prevItem = ItemContainer.itemAt(bufferSize - 1)
+        nextItem = ItemContainer.itemAt(bufferSize + 1)
     }
 
     function moveToLeft()
@@ -157,7 +162,7 @@ Rectangle {
     function modelIndex(index)
     {
         if (index < 0){
-            return (index+model.count) % model.count
+            return (index + model.count) % model.count
         } else {
             return (index % model.count)
         }
@@ -173,14 +178,28 @@ Rectangle {
         property: "x"
         to: 0
         duration: flickAnimationDuration
-        alwaysRunToEnd: true
-        easing.type: Easing.OutQuad
+        easing.type: Easing.OutExpo
         onCompleted: {
             if (moveDirection < 0)
                 swapLeft()
             if (moveDirection > 0)
                 swapRight()
+
+            prevItem = ItemContainer.itemAt(bufferSize - 1)
+            nextItem = ItemContainer.itemAt(bufferSize + 1)
         }
+    }
+
+    Binding {
+        target: prevItem
+        property: "opacity"
+        value: Math.pow((prevItem.x + width)/width, 2)
+    }
+
+    Binding {
+        target: nextItem
+        property: "opacity"
+        value: Math.pow((width - nextItem.x)/width, 2)
     }
 
     // NOTE: onDoubleClicked didn't work here. It worked randomly on N950.
@@ -189,26 +208,24 @@ Rectangle {
         property real firstPressX
         property real pressX
         property real pressY
-        property real tapThresshold: 10
+        property real tapThresshold: 5
         z: 10
         anchors.fill: parent
         enabled: currentItem !== null && !currentItem.itemScaled
         preventStealing: true
 
-        Timer {
-            id: clickTimer
-            interval: 200
-            onTriggered: if ( !flickListView.itemScaled ) flickListView.clicked()
-        }
-
         onPressed: {
+            if (flickAnimation.running) {
+                flickAnimation.stop()
+            }
+
             firstPressX = mouseX
             pressX = mouseX
             pressY = mouseY
         }
 
         onPositionChanged: {
-            if (currentItem.itemScaled){
+            if (currentItem.itemScaled) {
                 return
             }
 
@@ -217,32 +234,27 @@ Rectangle {
         }
 
         onReleased: {
-
-            if ( Math.abs(firstPressX-mouseX) < tapThresshold){
-                if (clickTimer.running && !flickListView.alignMiddle){
-                    clickTimer.stop()
-                    currentItem.scaleToMax(pressX, pressY)
-                } else {
-                     clickTimer.restart()
-                }
+            if (Math.abs(firstPressX-mouseX) < tapThresshold && !flickListView.itemScaled) {
+                flickListView.clicked()
                 return
             }
 
-            if ( flickListView.itemScaled)
+            if (flickListView.itemScaled)
                 return
 
             // If user has moved too little, return back to beginning
             var delta = Math.abs(firstPressX-mouseX)
-            if ( 0 < delta && delta < (parent.width / 4)){
+            if (0 < delta && delta < (parent.width / 4)) {
                 moveBackToBeginning()
                 return
             }
 
             // Move to the next or previous item
-            if ( firstPressX > mouseX )
+            if (firstPressX > mouseX) {
                 moveToLeft()
-            else
+            } else {
                 moveToRight()
+            }
 
         }
     }

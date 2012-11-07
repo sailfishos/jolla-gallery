@@ -2,7 +2,7 @@ import QtQuick 1.1
 import com.jolla.components 1.0
 
 
-Rectangle {
+Item {
     id: fsMediaItem
     property url source
     property string mimeType
@@ -10,7 +10,6 @@ Rectangle {
     property bool enableZoom: parent.enableZoom
     property bool imageItem: mimeType.substring(0,5) !== "video"
     property QtObject mediaItem: null
-    color: "black"
 
     Component {
         id: imageComponent
@@ -45,6 +44,7 @@ Rectangle {
 
         fsMediaItem.source = source
         fsMediaItem.mimeType = mimeType
+        fsMediaItem.opacity = 0
 
         if (mediaItem == null){
             mediaItem = imageItem
