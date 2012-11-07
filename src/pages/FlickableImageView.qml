@@ -189,17 +189,12 @@ Rectangle {
         property real firstPressX
         property real pressX
         property real pressY
-        property real tapThresshold: 10
+        property real tapThresshold: 5
         z: 10
         anchors.fill: parent
         enabled: currentItem !== null && !currentItem.itemScaled
         preventStealing: true
 
-        Timer {
-            id: clickTimer
-            interval: 200
-            onTriggered: if ( !flickListView.itemScaled ) flickListView.clicked()
-        }
 
         onPressed: {
             firstPressX = mouseX
@@ -218,13 +213,8 @@ Rectangle {
 
         onReleased: {
 
-            if ( Math.abs(firstPressX-mouseX) < tapThresshold){
-                if (clickTimer.running && !flickListView.alignMiddle){
-                    clickTimer.stop()
-                    currentItem.scaleToMax(pressX, pressY)
-                } else {
-                     clickTimer.restart()
-                }
+            if ( Math.abs(firstPressX-mouseX) < tapThresshold && !flickListView.itemScaled){
+                flickListView.clicked()
                 return
             }
 
@@ -245,5 +235,7 @@ Rectangle {
                 moveToRight()
 
         }
+
+        onCanceled: console.log("Canceled")
     }
 }

@@ -71,7 +71,7 @@ Flickable {
 
         // If photo height is greater than view height, do Y centering only after that
         // otherwise it shoots to the skies.
-        if ( photo.height > height) {
+        if (photo.height > height) {
             contentY += (center.y * newHeight / oldHeight) - center.y
         }
 
@@ -120,21 +120,6 @@ Flickable {
                 fittedScale = 0
                 itemScaled = false
                 updateScale()
-            }
-
-            // We need to handle the second double tap because the top level mouse area
-            // is disabled while interacting with this QML element.
-            // NOTE: onDoubleClicked didn't work here. It worked randomly on N950.
-            MouseArea {
-                anchors.fill: parent
-                Timer { id: clickTimer; interval: 200 }
-
-                onPressed: {
-                    if (clickTimer.running)
-                        resetScale()
-                    else
-                        clickTimer.start()
-                }
             }
         }
     }
