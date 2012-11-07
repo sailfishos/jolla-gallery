@@ -73,7 +73,7 @@ Item {
             previousRightItem = rightItem
         }
 
-        prevItem = ItemContainer.itemAt(bufferSize -1)
+        prevItem = ItemContainer.itemAt(bufferSize - 1)
         nextItem = ItemContainer.itemAt(bufferSize + 1)
     }
 
@@ -162,7 +162,7 @@ Item {
     function modelIndex(index)
     {
         if (index < 0){
-            return (index+model.count) % model.count
+            return (index + model.count) % model.count
         } else {
             return (index % model.count)
         }
@@ -178,7 +178,6 @@ Item {
         property: "x"
         to: 0
         duration: flickAnimationDuration
-        //alwaysRunToEnd: true
         easing.type: Easing.OutExpo
         onCompleted: {
             if (moveDirection < 0)
@@ -186,7 +185,7 @@ Item {
             if (moveDirection > 0)
                 swapRight()
 
-            prevItem = ItemContainer.itemAt(bufferSize -1)
+            prevItem = ItemContainer.itemAt(bufferSize - 1)
             nextItem = ItemContainer.itemAt(bufferSize + 1)
         }
     }
@@ -216,7 +215,7 @@ Item {
         preventStealing: true
 
         onPressed: {
-            if (flickAnimation.running){
+            if (flickAnimation.running) {
                 flickAnimation.stop()
             }
 
@@ -226,7 +225,7 @@ Item {
         }
 
         onPositionChanged: {
-            if (currentItem.itemScaled){
+            if (currentItem.itemScaled) {
                 return
             }
 
@@ -235,27 +234,27 @@ Item {
         }
 
         onReleased: {
-
-            if ( Math.abs(firstPressX-mouseX) < tapThresshold && !flickListView.itemScaled){
+            if (Math.abs(firstPressX-mouseX) < tapThresshold && !flickListView.itemScaled) {
                 flickListView.clicked()
                 return
             }
 
-            if ( flickListView.itemScaled)
+            if (flickListView.itemScaled)
                 return
 
             // If user has moved too little, return back to beginning
             var delta = Math.abs(firstPressX-mouseX)
-            if ( 0 < delta && delta < (parent.width / 4)){
+            if (0 < delta && delta < (parent.width / 4)) {
                 moveBackToBeginning()
                 return
             }
 
             // Move to the next or previous item
-            if ( firstPressX > mouseX )
+            if (firstPressX > mouseX) {
                 moveToLeft()
-            else
+            } else {
                 moveToRight()
+            }
 
         }
     }
