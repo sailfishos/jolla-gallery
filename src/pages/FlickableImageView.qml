@@ -1,7 +1,7 @@
 import QtQuick 1.1
 import "scripts/ItemContainer.js" as ItemContainer
 
-Rectangle {
+Item {
     id: flickListView    
     signal clicked
 
@@ -10,12 +10,13 @@ Rectangle {
     property variant model
     property int moveDirection // -1 left, 0 nothing, 1 right
     property int bufferSize: 2
-    property int flickAnimationDuration: 150
+    property int flickAnimationDuration: 400
     property bool alignMiddle
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem.x === 0
+    property variant prevItem
+    property variant nextItem
 
-    color: "black"
 
     Component {
         id: mediaItemComponent
@@ -43,6 +44,7 @@ Rectangle {
 
         var modelItem = model.get(modelIndex(currentIndex))
         currentItem.loadMediaContent(modelItem.url, modelItem.mimeType)
+        currentItem.opacity = 1
 
         var previousLeftItem = currentItem
         var previousRightItem = currentItem
@@ -70,6 +72,9 @@ Rectangle {
             previousLeftItem = leftItem
             previousRightItem = rightItem
         }
+
+        prevItem = ItemContainer.itemAt(bufferSize -1)
+        nextItem = ItemContainer.itemAt(bufferSize + 1)
     }
 
     function moveToLeft()
@@ -173,14 +178,29 @@ Rectangle {
         property: "x"
         to: 0
         duration: flickAnimationDuration
-        alwaysRunToEnd: true
-        easing.type: Easing.OutQuad
+        //alwaysRunToEnd: true
+        easing.type: Easing.OutExpo
         onCompleted: {
             if (moveDirection < 0)
                 swapLeft()
             if (moveDirection > 0)
                 swapRight()
+
+            prevItem = ItemContainer.itemAt(bufferSize -1)
+            nextItem = ItemContainer.itemAt(bufferSize + 1)
         }
+    }
+
+    Binding {
+        target: prevItem
+        property: "opacity"
+        value: Math.pow((prevItem.x + width)/width, 2)
+    }
+
+    Binding {
+        target: nextItem
+        property: "opacity"
+        value: Math.pow((width - nextItem.x)/width, 2)
     }
 
     // NOTE: onDoubleClicked didn't work here. It worked randomly on N950.
@@ -195,8 +215,11 @@ Rectangle {
         enabled: currentItem !== null && !currentItem.itemScaled
         preventStealing: true
 
-
         onPressed: {
+            if (flickAnimation.running){
+                flickAnimation.stop()
+            }
+
             firstPressX = mouseX
             pressX = mouseX
             pressY = mouseY
@@ -235,7 +258,5 @@ Rectangle {
                 moveToRight()
 
         }
-
-        onCanceled: console.log("Canceled")
     }
 }

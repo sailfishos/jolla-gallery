@@ -52,6 +52,7 @@ Page {
 
         PullDownMenu {
             bottomMargin: 0
+
             MenuItem {
                 text: "Delete"
                 onClicked: {
@@ -66,9 +67,9 @@ Page {
             }
             MenuItem {
                 text: "Set as wallpaper"
-                onClicked:{console.log("Changed wallpaper"); wallpaper.source = imageList.currentItemUrl()}
+                onClicked: wallpaper.source = imageList.currentItemUrl()
             }
-            visibleChildren: PageHeader {  title: "Share" }
+            visibleChildren: PageHeader { title: "Share" }
          }
 
         delegate: BackgroundItem {
@@ -78,6 +79,36 @@ Page {
                 text: name
                 anchors.verticalCenter: parent.verticalCenter
             }
+        }
+    }
+
+    // Hide the menu items from the pulldown menu with this image.
+    // Handle landscape & portrait changes also here.
+    Item {
+        anchors.fill: parent
+        opacity: imageList.alignMiddle ? 0 : 1
+        Behavior on opacity { NumberAnimation { duration: 300 } }
+
+        Image {
+            id: image
+
+            fillMode: Image.PreserveAspectCrop
+            width: window.isPortrait ? window.height : window.width
+            height: window.isPortrait ? window.width : window.height
+            source: theme.backgroundImage
+            transform: Rotation {
+                angle: !window.isPortrait ? -90 : 0
+                origin {
+                    x: !window.isPortrait ? window.height / 2 : 0
+                    y: !window.isPortrait ? window.height / 2 : 0
+                }
+            }
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            opacity: 0.65
+            color: "black"
         }
     }
 
