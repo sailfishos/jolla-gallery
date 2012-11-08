@@ -29,6 +29,8 @@ Page {
         property bool itemSelected
         property Item overlay: __overlay
 
+        property int firstVisible: Math.max(0, grid.indexAt(0, grid.contentY))
+
         flickDeceleration: 1400
         cellWidth: window.isPortrait ? width / 3 : Math.floor(width / 5.0)
         cellHeight: cellWidth

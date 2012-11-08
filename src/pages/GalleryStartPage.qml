@@ -63,6 +63,11 @@ Page {
                 icon: "PhotoIcon.qml"
                 type: DocumentGallery.Image
             }
+            DocumentGallerySource {
+                title: "Videos"
+                icon: "PhotoIcon.qml"
+                type: DocumentGallery.Video
+            }
         }
     }
 }

@@ -26,10 +26,10 @@ Item {
         id: videoComponent
 
         VideoPlayer {
-            property bool itemScaled: false
             anchors.fill: parent
             source: fsMediaItem.source
-
+            mimeType: fsMediaItem.mimeType
+            alignTop: fsMediaItem.parent.alignMiddle
         }
     }
 
