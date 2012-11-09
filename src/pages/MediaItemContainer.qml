@@ -18,6 +18,7 @@ Item {
             anchors.fill: parent
             source: fsMediaItem.source
             alignTop: fsMediaItem.parent.alignMiddle
+            clip: fsMediaItem.parent.alignMiddle
         }
     }
 
@@ -26,7 +27,6 @@ Item {
 
         VideoPlayer {
             property bool itemScaled: false
-
             anchors.fill: parent
             source: fsMediaItem.source
 

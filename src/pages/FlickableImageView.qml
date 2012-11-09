@@ -10,7 +10,7 @@ Item {
     property variant model
     property int moveDirection // -1 left, 0 nothing, 1 right
     property int bufferSize: 2
-    property int flickAnimationDuration: 400
+    property int flickAnimationDuration: 500
     property bool alignMiddle
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem.x === 0
@@ -22,7 +22,7 @@ Item {
         id: mediaItemComponent
 
         MediaItemContainer {
-            anchors { top: flickListView.top; bottom: flickListView.bottom; margins: 4 }
+            anchors { top: flickListView.top; bottom: flickListView.bottom }
             width: flickListView.width
         }
     }
