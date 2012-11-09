@@ -44,7 +44,6 @@ Item {
 
         fsMediaItem.source = source
         fsMediaItem.mimeType = mimeType
-        fsMediaItem.opacity = 0
 
         if (mediaItem == null){
             mediaItem = imageItem

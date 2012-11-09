@@ -118,7 +118,7 @@ Page {
         property bool isPortrait: window.isPortrait
         property real menuProgress: alignMiddle ? 1.0 : 0
 
-        clip: menuProgress != 0.0
+        clip: !alignMiddle
         onClicked: alignMiddle = !alignMiddle
 
         Behavior on menuProgress {
