@@ -24,7 +24,7 @@ Item {
         MediaItemContainer {
             anchors { top: flickListView.top; bottom: flickListView.bottom }
             width: flickListView.width
-
+            // Adjust opacity based on item position
             opacity: Math.abs(x) <= flickListView.width ? 1.0 -  (Math.abs(x) / flickListView.width) : 0
         }
     }
@@ -46,7 +46,6 @@ Item {
 
         var modelItem = model.get(modelIndex(currentIndex))
         currentItem.loadMediaContent(modelItem.url, modelItem.mimeType)
-        //currentItem.opacity = 1
 
         var previousLeftItem = currentItem
         var previousRightItem = currentItem
