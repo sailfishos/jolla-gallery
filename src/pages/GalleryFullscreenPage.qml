@@ -69,8 +69,8 @@ Page {
                 text: "Set as wallpaper"
                 onClicked: wallpaper.source = imageList.currentItemUrl()
             }
-            visibleChildren: PageHeader { title: "Share" }
-         }
+        }
+        header: PageHeader { title: "Share" }
 
         delegate: BackgroundItem {
             width: menuList.width
