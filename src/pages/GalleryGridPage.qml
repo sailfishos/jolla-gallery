@@ -36,6 +36,7 @@ Page {
         height: parent.height
         width: parent.width
         cacheBuffer: cellHeight * 5
+        pressDelay: 75
 
         onItemSelectedChanged: contentItem.opacity = itemSelected ? 0.2 : 1
 
