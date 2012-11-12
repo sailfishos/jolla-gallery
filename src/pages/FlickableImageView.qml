@@ -204,7 +204,7 @@ Item {
         preventStealing: true
 
         onPressed: {
-            if (flickAnimation.running){
+            if (flickAnimation.running) {
                 flickAnimation.stop()
             }
 

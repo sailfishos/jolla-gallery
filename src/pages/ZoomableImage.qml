@@ -110,10 +110,8 @@ Flickable {
                 if (status != Image.Ready)
                     return
 
-                if (alignTop){
-                    fittedScale = window.isPortrait
-                            ? minimumDimension / Math.max(photo.implicitWidth, photo.implicitHeight)
-                            : minimumDimension / Math.max(photo.implicitWidth, photo.implicitHeight)
+                if (alignTop) {
+                    fittedScale = minimumDimension / Math.max(photo.implicitWidth, photo.implicitHeight)
                 } else {
                     fittedScale = window.isPortrait
                             ? minimumDimension / photo.implicitWidth
