@@ -137,14 +137,8 @@ Flickable {
             asynchronous: true
             anchors.centerIn: parent
 
-            onStatusChanged: {
-                updateScale()
-            }
-
-            onIsPortraitChanged: {
-                updateScale()
-            }
-
+            onStatusChanged: updateScale()
+            onIsPortraitChanged: updateScale()
             onSourceChanged: {
                 scaleBehavior.enabled = false
                 fittedScale = 0
