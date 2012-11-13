@@ -18,24 +18,37 @@ Page {
 
     ListModel {
         id: actionsModel
-        ListElement {
-            name: "Email"
+
+        function title(index)
+        {
+            if (title["text"] === undefined) {
+                title.text = [
+                            //% "Email"
+                            qsTrId("gallery-bt-share_email"),
+                            //% "SMS"
+                            qsTrId("gallery-bt-share_sms"),
+                            "FaceBook",
+                            "Picasa",
+                            "Evernote"
+                        ]
+            }
+            return title.text[index]
         }
 
         ListElement {
-            name: "SMS"
+            // placeholder for email
         }
-
         ListElement {
-            name: "Facebook"
+            // placeholder for sms
         }
-
         ListElement {
-            name: "Picasa"
+            // placeholder for Facebook
         }
-
         ListElement {
-            name: "Evernote"
+            // placeholder for picasa
+        }
+        ListElement {
+            //placeholder for Evernote
         }
     }
 
@@ -54,23 +67,27 @@ Page {
             bottomMargin: 0
 
             MenuItem {
-                text: "Details"
+                //% "Details"
+                text: qsTrId("gallery-me-details")
                 onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryDetailsPage.qml"), {modelItem: model.get(currentIndex).itemId} )
             }
             MenuItem {
-                text: "Delete"
+                //% "Delete"
+                text: qsTrId("gallery-me-delete")
                 onClicked: {
                     console.log("Delete clicked")
                 }
             }
             MenuItem {
-                text: "Edit"
+                //% "Edit"
+                text: qsTrId("gallery-me-edit")
                 onClicked: {
                     console.log("Delete clicked")
                 }
             }
             MenuItem {
-                text: "Set as wallpaper"
+                //% "Set as wallpaper"
+                text: qsTrId("gallery-me-set_as_wallpaper")
                 onClicked: wallpaper.source = imageList.currentItemUrl()
             }
         }
@@ -83,13 +100,14 @@ Page {
             width: menuList.width
             Label {
                 x: 26
-                text: name
+                text: actionsModel.title(index)
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
 
         Label {
-            text: "Share"
+            //% "Share"
+            text: qsTrId("gallery-la-share")
             color: theme.highlightColor
             height: theme.standardItemHeight
             verticalAlignment: Text.AlignVCenter

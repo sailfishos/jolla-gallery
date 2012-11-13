@@ -57,7 +57,9 @@ Page {
         model: MediaSourceModel {
             id: mediaSourceModel
             DocumentGallerySource {
-                title: "Photos"
+                //: Main screen
+                //% "Photos"
+                title: qsTrId("gallery-bt-photos")
                 icon: "PhotoIcon.qml"
                 type: DocumentGallery.Image
             }
