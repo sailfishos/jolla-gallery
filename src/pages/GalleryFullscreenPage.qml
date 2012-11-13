@@ -125,9 +125,10 @@ Page {
             NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
         }
 
-        x: isPortrait ? 0 :  menuProgress * parent.width / 2
-        y: isPortrait ? menuProgress * parent.height / 2 : 0
-        width: isPortrait ? parent.width : (2 - menuProgress) / 2 * parent.width
-        height: isPortrait ? (2 - menuProgress) / 2 * parent.height  : parent.height
+        anchors {
+            fill: parent
+            leftMargin: window.isPortrait ? 0 : menuProgress * parent.width / 2
+            topMargin: window.isPortrait ? menuProgress * parent.height / 2 : 0
+        }
     }
 }
