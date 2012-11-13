@@ -26,7 +26,7 @@ Flickable {
         if (alignTop) {
             scaleBehavior.enabled = true
             photo.updateScale()
-        }else{
+        } else {
             photo.updateScale()
             scaleBehavior.enabled = false
         }
