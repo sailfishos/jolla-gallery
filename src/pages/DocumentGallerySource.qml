@@ -6,7 +6,7 @@ MediaSource {
     property alias type: galleryModel.rootType
     model: DocumentGalleryModel {
         id: galleryModel
-        properties: [ "url", "mimeType" ]
+        properties: [ "url", "mimeType", "title" ]
         autoUpdate: true
     }
     count: galleryModel.count
