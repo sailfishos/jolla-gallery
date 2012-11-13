@@ -39,7 +39,7 @@ Image {
         // Indicate selection by scaling the thumbnail, but it's allowed to do
         // when grid is not moving and contains mouse
         onPressed: {
-            if (!thumbnail.GridView.view.movingVertically && !thumbnail.GridView.view.flicking && containsMouse){
+            if (!thumbnail.GridView.view.movingVertically && !thumbnail.GridView.view.flicking && containsMouse) {
                 thumbnail.scale = 1.1
                 thumbnail.GridView.view.itemSelected = true
                 thumbnail.state = "highlight"

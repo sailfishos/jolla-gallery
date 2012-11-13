@@ -37,7 +37,7 @@ Item {
     {
         // Destroy the old media item if the type is different, otherwise
         // the old media item is reused.
-        if (mediaItem !== null && mediaItem.mimeType != mimeType){
+        if (mediaItem !== null && mediaItem.mimeType != mimeType) {
             mediaItem.destroy()
             mediaItem = null
         }
@@ -45,7 +45,7 @@ Item {
         fsMediaItem.source = source
         fsMediaItem.mimeType = mimeType
 
-        if (mediaItem == null){
+        if (mediaItem == null) {
             mediaItem = imageItem
                     ? imageComponent.createObject(fsMediaItem)
                     : videoComponent.createObject(fsMediaItem)
