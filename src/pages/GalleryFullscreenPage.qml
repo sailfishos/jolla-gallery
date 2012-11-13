@@ -115,18 +115,19 @@ Page {
     // Element for handling the actual flicking and image buffering
     FlickableImageView {
         id: imageList
+        property bool isPortrait: window.isPortrait
+        property real menuProgress: alignMiddle ? 1.0 : 0
 
-        property real menuProgress: alignMiddle ? 1.0 : 0.0
+        clip: !alignMiddle
+        onClicked: alignMiddle = !alignMiddle
+
         Behavior on menuProgress {
             NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
         }
 
-        anchors {
-            fill: parent
-            leftMargin: window.isPortrait ? 0 : menuProgress * parent.width / 2
-            topMargin: window.isPortrait ? menuProgress * parent.height / 2 : 0
-        }
-        clip: menuProgress != 0.0
-        onClicked: alignMiddle = !alignMiddle
+        x: isPortrait ? 0 :  menuProgress * parent.width / 2
+        y: isPortrait ? menuProgress * parent.height / 2 : 0
+        width: isPortrait ? parent.width : (2 - menuProgress) / 2 * parent.width
+        height: isPortrait ? (2 - menuProgress) / 2 * parent.height  : parent.height
     }
 }

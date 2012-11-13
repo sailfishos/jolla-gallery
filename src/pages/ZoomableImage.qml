@@ -18,6 +18,20 @@ Flickable {
     contentWidth: Math.max(width, photo.width)
     contentHeight: Math.max(height, photo.height)
 
+    onAlignTopChanged: setSplitMode()
+
+
+    function setSplitMode()
+    {
+        if (alignTop) {
+            scaleBehavior.enabled = true
+            photo.updateScale()
+        } else {
+            photo.updateScale()
+            scaleBehavior.enabled = false
+        }
+    }
+
     function scaleToMax(centerX, centerY)
     {
         if (!itemScaled){
@@ -95,9 +109,15 @@ Flickable {
             function updateScale() {
                 if (status != Image.Ready)
                     return
-                fittedScale = window.isPortrait
-                        ? minimumDimension / photo.implicitWidth
-                        : minimumDimension / photo.implicitHeight
+
+                if (alignTop) {
+                    fittedScale = minimumDimension / Math.max(photo.implicitWidth, photo.implicitHeight)
+                } else {
+                    fittedScale = window.isPortrait
+                            ? minimumDimension / photo.implicitWidth
+                            : minimumDimension / photo.implicitHeight
+                }
+
                 if (!itemScaled || scale < fittedScale) {
                     scale = fittedScale
                     contentX = 0
@@ -105,6 +125,9 @@ Flickable {
                     itemScaled = false
                 }
             }
+
+            // This Behavior is used only when user has aligned image i.e. we are on a split screen mode
+            Behavior on scale { id: scaleBehavior; NumberAnimation {  duration: 200; alwaysRunToEnd: true } }
 
             smooth: !(flickable.movingVertically || flickable.movingHorizontally)
             width: implicitWidth * scale
@@ -117,9 +140,9 @@ Flickable {
             onStatusChanged: updateScale()
             onIsPortraitChanged: updateScale()
             onSourceChanged: {
+                scaleBehavior.enabled = false
                 fittedScale = 0
                 itemScaled = false
-                updateScale()
             }
         }
     }

@@ -10,7 +10,7 @@ Item {
     property variant model
     property int moveDirection // -1 left, 0 nothing, 1 right
     property int bufferSize: 2
-    property int flickAnimationDuration: 400
+    property int flickAnimationDuration: 500
     property bool alignMiddle
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem.x === 0
@@ -22,8 +22,10 @@ Item {
         id: mediaItemComponent
 
         MediaItemContainer {
-            anchors { top: flickListView.top; bottom: flickListView.bottom; margins: 4 }
+            anchors { top: flickListView.top; bottom: flickListView.bottom }
             width: flickListView.width
+            // Adjust opacity based on item position
+            opacity: Math.abs(x) <= flickListView.width ? 1.0 -  (Math.abs(x) / flickListView.width) : 0
         }
     }
 
@@ -44,7 +46,6 @@ Item {
 
         var modelItem = model.get(modelIndex(currentIndex))
         currentItem.loadMediaContent(modelItem.url, modelItem.mimeType)
-        currentItem.opacity = 1
 
         var previousLeftItem = currentItem
         var previousRightItem = currentItem
@@ -188,18 +189,6 @@ Item {
             prevItem = ItemContainer.itemAt(bufferSize - 1)
             nextItem = ItemContainer.itemAt(bufferSize + 1)
         }
-    }
-
-    Binding {
-        target: prevItem
-        property: "opacity"
-        value: Math.pow((prevItem.x + width)/width, 2)
-    }
-
-    Binding {
-        target: nextItem
-        property: "opacity"
-        value: Math.pow((width - nextItem.x)/width, 2)
     }
 
     // NOTE: onDoubleClicked didn't work here. It worked randomly on N950.
