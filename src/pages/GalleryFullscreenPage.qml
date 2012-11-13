@@ -54,6 +54,10 @@ Page {
             bottomMargin: 0
 
             MenuItem {
+                text: "Details"
+                onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryDetailsPage.qml"), {modelItem: model.get(currentIndex).itemId} )
+            }
+            MenuItem {
                 text: "Delete"
                 onClicked: {
                     console.log("Delete clicked")
