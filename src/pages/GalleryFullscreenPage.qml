@@ -70,7 +70,10 @@ Page {
                 onClicked: wallpaper.source = imageList.currentItemUrl()
             }
         }
-        header: PageHeader { title: "Share" }
+
+        header: PageHeader {
+            title: model.get(currentIndex).title
+        }
 
         delegate: BackgroundItem {
             width: menuList.width
@@ -78,6 +81,19 @@ Page {
                 x: 26
                 text: name
                 anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        Label {
+            text: "Share"
+            color: theme.highlightColor
+            height: theme.standardItemHeight
+            verticalAlignment: Text.AlignVCenter
+            anchors {
+                top: parent.top
+                topMargin: 78 - menuList.contentY  // 78 is the height of the PageHeader
+                right: parent.right
+                rightMargin: 24
             }
         }
     }
