@@ -7,7 +7,8 @@ Page {
     property alias modelItem: galleryItem.item
 
     PageHeader {
-        title: qsTr("Details")
+        //% "Details"
+        title: qsTrId("gallery-he-details")
     }
 
     DocumentGalleryItem {
@@ -24,13 +25,15 @@ Page {
                 heightLabel.text = galleryItem.metaData.height
 
                 if (itemType == DocumentGallery.Video) {
-                    durationHeading.text = qsTr("Duration")
+                    //% "Duration"
+                    durationHeading.text = qsTrId("gallery-la-duration")
                     durationLabel.text = durationDescription(galleryItem.metaData.duration)
                 }
             }
         }
 
         function sizeDescription(size) {
+            // FIXME: in french these should be mega/kilo octets
             var bytes = parseInt(size)
             if (bytes > (1024 * 1024)) {
                 return Math.floor(bytes / (1024 * 1024)) + 'MB'
@@ -58,7 +61,9 @@ Page {
         Label {
             height: 40
             font.family: theme.fontFamilyHeading
-            text: qsTr("Filename")
+            //: Details page
+            //% "Filename"
+            text: qsTrId("gallery-la-filename")
         }
         Label {
             id: nameLabel
@@ -69,7 +74,8 @@ Page {
         Label {
             height: 40
             font.family: theme.fontFamilyHeading
-            text: qsTr("Size")
+            //% "Size"
+            text: qsTrId("gallery-la-size")
         }
         Label {
             id: sizeLabel
@@ -80,7 +86,8 @@ Page {
         Label {
             height: 40
             font.family: theme.fontFamilyHeading
-            text: qsTr("Type")
+            //% "Type"
+            text: qsTrId("gallery-la-type")
         }
         Label {
             id: typeLabel
@@ -91,7 +98,8 @@ Page {
         Label {
             height: 40
             font.family: theme.fontFamilyHeading
-            text: qsTr("Width")
+            //% "Width"
+            text: qsTrId("gallery-la-width")
         }
         Label {
             id: widthLabel
@@ -102,7 +110,8 @@ Page {
         Label {
             height: 40
             font.family: theme.fontFamilyHeading
-            text: qsTr("Height")
+            //% "Height"
+            text: qsTrId("gallery-la-height")
         }
         Label {
             id: heightLabel

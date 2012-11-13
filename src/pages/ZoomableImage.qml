@@ -34,7 +34,7 @@ Flickable {
 
     function scaleToMax(centerX, centerY)
     {
-        if (!itemScaled){
+        if (!itemScaled) {
             scaleImage(3.5, Qt.point(centerX, centerY))
             flickable.returnToBounds()
         }

@@ -11,7 +11,7 @@ DeclarativeWallpaper::DeclarativeWallpaper(QObject *parent) :
 void DeclarativeWallpaper::setSource(const QUrl & url)
 {
     QUrl oldWallpaper = source();
-    if (oldWallpaper != url){
+    if (oldWallpaper != url) {
         m_gconfItem->set(url.toLocalFile());
     }
 }

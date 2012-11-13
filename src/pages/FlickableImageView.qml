@@ -52,7 +52,7 @@ Item {
 
         // Create 2 * bufferSize items and load their content radiating
         // out from the center item.
-        for (var i=1; i <= bufferSize; i++){
+        for (var i=1; i <= bufferSize; i++) {
             var leftItem = mediaItemComponent.createObject(flickListView);
             var rightItem = mediaItemComponent.createObject(flickListView);
 
@@ -162,7 +162,7 @@ Item {
 
     function modelIndex(index)
     {
-        if (index < 0){
+        if (index < 0) {
             return (index + model.count) % model.count
         } else {
             return (index % model.count)

@@ -21,6 +21,15 @@ Requires:  libdeclarative-gallery
 %description
 The Jolla Gallery application.
 
+%package ts-devel
+Summary:   Translation source for Jolla Gallery
+License:   TBD
+Group:     Applications/Multimedia
+
+%description ts-devel
+Translation source for Jolla Gallery
+
+
 %prep
 %setup -q -n %{name}-%{version}
 
@@ -43,6 +52,12 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/*.desktop
 %{_datadir}/jolla-gallery/*
 %{_bindir}/jolla-gallery
+/usr/share/translations/gallery_eng_en.qm
+
+%files ts-devel
+%defattr(-,root,root,-)
+/usr/share/translations/source/gallery.ts
+
 
 %post -n jolla-gallery -p /sbin/ldconfig
 %postun -n jolla-gallery -p /sbin/ldconfig

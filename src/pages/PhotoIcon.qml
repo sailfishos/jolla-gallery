@@ -31,7 +31,7 @@ Item {
         running: window.applicationActive && media.count > 1
         onTriggered: {
             var modelIndex = Math.floor((Math.random()*media.model.count));
-            if ( iconIndex % 2 == 0){
+            if (iconIndex % 2 == 0) {
                 icon2.source = "image://nemoThumbnail/" + media.model.get(modelIndex).url
                 icon1.opacity = 0
                 icon2.opacity = 1

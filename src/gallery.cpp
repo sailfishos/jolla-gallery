@@ -5,6 +5,9 @@
 #include <QDeclarativeContext>
 #include <QtDeclarative>
 #include <QDir>
+#include <QTranslator>
+#include <QLocale>
+
 #include "declarativewallpaper.h"
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
@@ -22,6 +25,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QApplication> app(new QApplication(argc, argv));
     QScopedPointer<QDeclarativeView> view(new QDeclarativeView);
 #endif
+
+    QTranslator engineeringEnglish;
+    engineeringEnglish.load("gallery_eng_en", "/usr/share/translations");
+    qApp->installTranslator(&engineeringEnglish);
+    QTranslator translator;
+    translator.load(QLocale(), "gallery", "-", "/usr/share/translations");
+    qApp->installTranslator(&translator);
 
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
