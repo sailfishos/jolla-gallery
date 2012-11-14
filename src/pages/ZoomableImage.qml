@@ -32,14 +32,6 @@ Flickable {
         }
     }
 
-    function scaleToMax(centerX, centerY)
-    {
-        if (!itemScaled) {
-            scaleImage(3.5, Qt.point(centerX, centerY))
-            flickable.returnToBounds()
-        }
-    }
-
     function resetScale()
     {
         if (itemScaled) {

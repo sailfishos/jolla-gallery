@@ -51,10 +51,4 @@ Item {
                     : videoComponent.createObject(fsMediaItem)
         }
     }
-
-    function scaleToMax(centerX, centerY)
-    {
-        if (imageItem)
-            mediaItem.scaleToMax(centerX, centerY)
-    }
  }

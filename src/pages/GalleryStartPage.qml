@@ -27,8 +27,8 @@ Page {
             // Load icon from a plugin
             Loader {
                 id: thumbnail
-                x: width
-                width: 160
+                x: width - 20
+                width: 120
                 height: width
                 source: media.icon
                 opacity: delegateItem.down ? 0.5 : 1
