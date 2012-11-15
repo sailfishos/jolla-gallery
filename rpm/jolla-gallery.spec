@@ -29,7 +29,6 @@ Group:     Applications/Multimedia
 %description ts-devel
 Translation source for Jolla Gallery
 
-
 %prep
 %setup -q -n %{name}-%{version}
 
