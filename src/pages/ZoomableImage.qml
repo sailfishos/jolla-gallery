@@ -15,11 +15,10 @@ Flickable {
     flickableDirection: Flickable.HorizontalAndVerticalFlick
     boundsBehavior: Flickable.StopAtBounds
 
-    contentWidth: Math.max(width, photo.width)
-    contentHeight: Math.max(height, photo.height)
+    contentWidth: itemScaled ? Math.max(width, photo.width) : width
+    contentHeight: itemScaled ? Math.max(height, photo.height) : height
 
     onAlignTopChanged: setSplitMode()
-
 
     function setSplitMode()
     {
@@ -29,14 +28,6 @@ Flickable {
         } else {
             photo.updateScale()
             scaleBehavior.enabled = false
-        }
-    }
-
-    function scaleToMax(centerX, centerY)
-    {
-        if (!itemScaled) {
-            scaleImage(3.5, Qt.point(centerX, centerY))
-            flickable.returnToBounds()
         }
     }
 
@@ -105,13 +96,14 @@ Flickable {
             property real fittedScale
             property real scale
             property bool isPortrait: window.isPortrait
+            property bool isImagePortrait: photo.implicitWidth < photo.implicitHeight
 
             function updateScale() {
                 if (status != Image.Ready)
                     return
 
                 if (alignTop) {
-                    fittedScale = minimumDimension / Math.max(photo.implicitWidth, photo.implicitHeight)
+                    fittedScale = minimumDimension / (isImagePortrait ? photo.implicitWidth : photo.implicitHeight)
                 } else {
                     fittedScale = window.isPortrait
                             ? minimumDimension / photo.implicitWidth
@@ -127,13 +119,13 @@ Flickable {
             }
 
             // This Behavior is used only when user has aligned image i.e. we are on a split screen mode
-            Behavior on scale { id: scaleBehavior; NumberAnimation {  duration: 200; alwaysRunToEnd: true } }
+            Behavior on scale { id: scaleBehavior; NumberAnimation {  duration: 300; alwaysRunToEnd: true } }
 
             smooth: !(flickable.movingVertically || flickable.movingHorizontally)
             width: implicitWidth * scale
             height: implicitHeight * scale
             sourceSize.width: minimumDimension * 1.5
-            fillMode: Image.PreserveAspectFit
+            fillMode:  Image.PreserveAspectFit
             asynchronous: true
             anchors.centerIn: parent
 

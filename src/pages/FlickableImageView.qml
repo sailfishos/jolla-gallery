@@ -14,8 +14,6 @@ Item {
     property bool alignMiddle
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem.x === 0
-    property variant prevItem
-    property variant nextItem
 
 
     Component {
@@ -72,10 +70,7 @@ Item {
 
             previousLeftItem = leftItem
             previousRightItem = rightItem
-        }
-
-        prevItem = ItemContainer.itemAt(bufferSize - 1)
-        nextItem = ItemContainer.itemAt(bufferSize + 1)
+        }        
     }
 
     function moveToLeft()
@@ -185,9 +180,6 @@ Item {
                 swapLeft()
             if (moveDirection > 0)
                 swapRight()
-
-            prevItem = ItemContainer.itemAt(bufferSize - 1)
-            nextItem = ItemContainer.itemAt(bufferSize + 1)
         }
     }
 
