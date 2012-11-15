@@ -10,7 +10,7 @@ Page {
         id: delegate
         BackgroundItem {
             id: delegateItem
-            width: parent.width
+            width: view.width
             height: thumbnail.height
 
             Label {
@@ -52,6 +52,8 @@ Page {
     }
 
     JollaListView {
+        id: view
+
         anchors.fill: parent
         delegate: delegate
         model: MediaSourceModel {
