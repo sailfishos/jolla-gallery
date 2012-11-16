@@ -62,6 +62,8 @@ Page {
                 title: qsTrId("gallery-bt-photos")
                 icon: "PhotoIcon.qml"
                 type: DocumentGallery.Image
+                // Temporary measure to filter out dummy images in other locations.
+                filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Pictures/" }
             }
         }
     }
