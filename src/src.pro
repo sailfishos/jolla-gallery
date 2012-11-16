@@ -7,6 +7,10 @@ QT += declarative
 qml.files = *.qml pages images
 qml.path = $$DEPLOYMENT_PATH
 
+CONFIG += mobility
+
+MOBILITY += gallery
+
 contains(CONFIG, desktop) {
     DEFINES *= DESKTOP
 }

@@ -63,6 +63,20 @@ Page {
                 icon: "PhotoIcon.qml"
                 type: DocumentGallery.Image
             }
+
+            albumDelegate: MediaSource {
+                model: DocumentGalleryModel {
+                    id: albumModel
+                    properties: [ "url", "mimeType", "title" ]
+                    autoUpdate: true
+                    rootType: DocumentGallery.Image
+                    rootItem: albumId
+                }
+                title: albumTitle
+                count: albumModel.count
+                icon: "PhotoIcon.qml"
+                ready: true
+            }
         }
     }
 }
