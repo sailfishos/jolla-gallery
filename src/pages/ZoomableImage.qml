@@ -1,8 +1,7 @@
 import QtQuick 1.1
+import com.jolla.components 1.0
 
-
-
-Flickable {
+JollaFlickable {
     id: flickable
 
     property bool itemScaled: false
@@ -13,7 +12,6 @@ Flickable {
     property real maximumDimension: Math.max(window.width, window.height)
 
     flickableDirection: Flickable.HorizontalAndVerticalFlick
-    boundsBehavior: Flickable.StopAtBounds
 
     contentWidth: itemScaled ? Math.max(width, photo.width) : width
     contentHeight: itemScaled ? Math.max(height, photo.height) : height
