@@ -2,7 +2,6 @@ import QtQuick 1.1
 import com.jolla.components 1.0
 import QtMobility.gallery 1.1
 
-
 /**
   * GalleryGridPage displays image and video thumbnails on a grid. By
   * tapping a thumbnail GalleryFullscreenPage will be opened.
@@ -23,7 +22,7 @@ Page {
         opacity: grid.showTitle ? 1 : 0
     }
 
-    GridView {
+    JollaGridView {
         id: grid
         property bool showTitle
         property bool itemSelected
@@ -32,7 +31,6 @@ Page {
         flickDeceleration: 1400
         cellWidth: window.isPortrait ? width / 3 : Math.floor(width / 5.0)
         cellHeight: cellWidth
-        boundsBehavior: Flickable.StopAtBounds
         height: parent.height
         width: parent.width
         cacheBuffer: cellHeight * 5
