@@ -27,9 +27,7 @@ Page {
                             qsTrId("gallery-bt-share_email"),
                             //% "SMS"
                             qsTrId("gallery-bt-share_sms"),
-                            "FaceBook",
-                            "Picasa",
-                            "Evernote"
+                            "Bluetooth"
                         ]
             }
             return title.text[index]
@@ -42,13 +40,20 @@ Page {
             // placeholder for sms
         }
         ListElement {
-            // placeholder for Facebook
+            // placeholder for Bluetooth
         }
-        ListElement {
-            // placeholder for picasa
-        }
-        ListElement {
-            //placeholder for Evernote
+    }
+
+    Connections {
+        target: window
+        // reset the page state if gallery is pushed to the background
+        onApplicationActiveChanged: {
+            if (!window.applicationActive && pageStack.currentPage === fullscreenPage) {
+                menuProgressBehavior.enabled = false
+                imageList.alignMiddle = false
+                menuProgressBehavior.enabled = true
+                pullDownMenu.hide()
+            }
         }
     }
 
@@ -64,6 +69,8 @@ Page {
         model: actionsModel
 
         PullDownMenu {
+            id: pullDownMenu
+
             bottomMargin: 0
 
             MenuItem {
@@ -159,6 +166,7 @@ Page {
         onClicked: alignMiddle = !alignMiddle
 
         Behavior on menuProgress {
+            id: menuProgressBehavior
             NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
         }
 
