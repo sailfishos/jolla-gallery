@@ -4,6 +4,7 @@ import QtMobility.gallery 1.1
 
 MediaSource {
     property alias type: galleryModel.rootType
+    property alias filter: galleryModel.filter
     model: DocumentGalleryModel {
         id: galleryModel
         properties: [ "url", "mimeType", "title" ]
