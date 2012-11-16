@@ -27,9 +27,7 @@ Page {
                             qsTrId("gallery-bt-share_email"),
                             //% "SMS"
                             qsTrId("gallery-bt-share_sms"),
-                            "FaceBook",
-                            "Picasa",
-                            "Evernote"
+                            "Bluetooth"
                         ]
             }
             return title.text[index]
@@ -42,13 +40,7 @@ Page {
             // placeholder for sms
         }
         ListElement {
-            // placeholder for Facebook
-        }
-        ListElement {
-            // placeholder for picasa
-        }
-        ListElement {
-            //placeholder for Evernote
+            // placeholder for Bluetooth
         }
     }
 
