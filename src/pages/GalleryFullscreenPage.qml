@@ -132,7 +132,7 @@ Page {
             verticalAlignment: Text.AlignVCenter
             anchors {
                 top: parent.top
-                topMargin: 78 - menuList.contentY  // 78 is the height of the PageHeader
+                topMargin: theme.pageHeaderHeight - menuList.contentY
                 right: parent.right
                 rightMargin: 24
             }
