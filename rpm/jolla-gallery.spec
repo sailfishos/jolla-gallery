@@ -17,6 +17,7 @@ BuildRequires:  pkgconfig(qdeclarative-boostable)
 
 Requires:  jollacomponents
 Requires:  libdeclarative-gallery
+Requires:  mapplauncherd-booster-jolla
 
 %description
 The Jolla Gallery application.
