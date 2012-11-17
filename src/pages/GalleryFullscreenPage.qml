@@ -25,8 +25,8 @@ Page {
                 title.text = [
                             //% "Email"
                             qsTrId("gallery-bt-share_email"),
-                            //% "SMS"
-                            qsTrId("gallery-bt-share_sms"),
+                            //% "MMS"
+                            qsTrId("gallery-bt-share_mms"),
                             "Bluetooth"
                         ]
             }
@@ -37,7 +37,7 @@ Page {
             // placeholder for email
         }
         ListElement {
-            // placeholder for sms
+            // placeholder for mms
         }
         ListElement {
             // placeholder for Bluetooth
