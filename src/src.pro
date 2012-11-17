@@ -2,7 +2,7 @@ include(../common.pri)
 
 TARGET = jolla-gallery
 target.path = /usr/bin
-QT += declarative
+QT += declarative dbus script
 
 qml.files = *.qml pages images
 qml.path = $$DEPLOYMENT_PATH
@@ -16,6 +16,7 @@ contains(CONFIG, desktop) {
 }
 
 CONFIG += link_pkgconfig
+
 PKGCONFIG += mlite
 
 OTHER_FILES += \
@@ -26,12 +27,14 @@ OTHER_FILES += \
 HEADERS += \
     declarativewallpaper.h \
     declarativemediamodel.h \
-    declarativemediasource.h
+    declarativemediasource.h \
+    declarativedbusinterface.h
 
 SOURCES += gallery.cpp \
     declarativewallpaper.cpp \
     declarativemediamodel.cpp \
-    declarativemediasource.cpp
+    declarativemediasource.cpp \
+    declarativedbusinterface.cpp
 
 INSTALLS += target qml
 
