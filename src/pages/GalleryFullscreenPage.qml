@@ -23,10 +23,13 @@ Page {
         {
             if (title["text"] === undefined) {
                 title.text = [
+                            "Facebook",
                             //% "Email"
                             qsTrId("gallery-bt-share_email"),
                             //% "MMS"
                             qsTrId("gallery-bt-share_mms"),
+                            "Picasa",
+                            "Evernote",
                             "Bluetooth"
                         ]
             }
@@ -34,10 +37,19 @@ Page {
         }
 
         ListElement {
-            // placeholder for email
+            // placeholder for Facebook
         }
         ListElement {
-            // placeholder for mms
+            // placeholder for Email
+        }
+        ListElement {
+            // placeholder for MMS
+        }
+        ListElement {
+            // placeholder for Picasa
+        }
+        ListElement {
+            // placeholder for Evernote
         }
         ListElement {
             // placeholder for Bluetooth
