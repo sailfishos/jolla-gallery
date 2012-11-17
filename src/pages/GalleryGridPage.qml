@@ -17,7 +17,7 @@ Page {
         y: grid.contentItem.y + grid.cellHeight + (grid.cellHeight - titleText.paintedHeight) / 2
         anchors { right: grid.right; rightMargin: 10 }
         color: theme.highlightColor
-        font.pixelSize: theme.fontSizeExtraLarge
+        font { pixelSize: theme.fontSizeExtraLarge; family: theme.fontFamilyHeading }
         onTextChanged: grid.showTitle = true
         opacity: grid.showTitle ? 1 : 0
     }
