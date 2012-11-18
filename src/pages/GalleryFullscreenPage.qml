@@ -105,8 +105,8 @@ Page {
                 }
             }
             MenuItem {
-                //% "Set as wallpaper"
-                text: qsTrId("gallery-me-set_as_wallpaper")
+                //% "Create ambience"
+                text: qsTrId("gallery-me-create_ambience")
                 onClicked: wallpaper.source = imageList.currentItemUrl()
             }
         }
