@@ -1,7 +1,7 @@
 import QtQuick 1.1
 import "scripts/ItemContainer.js" as ItemContainer
 
-Item {
+MouseArea {
     id: flickListView    
     signal clicked
 
@@ -17,14 +17,25 @@ Item {
     property variant prevItem
     property variant nextItem
 
+    property real firstPressX
+    property real pressX
+    property real pressY
+    property real tapThresshold: 5
+
+    enabled: currentItem !== null && !currentItem.itemScaled
+    preventStealing: true
+    drag.filterChildren: true
 
     Component {
         id: mediaItemComponent
 
         MediaItemContainer {
+            id: container
+
             anchors { top: flickListView.top; bottom: flickListView.bottom }
             width: flickListView.width
             alignTop: alignMiddle
+            isCurrentItem: container == currentItem
             // Adjust opacity based on item position
             opacity: Math.abs(x) <= flickListView.width ? 1.0 -  (Math.abs(x) / flickListView.width) : 0
         }
@@ -192,60 +203,46 @@ Item {
         }
     }
 
-    // NOTE: onDoubleClicked didn't work here. It worked randomly on N950.
-    MouseArea {
-        id: mouseArea
-        property real firstPressX
-        property real pressX
-        property real pressY
-        property real tapThresshold: 5
-        z: 10
-        anchors.fill: parent
-        enabled: currentItem !== null && !currentItem.itemScaled
-        preventStealing: true
-
-        onPressed: {
-            if (flickAnimation.running) {
-                flickAnimation.stop()
-            }
-
-            firstPressX = mouseX
-            pressX = mouseX
-            pressY = mouseY
+    onPressed: {
+        if (flickAnimation.running) {
+            flickAnimation.stop()
         }
 
-        onPositionChanged: {
-            if (currentItem.itemScaled) {
-                return
-            }
+        firstPressX = mouseX
+        pressX = mouseX
+        pressY = mouseY
+    }
 
-            currentItem.x = currentItem.x - (pressX - mouseX)
-            pressX = mouseX
+    onPositionChanged: {
+        if (currentItem.itemScaled) {
+            return
         }
 
-        onReleased: {
-            if (Math.abs(firstPressX-mouseX) < tapThresshold && !flickListView.itemScaled) {
-                flickListView.clicked()
-                return
-            }
+        currentItem.x = currentItem.x - (pressX - mouseX)
+        pressX = mouseX
+    }
 
-            if (flickListView.itemScaled)
-                return
+    onReleased: {
+        if (Math.abs(firstPressX-mouseX) < tapThresshold && !flickListView.itemScaled) {
+            flickListView.clicked()
+            return
+        }
 
-            // If user has moved too little, return back to beginning
-            var delta = Math.abs(firstPressX-mouseX)
-            if (0 < delta && delta < (parent.width / 4)) {
-                moveBackToBeginning()
-                return
-            }
+        if (flickListView.itemScaled)
+            return
 
-            // Move to the next or previous item
-            if (firstPressX > mouseX) {
-                moveToLeft()
-            } else {
-                moveToRight()
-            }
+        // If user has moved too little, return back to beginning
+        var delta = Math.abs(firstPressX-mouseX)
+        if (0 < delta && delta < (parent.width / 4)) {
+            moveBackToBeginning()
+            return
+        }
 
+        // Move to the next or previous item
+        if (firstPressX > mouseX) {
+            moveToLeft()
+        } else {
+            moveToRight()
         }
     }
 }

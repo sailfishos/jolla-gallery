@@ -66,7 +66,7 @@ Page {
                 type: DocumentGallery.Image
             }
             DocumentGallerySource {
-                //% "Photos"
+                //% "Videos"
                 title: qsTrId("gallery-bt-videos")
                 icon: "PhotoIcon.qml"
                 type: DocumentGallery.Video

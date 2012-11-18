@@ -7,7 +7,9 @@ Item {
     id: player
     property alias source: poster.source
     property alias mimeType: poster.mimeType
+    property alias video: videoLoader.item
     property bool alignTop
+    property bool playing
 
     property real windowWidth: window.isPortrait
             ? Math.min(window.width, window.height)
@@ -19,40 +21,100 @@ Item {
     property real minimumDimension: Math.min(window.width, window.height)
     property real maximumDimension: Math.max(window.width, window.height)
 
-    property real scale: alignTop
-            ? minimumDimension / Math.max(implicitWidth, implicitHeight)
-            : window.isPortrait
-                    ? minimumDimension / implicitWidth
-                    : minimumDimension / implicitHeight
+    property real scale: minimumDimension / implicitHeight
 
-    implicitWidth: poster.implicitWidth !== 0 // Once the video is loaded it should override this.
-            ? poster.implicitWidth
-            : windowWidth
-    implicitHeight: poster.implicitHeight !== 0
-            ? poster.implicitHeight
-            : windowHeight
+    implicitWidth: video === null || video.implicitWidth === 0
+            ? poster.implicitWidth !== 0 ? poster.implicitWidth : windowWidth
+            : video.implicitWidth
+    implicitHeight: video === null || video.implicitHeight === 0
+            ? poster.implicitHeight !== 0 ? poster.implicitHeight : windowHeight
+            : video.implicitHeight
 
-    Behavior on scale {
-        id: scaleBehavior
-        enabled: poster.status == Thumbnail.Ready
-        NumberAnimation {  duration: 200; alwaysRunToEnd: true }
+    clip: alignTop
+
+    onSourceChanged: videoLoader.sourceComponent = null
+
+    onPlayingChanged: {
+        if (playing) {
+            videoLoader.sourceComponent = videoComponent
+            video.play()
+        }
     }
 
-    Thumbnail {
-        id: poster
+    Component {
+        id: videoComponent
 
-        x: Math.max(0, (parent.width - width) / 2)
-        y: Math.max(0, (parent.height - height) / 2)
+        Video {
+            id: video
+
+            // Hide
+            visible:  window.applicationActive
+                    && fsMediaItem.isCurrentItem
+                    && video.status >= Video.Loaded
+                    && video.status <= Video.EndOfMedia
+
+            source: player.source
+            playing: true
+            paused: !window.applicationActive
+                    || !fsMediaItem.isCurrentItem
+                    || alignTop
+                    || !player.playing
+
+            onPlayingChanged: {
+                if (!playing)
+                    player.playing = false
+            }
+        }
+    }
+
+    Item {
+        // Lock the orientation to landscape as the current configuration on QtMultimediaKit
+        // uses an X overlay which refuses to render in anything but landscape.
+        width: maximumDimension
+        height: minimumDimension
 
         anchors.centerIn: parent
 
-        width: implicitWidth * player.scale
-        height: implicitHeight * player.scale
+        rotation: window.isPortrait ? 90 : 0
 
-        sourceSize.width: maximumDimension
-        sourceSize.height: maximumDimension
+        Loader {
+            id: videoLoader
 
-        priority: Thumbnail.HighPriority
-        fillMode: Thumbnail.PreserveAspectFit
+            width: video !== null ? video.implicitWidth * player.scale : maximumDimension
+            height: video !== null ? video.implicitHeight * player.scale : minimumDimension
+
+            anchors.centerIn: parent
+        }
+
+        Thumbnail {
+            id: poster
+
+            anchors.centerIn: parent
+
+            width: poster.implicitWidth * player.scale
+            height: poster.implicitHeight * player.scale
+
+            sourceSize.width: maximumDimension
+            sourceSize.height: maximumDimension
+
+            priority: Thumbnail.HighPriority
+            fillMode: Thumbnail.PreserveAspectFit
+            visible: video === null || !video.visible
+        }
+
+        Row {  // Rectangle
+            id: controls
+
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                bottom: parent.bottom
+            }
+
+            ToolIcon {
+                iconSource: player.playing ? "images/icon-m-pause.png" : "images/icon-m-play.png"
+                preventStealing: true
+                onClicked: player.playing = !player.playing
+            }
+        }
     }
 }

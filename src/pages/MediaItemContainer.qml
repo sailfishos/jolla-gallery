@@ -10,6 +10,7 @@ Item {
     property bool enableZoom: parent.enableZoom
     property bool alignTop
     property bool imageItem: mimeType.substring(0,5) !== "video"
+    property bool isCurrentItem
     property QtObject mediaItem: null
 
     Component {
