@@ -78,6 +78,7 @@ Page {
             right: window.isPortrait ? parent.right : parent.horizontalCenter
             bottom: window.isPortrait ? parent.verticalCenter : parent.bottom
         }
+        clip: true
         model: actionsModel
 
         PullDownMenu {
