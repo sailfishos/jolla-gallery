@@ -27,8 +27,8 @@ Page {
             // Load icon from a plugin
             Loader {
                 id: thumbnail
-                x: width
-                width: 160
+                x: width - 20
+                width: 120
                 height: width
                 source: media.icon
                 opacity: delegateItem.down ? 0.5 : 1
@@ -64,6 +64,8 @@ Page {
                 title: qsTrId("gallery-bt-photos")
                 icon: "PhotoIcon.qml"
                 type: DocumentGallery.Image
+                // Temporary measure to filter out dummy images in other locations.
+                filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Pictures/" }
             }
             DocumentGallerySource {
                 //% "Videos"

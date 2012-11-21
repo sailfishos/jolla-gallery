@@ -10,12 +10,10 @@ MouseArea {
     property variant model
     property int moveDirection // -1 left, 0 nothing, 1 right
     property int bufferSize: 2
-    property int flickAnimationDuration: 500
+    property int flickAnimationDuration: 1100
     property bool alignMiddle
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem.x === 0
-    property variant prevItem
-    property variant nextItem
 
     property real firstPressX
     property real pressX
@@ -84,10 +82,7 @@ MouseArea {
 
             previousLeftItem = leftItem
             previousRightItem = rightItem
-        }
-
-        prevItem = ItemContainer.itemAt(bufferSize - 1)
-        nextItem = ItemContainer.itemAt(bufferSize + 1)
+        }        
     }
 
     function moveToLeft()
@@ -197,9 +192,6 @@ MouseArea {
                 swapLeft()
             if (moveDirection > 0)
                 swapRight()
-
-            prevItem = ItemContainer.itemAt(bufferSize - 1)
-            nextItem = ItemContainer.itemAt(bufferSize + 1)
         }
     }
 

@@ -23,32 +23,49 @@ Page {
         {
             if (title["text"] === undefined) {
                 title.text = [
+                            "Facebook",
                             //% "Email"
                             qsTrId("gallery-bt-share_email"),
-                            //% "SMS"
-                            qsTrId("gallery-bt-share_sms"),
-                            "FaceBook",
+                            //% "MMS"
+                            qsTrId("gallery-bt-share_mms"),
                             "Picasa",
-                            "Evernote"
+                            "Evernote",
+                            "Bluetooth"
                         ]
             }
             return title.text[index]
         }
 
         ListElement {
-            // placeholder for email
-        }
-        ListElement {
-            // placeholder for sms
-        }
-        ListElement {
             // placeholder for Facebook
         }
         ListElement {
-            // placeholder for picasa
+            // placeholder for Email
         }
         ListElement {
-            //placeholder for Evernote
+            // placeholder for MMS
+        }
+        ListElement {
+            // placeholder for Picasa
+        }
+        ListElement {
+            // placeholder for Evernote
+        }
+        ListElement {
+            // placeholder for Bluetooth
+        }
+    }
+
+    Connections {
+        target: window
+        // reset the page state if gallery is pushed to the background
+        onApplicationActiveChanged: {
+            if (!window.applicationActive && pageStack.currentPage === fullscreenPage) {
+                menuProgressBehavior.enabled = false
+                imageList.alignMiddle = false
+                menuProgressBehavior.enabled = true
+                pullDownMenu.hide()
+            }
         }
     }
 
@@ -61,9 +78,12 @@ Page {
             right: window.isPortrait ? parent.right : parent.horizontalCenter
             bottom: window.isPortrait ? parent.verticalCenter : parent.bottom
         }
+        clip: true
         model: actionsModel
 
         PullDownMenu {
+            id: pullDownMenu
+
             bottomMargin: 0
 
             MenuItem {
@@ -86,8 +106,8 @@ Page {
                 }
             }
             MenuItem {
-                //% "Set as wallpaper"
-                text: qsTrId("gallery-me-set_as_wallpaper")
+                //% "Create ambience"
+                text: qsTrId("gallery-me-create_ambience")
                 onClicked: wallpaper.source = imageList.currentItemUrl()
             }
         }
@@ -113,7 +133,7 @@ Page {
             verticalAlignment: Text.AlignVCenter
             anchors {
                 top: parent.top
-                topMargin: 78 - menuList.contentY  // 78 is the height of the PageHeader
+                topMargin: theme.pageHeaderHeight - menuList.contentY
                 right: parent.right
                 rightMargin: 24
             }
@@ -156,10 +176,10 @@ Page {
         property bool isPortrait: window.isPortrait
         property real menuProgress: alignMiddle ? 1.0 : 0
 
-        clip: !alignMiddle
         onClicked: alignMiddle = !alignMiddle
 
         Behavior on menuProgress {
+            id: menuProgressBehavior
             NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
         }
 
