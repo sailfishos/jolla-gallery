@@ -37,7 +37,7 @@ Item {
     onPlayingChanged: {
         if (playing) {
             videoLoader.sourceComponent = videoComponent
-            video.play()
+            video.playing = true
         }
     }
 
@@ -47,7 +47,9 @@ Item {
         Video {
             id: video
 
-            // Hide
+            // Hide the Video item when the application isn't active or it doesn't have
+            // anything meaningful to display otherwise the overlay may draw over the
+            // homescreen, other applications, or other videos.
             visible:  window.applicationActive
                     && fsMediaItem.isCurrentItem
                     && video.status >= Video.Loaded
@@ -105,6 +107,10 @@ Item {
         Row {  // Rectangle
             id: controls
 
+            opacity: player.alignTop || !player.playing ? 1.0 : 0.0
+            Behavior on opacity { NumberAnimation { duration: 150 } }
+            visible: opacity !== 0.0
+
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 bottom: parent.bottom
@@ -112,7 +118,6 @@ Item {
 
             ToolIcon {
                 iconSource: player.playing ? "images/icon-m-pause.png" : "images/icon-m-play.png"
-                preventStealing: true
                 onClicked: player.playing = !player.playing
             }
         }

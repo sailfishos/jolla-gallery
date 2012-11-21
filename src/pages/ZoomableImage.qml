@@ -18,6 +18,8 @@ JollaFlickable {
 
     onAlignTopChanged: setSplitMode()
 
+    interactive: itemScaled
+
     function setSplitMode()
     {
         if (alignTop) {
@@ -136,4 +138,5 @@ JollaFlickable {
             }
         }
     }
+
 }

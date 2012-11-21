@@ -20,9 +20,13 @@ MouseArea {
     property real pressY
     property real tapThresshold: 5
 
-    enabled: currentItem !== null && !currentItem.itemScaled
     preventStealing: true
-    drag.filterChildren: true
+
+    // The Flickable and PinchArea in ZoomableImage will consume any mouse
+    // events before they reach here, filtering their events allows us to
+    // continue receiving those events but also means we receive events
+    // from the buttons in VideoPlayer which we don't want.
+    drag.filterChildren: currentItem !== null && currentItem.imageItem && !currentItem.itemScaled
 
     Component {
         id: mediaItemComponent
