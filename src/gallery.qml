@@ -18,8 +18,8 @@ ApplicationWindow {
 
     // Ensure the Wallpapers album exists and has the correct translated name.
     Component.onCompleted: {
-        //% "Wallpapers"
-        AlbumManager.createAlbum("<urn:jolla-gallery:albums:wallpapers>", qsTrId("gallery-bt-wallpapers"))
+        //% "Ambience"
+        AlbumManager.createAlbum("<urn:jolla-gallery:albums:wallpapers>", qsTrId("gallery-bt-ambience"))
     }
 
     cover: undefined
