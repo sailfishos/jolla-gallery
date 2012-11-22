@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.0.21
+Version:    0.0.24
 Release:    1
 Group:      Applications/Multimedia
 License:    TBD
@@ -17,6 +17,7 @@ BuildRequires:  pkgconfig(qdeclarative-boostable)
 
 Requires:  jollacomponents
 Requires:  libdeclarative-gallery
+Requires:  mapplauncherd-booster-jolla
 
 %description
 The Jolla Gallery application.

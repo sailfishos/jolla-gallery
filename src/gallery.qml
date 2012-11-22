@@ -7,7 +7,14 @@ import "pages/scripts/AlbumManager.js" as AlbumManager
 ApplicationWindow {
     id: window
 
-    lockOrientation: false
+    // Force the orientation to portrait in cover view.  Only set the orientation after
+    // lockOrientation becomes true to avoid possible fighting and races with the automatic
+    // orientation.
+    lockOrientation: !applicationActive
+    onLockOrientationChanged: {
+        if (lockOrientation)
+            isPortrait = true
+    }
 
     // Ensure the Wallpapers album exists and has the correct translated name.
     Component.onCompleted: {

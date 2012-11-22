@@ -10,7 +10,7 @@ Item {
     property variant model
     property int moveDirection // -1 left, 0 nothing, 1 right
     property int bufferSize: 2
-    property int flickAnimationDuration: 500
+    property int flickAnimationDuration: 1100
     property bool alignMiddle
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem.x === 0
