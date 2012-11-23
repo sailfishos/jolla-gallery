@@ -8,7 +8,9 @@ Item {
     property string mimeType
     property bool itemScaled: mediaItem !== null && mediaItem.itemScaled
     property bool enableZoom: parent.enableZoom
+    property bool alignTop
     property bool imageItem: mimeType.substring(0,5) !== "video"
+    property bool isCurrentItem
     property QtObject mediaItem: null
 
     Component {
@@ -17,8 +19,8 @@ Item {
         ZoomableImage {
             anchors.fill: parent
             source: fsMediaItem.source
-            alignTop: fsMediaItem.parent.alignMiddle
-            clip: fsMediaItem.parent.alignMiddle
+            alignTop: fsMediaItem.alignTop
+            clip: fsMediaItem.alignTop
         }
     }
 
@@ -26,10 +28,12 @@ Item {
         id: videoComponent
 
         VideoPlayer {
-            property bool itemScaled: false
+            property bool itemScaled
+
             anchors.fill: parent
             source: fsMediaItem.source
-
+            mimeType: fsMediaItem.mimeType
+            alignTop: fsMediaItem.alignTop
         }
     }
 
