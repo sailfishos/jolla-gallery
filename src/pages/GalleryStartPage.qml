@@ -10,7 +10,7 @@ Page {
         id: delegate
         BackgroundItem {
             id: delegateItem
-            width: parent.width
+            width: view.width
             height: thumbnail.height
 
             Label {
@@ -52,6 +52,8 @@ Page {
     }
 
     JollaListView {
+        id: view
+
         anchors.fill: parent
         delegate: delegate
         model: MediaSourceModel {
@@ -64,6 +66,13 @@ Page {
                 type: DocumentGallery.Image
                 // Temporary measure to filter out dummy images in other locations.
                 filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Pictures/" }
+            }
+
+            DocumentGallerySource {
+                //% "Videos"
+                title: qsTrId("gallery-bt-videos")
+                icon: "PhotoIcon.qml"
+                type: DocumentGallery.Video
             }
 
             albumDelegate: MediaSource {

@@ -5,7 +5,7 @@ import org.nemomobile.thumbnailer 1.0
   * GridThumbnail is for displaying either photo or video thumbnail.
   * NOTE: At the moment it only supports photothumbnails.
   */
-Image {
+Thumbnail {
     id: thumbnail
     signal clicked    
     property bool secondRow: window.isPortrait
@@ -14,11 +14,14 @@ Image {
 
     sourceSize.width: 160
     sourceSize.height: 160
-    asynchronous: true
-    source: model.thumbnailUrl === undefined ? "image://nemoThumbnail/" + model.url : model.thumbnailUrl
+    source: url
+    mimeType: model.mimeType
     opacity: GridView.view.showTitle && secondRow ? 0 : 1
     z: scale > 1 ? 100 : 0
     smooth: scale != 1.0
+    priority: index >= grid.firstVisible && index < grid.firstVisible + 15
+              ? Thumbnail.NormalPriority
+              : Thumbnail.LowPriority
 
     // Animation for displaying a title. Used only once for the
     // second row items.

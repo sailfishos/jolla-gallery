@@ -2,7 +2,10 @@ include(../common.pri)
 
 TARGET = jolla-gallery
 target.path = /usr/bin
+
 QT += declarative dbus script
+CONFIG += mobility
+MOBILITY += multimedia
 
 qml.files = *.qml pages images
 qml.path = $$DEPLOYMENT_PATH
