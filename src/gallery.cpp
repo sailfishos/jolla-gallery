@@ -27,19 +27,22 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     QString translationPath("/usr/share/translations/");
-    QString extTranslationFile("gallery_content_eng_en");
 
-    if (QFile::exists(translationPath + QDir::separator() + extTranslationFile + ".qm")) {
+    // First try to load translation files for gallery extensions
+    QDir extDir(translationPath + QDir::separator() + "gallery-extensions");
+    QStringList qmExtFiles = extDir.entryList(QStringList() << "*.qm", QDir::Files);
+
+    foreach(QString qmFile, qmExtFiles) {
         QTranslator *extEngineeringEnglish = new QTranslator(view->engine());
-        extEngineeringEnglish->load(extTranslationFile, translationPath);
+        extEngineeringEnglish->load(qmFile, extDir.absolutePath());
         qApp->installTranslator(extEngineeringEnglish);
 
         QTranslator *extTranslator = new QTranslator(view->engine());
-        extTranslator->load(QLocale(), "gallery_content", "-", translationPath);
+        extTranslator->load(QLocale(), qmFile, "-", extDir.absolutePath());
         qApp->installTranslator(extTranslator);
     }
 
-
+    // Second load the gallery translation files
     QTranslator engineeringEnglish;
     engineeringEnglish.load("gallery_eng_en", translationPath);
     qApp->installTranslator(&engineeringEnglish);
