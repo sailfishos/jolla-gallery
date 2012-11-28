@@ -26,12 +26,29 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QDeclarativeView> view(new QDeclarativeView);
 #endif
 
+    QString translationPath("/usr/share/translations/");
+    QString extTranslationFile("gallery_content_eng_en");
+
+    if (QFile::exists(translationPath + QDir::separator() + extTranslationFile + ".qm")) {
+        QTranslator *extEngineeringEnglish = new QTranslator(view->engine());
+        extEngineeringEnglish->load(extTranslationFile, translationPath);
+        qApp->installTranslator(extEngineeringEnglish);
+
+        QTranslator *extTranslator = new QTranslator(view->engine());
+        extTranslator->load(QLocale(), "gallery_content", "-", translationPath);
+        qApp->installTranslator(extTranslator);
+    }
+
+
     QTranslator engineeringEnglish;
-    engineeringEnglish.load("gallery_eng_en", "/usr/share/translations");
+    engineeringEnglish.load("gallery_eng_en", translationPath);
     qApp->installTranslator(&engineeringEnglish);
+
     QTranslator translator;
-    translator.load(QLocale(), "gallery", "-", "/usr/share/translations");
+    translator.load(QLocale(), "gallery", "-", translationPath);
     qApp->installTranslator(&translator);
+
+
 
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
