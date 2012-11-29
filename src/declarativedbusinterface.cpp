@@ -4,6 +4,8 @@
 #include <QDBusConnection>
 #include <QScriptEngine>
 #include <QScriptValue>
+#include <QFile>
+#include <QUrl>
 
 #include <qdeclarativeinfo.h>
 #include <QtDebug>
@@ -79,4 +81,14 @@ void DeclarativeDBusInterface::call(const QString &method, const QScriptValue &a
     message.setArguments(dbusArguments);
     if (!QDBusConnection::sessionBus().send(message))
         qmlInfo(this) << QDBusConnection::systemBus().lastError();
+}
+
+bool DeclarativeDBusInterface::removeFile(const QUrl &url)
+{
+    if (!url.isLocalFile()) {
+        qmlInfo(this) << url << "is not a local file";
+        return false;
+    }
+
+    return QFile::remove(url.toLocalFile());
 }

@@ -5,6 +5,7 @@
 
 QT_BEGIN_NAMESPACE
 class QScriptValue;
+class QUrl;
 QT_END_NAMESPACE
 
 class DeclarativeDBusInterface : public QObject
@@ -27,6 +28,7 @@ public:
     void setInterface(const QString &interface);
 
     Q_INVOKABLE void call(const QString &method, const QScriptValue &arguments);
+    Q_INVOKABLE bool removeFile(const QUrl &url);
 
 signals:
     void destinationChanged();

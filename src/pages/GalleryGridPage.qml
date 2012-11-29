@@ -1,6 +1,7 @@
 import QtQuick 1.1
 import com.jolla.components 1.0
 import QtMobility.gallery 1.1
+import "scripts/AlbumManager.js" as AlbumManager
 
 /**
   * GalleryGridPage displays image and video thumbnails on a grid. By
@@ -55,11 +56,13 @@ Page {
 
             property bool isMenuItem: grid.menuItem == thumbnail
             property int modelIndex: index
+            property url mediaUrl: url
 
             width: grid.cellWidth
             height: isMenuItem ? grid.cellHeight + grid.menuHeight : grid.cellHeight
             opacity: GridView.isCurrentItem ? 1.0 : grid.unfocusedOpacity
             menuOffset: index >= grid.minimumOffsetIndex ? grid.menuHeight : 0.0
+            enabled: isMenuItem || grid.contextMenu === null || !grid.contextMenu.active
             onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
             onPressAndHold: {
                 if (grid.contextMenu === null)
@@ -71,6 +74,12 @@ Page {
 
         ScrollBar {}
         ScrollDecorator {}
+
+        // Padding so there is space for the menu and displaced items at the
+        // bottom of the contentItem.
+        footer: Item {
+            height: menuHeight
+        }
     }
 
     Component {
@@ -84,6 +93,7 @@ Page {
                 //: Grid Page
                 //% "Delete"
                 text: qsTrId("gallery-bt-delete")
+                onClicked: AlbumManager.deleteMedia(grid.menuItem.mediaUrl)
             }
         }
     }
