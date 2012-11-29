@@ -42,7 +42,7 @@ Page {
         Behavior on unfocusedOpacity { NumberAnimation { duration: 200 }}
 
         flickDeceleration: 1400
-        cellWidth: width / columnCount
+        cellWidth: Math.floor(width / columnCount)
         cellHeight: cellWidth
         height: parent.height
         width: parent.width
