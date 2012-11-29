@@ -67,11 +67,26 @@ Page {
                 // Temporary measure to filter out dummy images in other locations.
                 filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Pictures/" }
             }
+
             DocumentGallerySource {
                 //% "Videos"
                 title: qsTrId("gallery-bt-videos")
                 icon: "PhotoIcon.qml"
                 type: DocumentGallery.Video
+            }
+
+            albumDelegate: MediaSource {
+                model: DocumentGalleryModel {
+                    id: albumModel
+                    properties: [ "url", "mimeType", "title" ]
+                    autoUpdate: true
+                    rootType: DocumentGallery.Image
+                    rootItem: albumId
+                }
+                title: albumTitle
+                count: albumModel.count
+                icon: "PhotoIcon.qml"
+                ready: true
             }
         }
     }

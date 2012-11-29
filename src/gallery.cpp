@@ -11,6 +11,7 @@
 #include "declarativewallpaper.h"
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
+#include "declarativedbusinterface.h"
 
 #ifdef HAS_BOOSTER
 #include <MDeclarativeCache>
@@ -35,6 +36,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
+    qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
 
     view->setAttribute(Qt::WA_OpaquePaintEvent);
     view->setAttribute(Qt::WA_NoSystemBackground);

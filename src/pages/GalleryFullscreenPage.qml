@@ -1,5 +1,6 @@
 import QtQuick 1.1
 import com.jolla.components 1.0
+import "scripts/AlbumManager.js" as AlbumManager
 
 /**
   * GalleryFullScreenPage is a QML Element for displaying Photos and Videos
@@ -108,7 +109,10 @@ Page {
             MenuItem {
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
-                onClicked: wallpaper.source = imageList.currentItemUrl()
+                onClicked: {
+                    wallpaper.source = imageList.currentItemUrl()
+                    AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", wallpaper.source)
+                }
             }
         }
 
