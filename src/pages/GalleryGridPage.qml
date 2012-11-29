@@ -90,9 +90,8 @@ Page {
             x: parent !== null ? -parent.x : 0.0
 
             MenuItem {
-                //: Grid Page
                 //% "Delete"
-                text: qsTrId("gallery-bt-delete")
+                text: qsTrId("gallery-me-delete")
                 onClicked: AlbumManager.deleteMedia(grid.menuItem.mediaUrl)
             }
         }
