@@ -41,3 +41,9 @@ function removeAlbum(albumId) {
     var manager = albumManager()
     manager.removeAlbum(albumId)
 }
+
+
+function deleteMedia(url) {
+    var manager = albumManager()
+    manager.deleteMedia(url)
+}

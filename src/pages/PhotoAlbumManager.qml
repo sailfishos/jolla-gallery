@@ -64,4 +64,20 @@ DBusInterface {
                 "}"
         call('SparqlUpdate', statement)
     }
+
+    function deleteMedia(url) {
+        if (removeFile(url)) {
+            // Remove image from any albums, and from tracker itself.
+            // Tracker will find out the image is deleted eventually, but
+            // by removing it ourselves we cut down on the wait time.
+            var statement =
+                    _removeFromAlbumStatement("?y", url) +
+                    "DELETE { \n" +
+                    "   ?x a nfo:Media \n" +
+                    "} WHERE { \n" +
+                    "   {?x nie:url '" + url + "'} \n" +
+                    "}"
+            call('SparqlUpdate', statement)
+        }
+    }
 }

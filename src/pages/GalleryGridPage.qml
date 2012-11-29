@@ -1,6 +1,7 @@
 import QtQuick 1.1
 import com.jolla.components 1.0
 import QtMobility.gallery 1.1
+import "scripts/AlbumManager.js" as AlbumManager
 
 /**
   * GalleryGridPage displays image and video thumbnails on a grid. By
@@ -25,37 +26,74 @@ Page {
     JollaGridView {
         id: grid
         property bool showTitle
-        property bool itemSelected
-        property Item overlay: __overlay
 
         property int firstVisible: Math.max(0, grid.indexAt(0, grid.contentY))
+        property int columnCount: window.isPortrait ? 3 : 5
+
+        property Item contextMenu
+        property Item menuItem: contextMenu !== null ? contextMenu.parent : null
+        property real menuHeight: contextMenu !== null ? contextMenu.height : 0.0
+        property int minimumOffsetIndex: menuItem != null
+                ? menuItem.modelIndex + columnCount - (menuItem.modelIndex % columnCount)
+                : 0
+
+        property real unfocusedOpacity: (currentItem != null && currentItem.pressed)
+                || (contextMenu != null && contextMenu.active) ? 0.2 : 1.0
+        Behavior on unfocusedOpacity { NumberAnimation { duration: 200 }}
 
         flickDeceleration: 1400
-        cellWidth: window.isPortrait ? width / 3 : Math.floor(width / 5.0)
+        cellWidth: Math.floor(width / columnCount)
         cellHeight: cellWidth
         height: parent.height
         width: parent.width
         cacheBuffer: cellHeight * 5
         pressDelay: 75
 
-        onItemSelectedChanged: contentItem.opacity = itemSelected ? 0.2 : 1
-
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.
         delegate: GridImageThumbnail {
+            id: thumbnail
+
+            property bool isMenuItem: grid.menuItem == thumbnail
+            property int modelIndex: index
+            property url mediaUrl: url
+
             width: grid.cellWidth
-            height: grid.cellHeight
+            height: isMenuItem ? grid.cellHeight + grid.menuHeight : grid.cellHeight
+            opacity: GridView.isCurrentItem ? 1.0 : grid.unfocusedOpacity
+            menuOffset: index >= grid.minimumOffsetIndex ? grid.menuHeight : 0.0
+            enabled: isMenuItem || grid.contextMenu === null || !grid.contextMenu.active
             onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
+            onPressAndHold: {
+                if (grid.contextMenu === null)
+                    grid.contextMenu = contextMenuComponent.createObject(grid)
+                grid.contextMenu.show(thumbnail)
+            }
+            onPressed: grid.currentIndex = index;
         }
 
         ScrollBar {}
         ScrollDecorator {}
 
-        Behavior on contentItem.opacity { NumberAnimation { duration: 200 }}
+        // Padding so there is space for the menu and displaced items at the
+        // bottom of the contentItem.
+        footer: Item {
+            height: menuHeight
+        }
+    }
 
-        // This is an overlay layer which is used when a thumbnail has been selected.
-        // The thumbnail's parent is changed to this overlay and all the other thumbs in the
-        // overlay are still children of the contentItem and little transparent.
-        Item { id: __overlay; anchors.fill: parent}
+    Component {
+        id: contextMenuComponent
+
+        ContextMenu {
+            parent: null
+            x: parent !== null ? -parent.x : 0.0
+
+            MenuItem {
+                //% "Delete"
+                text: qsTrId("gallery-me-delete")
+                onClicked: AlbumManager.deleteMedia(grid.menuItem.mediaUrl)
+            }
+        }
     }
 }

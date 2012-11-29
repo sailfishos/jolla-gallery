@@ -96,7 +96,9 @@ Page {
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
                 onClicked: {
-                    console.log("Delete clicked")
+                    pageStack.pop()
+                    AlbumManager.deleteMedia(imageList.currentItemUrl())
+
                 }
             }
             MenuItem {
