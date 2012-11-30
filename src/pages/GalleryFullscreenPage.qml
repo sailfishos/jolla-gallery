@@ -12,7 +12,7 @@ import "scripts/AlbumManager.js" as AlbumManager
 Page {
     id: fullscreenPage
     property alias model: imageList.model
-    property alias currentIndex: imageList.currentIndex
+    property int currentIndex
 
     onCurrentIndexChanged: {
         if (status !== PageStatus.Active) {
@@ -191,7 +191,13 @@ Page {
         property bool isPortrait: window.isPortrait
         property real menuProgress: alignMiddle ? 1.0 : 0
 
-        onClicked: alignMiddle = !alignMiddle
+        function toggleMenuMode() {
+            alignMiddle = !alignMiddle
+        }
+
+        // can't just alias fullscreenPage.currentIndex to this currentIndex due to PathView bug
+        currentIndex: fullscreenPage.currentIndex
+        onCurrentIndexChanged: fullscreenPage.currentIndex = currentIndex
 
         Behavior on menuProgress {
             id: menuProgressBehavior
