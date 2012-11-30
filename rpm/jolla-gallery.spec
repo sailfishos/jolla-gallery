@@ -15,9 +15,12 @@ BuildRequires:  pkgconfig(mlite)
 BuildRequires:  pkgconfig(QtGallery)
 BuildRequires:  pkgconfig(qdeclarative-boostable)
 
+Requires:  nemo-qml-plugins-thumbnailer
+Requires:  jollacomponents-internal
 Requires:  jollacomponents
 Requires:  libdeclarative-gallery
 Requires:  mapplauncherd-booster-jolla
+Requires:  libdeclarative-multimedia
 
 %description
 The Jolla Gallery application.
