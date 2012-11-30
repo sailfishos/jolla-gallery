@@ -22,7 +22,7 @@ ApplicationWindow {
         AlbumManager.createAlbum("<urn:jolla-gallery:albums:wallpapers>", qsTrId("gallery-bt-ambience"))
     }
 
-    cover: undefined
+    cover: GalleryCover {}
     initialPage: GalleryStartPage {}
 }
 
