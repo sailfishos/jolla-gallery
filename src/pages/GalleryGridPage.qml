@@ -11,6 +11,7 @@ Page {
     id: gridPage
     property alias model: grid.model
     property alias title: titleText.text
+    property alias currentIndex: grid.currentIndex
 
     // Title for the grid
     Label {
@@ -63,7 +64,7 @@ Page {
             opacity: GridView.isCurrentItem ? 1.0 : grid.unfocusedOpacity
             menuOffset: index >= grid.minimumOffsetIndex ? grid.menuHeight : 0.0
             enabled: isMenuItem || grid.contextMenu === null || !grid.contextMenu.active
-            onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
+            onClicked: pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
             onPressAndHold: {
                 if (grid.contextMenu === null)
                     grid.contextMenu = contextMenuComponent.createObject(grid)
@@ -96,4 +97,5 @@ Page {
             }
         }
     }
+
 }

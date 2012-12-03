@@ -14,6 +14,17 @@ Page {
     property alias model: imageList.model
     property alias currentIndex: imageList.currentIndex
 
+    onCurrentIndexChanged: {
+        if (status !== PageStatus.Active) {
+            return
+        }
+
+        var grid = pageStack.previousPage()
+        if (grid !== null) {
+            grid.currentIndex = currentIndex
+        }
+    }
+
     clip: imageList.alignMiddle
     backNavigation: imageList.alignMiddle
 
