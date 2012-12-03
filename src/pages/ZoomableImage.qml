@@ -83,6 +83,7 @@ JollaFlickable {
         itemScaled = true
     }
 
+    children: ScrollDecorator {}
     PinchArea {
         id: pinchArea
         enabled: !flickable.alignTop && flickable.enableZoom && photo.status == Image.Ready
