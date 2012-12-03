@@ -73,7 +73,6 @@ Page {
             onPressed: grid.currentIndex = index;
         }
 
-        ScrollBar {}
         ScrollDecorator {}
 
         // Padding so there is space for the menu and displaced items at the
