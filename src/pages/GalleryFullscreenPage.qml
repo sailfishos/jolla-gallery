@@ -84,8 +84,6 @@ Page {
         PullDownMenu {
             id: pullDownMenu
 
-            bottomMargin: 0
-
             MenuItem {
                 //% "Details"
                 text: qsTrId("gallery-me-details")
