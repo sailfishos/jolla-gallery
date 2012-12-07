@@ -13,6 +13,8 @@ Page {
     property alias title: titleText.text
     property alias currentIndex: grid.currentIndex
 
+    objectName: "gridPage"
+
     // Title for the grid
     Label {
         id: titleText
@@ -41,6 +43,8 @@ Page {
         property real unfocusedOpacity: (currentItem != null && currentItem.pressed)
                 || (contextMenu != null && contextMenu.active) ? 0.2 : 1.0
         Behavior on unfocusedOpacity { NumberAnimation { duration: 200 }}
+
+        objectName: "gridView"
 
         flickDeceleration: 1400
         cellWidth: Math.floor(width / columnCount)

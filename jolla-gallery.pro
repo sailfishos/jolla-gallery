@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = src translations
+SUBDIRS = src translations tests
 CONFIG += ordered
 
 OTHER_FILES += jolla-gallery.desktop rpm/jolla-gallery.spec sources

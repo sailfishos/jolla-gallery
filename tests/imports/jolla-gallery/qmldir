@@ -1,0 +1,8 @@
+plugin jollagalleryplugin
+FlickableImageView 1.0 /usr/share/jolla-gallery/pages/FlickableImageView.qml
+GalleryDetailsPage 1.0 /usr/share/jolla-gallery/pages/GalleryDetailsPage.qml
+GalleryFullscreenPage 1.0 /usr/share/jolla-gallery/pages/GalleryFullscreenPage.qml
+GalleryGridPage 1.0 /usr/share/jolla-gallery/pages/GalleryGridPage.qml
+GalleryStartPage 1.0 /usr/share/jolla-gallery/pages/GalleryStartPage.qml
+VideoPlayer 1.0 /usr/share/jolla-gallery/pages/VideoPlayer.qml
+ZoomableImage 1.0 /usr/share/jolla-gallery/pages/ZoomableImage.qml

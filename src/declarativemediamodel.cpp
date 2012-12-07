@@ -107,6 +107,7 @@ public:
     QList<DeclarativeMediaSource *> m_activeSources;
     QDocumentGallery m_gallery; // Should create a static instance if it looks like there will be multiple requests.
     QGalleryQueryRequest m_albumsRequest;
+    QString m_sourcesPath;
     bool m_componentComplete;
 
     Q_DECLARE_PUBLIC(DeclarativeMediaModel)
@@ -139,6 +140,20 @@ DeclarativeMediaModel::DeclarativeMediaModel(QObject *parent) :
     QHash<int, QByteArray> roles;
     roles[MediaRole] = "media";
     setRoleNames(roles);
+
+    d_ptr->m_sourcesPath = QLatin1String(SOURCES_PATH);
+}
+
+
+DeclarativeMediaModel::DeclarativeMediaModel(const QString &sourcesPath, QObject *parent)
+    : QAbstractListModel(parent)
+    , d_ptr(new DeclarativeMediaModelPrivate(this))
+{
+    QHash<int, QByteArray> roles;
+    roles[MediaRole] = "media";
+    setRoleNames(roles);
+
+    d_ptr->m_sourcesPath = sourcesPath;
 }
 
 DeclarativeMediaModel::~DeclarativeMediaModel()
@@ -160,7 +175,7 @@ void DeclarativeMediaModel::componentComplete()
 
     QDeclarativeContext *context = qmlContext(this);
 
-    QDirIterator dir(QLatin1String(SOURCES_PATH));
+    QDirIterator dir(d->m_sourcesPath);
 
     while (dir.hasNext()) {
         const QString fileName = dir.next();

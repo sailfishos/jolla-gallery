@@ -33,6 +33,17 @@ Group:     Applications/Multimedia
 %description ts-devel
 Translation source for Jolla Gallery
 
+%package tests
+Summary:    Unit tests for Jolla Gallery
+Group:      Applications/Multimedia
+BuildRequires:  pkgconfig(QtTest)
+BuildRequires:  pkgconfig(QtGallery)
+Requires:   %{name} = %{version}-%{release}
+Requires:   qtest-qml
+
+%description tests
+This package contains QML unit tests for Jolla Gallery application
+
 %prep
 %setup -q -n %{name}-%{version}
 
@@ -45,6 +56,7 @@ make %{?jobs:-j%jobs}
 %install
 rm -rf %{buildroot}
 %qmake_install
+chmod +x %{buildroot}/opt/tests/jolla-gallery/auto/run-tests.sh
 
 desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
@@ -61,6 +73,11 @@ desktop-file-install --delete-original       \
 %defattr(-,root,root,-)
 /usr/share/translations/source/gallery.ts
 
+%files tests
+%defattr(-,root,root,-)
+# >> files tests
+/opt/tests/jolla-gallery/*
+# << files tests
 
 %post -n jolla-gallery -p /sbin/ldconfig
 %postun -n jolla-gallery -p /sbin/ldconfig
