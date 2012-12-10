@@ -11,6 +11,7 @@ import "scripts/AlbumManager.js" as AlbumManager
   */
 Page {
     id: fullscreenPage
+
     property alias model: imageList.model
     property int currentIndex
 
@@ -25,6 +26,7 @@ Page {
         }
     }
 
+    objectName: "fullscreenPage"
     clip: imageList.alignMiddle
     backNavigation: imageList.alignMiddle
 
@@ -84,6 +86,8 @@ Page {
     JollaListView {
         id: menuList
 
+        objectName: "menuList"
+
         anchors {
             left: parent.left
             top: parent.top
@@ -102,6 +106,7 @@ Page {
                 onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryDetailsPage.qml"), {modelItem: model.get(currentIndex).itemId} )
             }
             MenuItem {
+                objectName: "deleteItem"
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
                 onClicked: {
@@ -118,6 +123,7 @@ Page {
                 }
             }
             MenuItem {
+                objectName: "ambienceItem"
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
                 onClicked: {
@@ -194,6 +200,8 @@ Page {
         function toggleMenuMode() {
             alignMiddle = !alignMiddle
         }
+
+        objectName: "flickableView"
 
         // can't just alias fullscreenPage.currentIndex to this currentIndex due to PathView bug
         currentIndex: fullscreenPage.currentIndex

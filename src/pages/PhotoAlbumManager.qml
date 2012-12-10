@@ -6,27 +6,27 @@ DBusInterface {
     iface: "org.freedesktop.Tracker1.Resources"
 
     function _mediaFileListEntry(imageUrl) {
-        return  "   nfo:hasMediaFileListEntry [ \n" +
-                "       a nfo:MediaFileListEntry ; \n" +
+        return  "   nfo:hasMediaFileListEntry [\n" +
+                "       a nfo:MediaFileListEntry ;\n" +
                 "       nfo:entryUrl '" + imageUrl + "'\n" +
                 "   ]"
     }
 
     function _removeFromAlbumStatement(albumId, imageUrl) {
-        return  "DELETE { \n" +
-                "   " + albumId + " nfo:hasMediaFileListEntry ?x \n" +
-                "   ?x a nfo:MediaFileListEntry \n" +
-                "} WHERE { \n" +
-                "   {" + albumId + " nfo:hasMediaFileListEntry ?x} \n" +
-                "   {?x nfo:entryUrl '" + imageUrl + "'} \n" +
+        return  "DELETE {\n" +
+                "   " + albumId + " nfo:hasMediaFileListEntry ?x\n" +
+                "   ?x a nfo:MediaFileListEntry\n" +
+                "} WHERE {\n" +
+                "   {" + albumId + " nfo:hasMediaFileListEntry ?x}\n" +
+                "   {?x nfo:entryUrl '" + imageUrl + "'}\n" +
                 "}"
     }
 
     function addToAlbum(albumId, imageUrl) {
         var statement  =
                 _removeFromAlbumStatement(albumId, imageUrl) +
-                "INSERT { \n" +
-                "   " + albumId + " a nmm:ImageList ; \n" +
+                " INSERT {\n" +
+                "   " + albumId + " a nmm:ImageList ;\n" +
                 _mediaFileListEntry(imageUrl) + "\n" +
                 "}"
         call('SparqlUpdate', statement)
@@ -72,10 +72,10 @@ DBusInterface {
             // by removing it ourselves we cut down on the wait time.
             var statement =
                     _removeFromAlbumStatement("?y", url) +
-                    "DELETE { \n" +
-                    "   ?x a nfo:Media \n" +
-                    "} WHERE { \n" +
-                    "   {?x nie:url '" + url + "'} \n" +
+                    " DELETE {\n" +
+                    "   ?x a nfo:Media\n" +
+                    "} WHERE {\n" +
+                    "   {?x nie:url '" + url + "'}\n" +
                     "}"
             call('SparqlUpdate', statement)
         }

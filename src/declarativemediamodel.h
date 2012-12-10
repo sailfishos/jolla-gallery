@@ -26,6 +26,7 @@ public:
     };
 
     explicit DeclarativeMediaModel(QObject *parent = 0);
+    explicit DeclarativeMediaModel(const QString &sourcesPath, QObject *parent = 0);
 
     virtual ~DeclarativeMediaModel();
 

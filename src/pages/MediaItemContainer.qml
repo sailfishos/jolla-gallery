@@ -19,6 +19,8 @@ Item {
         id: imageComponent
 
         ZoomableImage {
+            objectName: "imageDelegate"
+
             anchors.fill: parent
             source: fsMediaItem.source
             alignTop: fsMediaItem.alignTop
@@ -33,6 +35,8 @@ Item {
 
         VideoPlayer {
             property bool itemScaled
+
+            objectName: "videoDelegate"
 
             anchors.fill: parent
             source: fsMediaItem.source
