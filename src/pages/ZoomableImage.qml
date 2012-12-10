@@ -11,6 +11,8 @@ JollaFlickable {
     property real minimumDimension: Math.min(window.width, window.height)
     property real maximumDimension: Math.max(window.width, window.height)
 
+    signal clicked
+
     flickableDirection: Flickable.HorizontalAndVerticalFlick
 
     contentWidth: itemScaled ? Math.max(width, photo.width) : width
@@ -138,6 +140,14 @@ JollaFlickable {
                 itemScaled = false
             }
         }
-    }
 
+        MouseArea {
+            anchors.fill: parent
+            enabled: !flickable.itemScaled
+
+            onClicked: {
+                flickable.clicked()
+            }
+        }
+    }
 }

@@ -7,11 +7,13 @@ Item {
     property url source
     property string mimeType
     property bool itemScaled: mediaItem !== null && mediaItem.itemScaled
-    property bool enableZoom: parent.enableZoom
+    property bool enableZoom
     property bool alignTop
     property bool imageItem: mimeType.substring(0,5) !== "video"
     property bool isCurrentItem
     property QtObject mediaItem: null
+
+    signal clicked
 
     Component {
         id: imageComponent
@@ -21,6 +23,8 @@ Item {
             source: fsMediaItem.source
             alignTop: fsMediaItem.alignTop
             clip: fsMediaItem.alignTop
+
+            onClicked: fsMediaItem.clicked()
         }
     }
 
@@ -34,6 +38,8 @@ Item {
             source: fsMediaItem.source
             mimeType: fsMediaItem.mimeType
             alignTop: fsMediaItem.alignTop
+
+            onClicked: fsMediaItem.clicked()
         }
     }
 

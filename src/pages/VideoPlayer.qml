@@ -20,6 +20,8 @@ Item {
     property real minimumDimension: Math.min(window.width, window.height)
     property real maximumDimension: Math.max(window.width, window.height)
 
+    signal clicked
+
     clip: alignTop
 
     // Container item to lock the orientation to landscape as the current configuration of
@@ -31,6 +33,14 @@ Item {
         anchors.centerIn: parent
         rotation: window.isPortrait ? 90 : 0
 
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                player.clicked()
+            }
+        }  
+        
         // Locate the controls behind the video and clip it when they should be visible.  This
         // is because the video is an overlay and any thing not fully opaque will produce ugly
         // artifacts when drawn over the video.
@@ -76,6 +86,6 @@ Item {
                 suspend: !window.applicationActive || !fsMediaItem.isCurrentItem || alignTop
                 active: window.applicationActive && fsMediaItem.isCurrentItem
             }
-        }
+        }      
     }
 }
