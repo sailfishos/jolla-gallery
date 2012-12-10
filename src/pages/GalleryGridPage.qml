@@ -82,7 +82,7 @@ Page {
         // Padding so there is space for the menu and displaced items at the
         // bottom of the contentItem.
         footer: Item {
-            height: menuHeight
+            height: grid.menuHeight
         }
     }
 
@@ -94,11 +94,11 @@ Page {
             x: parent !== null ? -parent.x : 0.0
 
             MenuItem {
+                objectName: "deleteItem"
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
                 onClicked: AlbumManager.deleteMedia(grid.menuItem.mediaUrl)
             }
         }
     }
-
 }

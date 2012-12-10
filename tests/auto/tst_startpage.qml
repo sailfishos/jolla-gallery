@@ -3,6 +3,7 @@ import QtQuick 1.0
 import com.jolla.components 1.0
 import com.jolla.gallery 1.0
 import com.jolla.gallery.test 1.0
+import "scripts/Util.js" as Util
 
 ApplicationWindow {
     id: window
@@ -11,45 +12,38 @@ ApplicationWindow {
             ? pageStack.currentPage.objectName
             : ""
 
-    initialPage: GalleryStartPage { id: startPage; objectName: "startPage" }
+    initialPage: GalleryStartPage {
+        id: startPage
+        objectName: "startPage"
+    }
 
     TestCase {
         name: "StartPage"
         when: windowShown
 
         function test_staticAlbums() {
-            var albumView = findItem(startPage, function(item) {
-                if (item.objectName == "albumsView")
-                    return item
-            })
+            var albumView = Util.findItemByName(startPage, "albumsView")
             verify(albumView !== undefined)
             compare(albumView.count, 2)
 
-            var delegate = findItem(albumView, function(item) {
+            var delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == qsTrId("gallery-bt-photos")
             }).parent
             verify(delegate !== undefined)
 
-            var countLabel = findItem(delegate, function(item) {
-                return item.objectName == "countLabel"
-            })
+            var countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "text", "2")    // queries are asynchronous and the results may not be available immediately.
 
-            delegate = findItem(albumView, function(item) {
+            delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == qsTrId("gallery-bt-videos")
             }).parent
             verify(delegate !== undefined)
-            countLabel = findItem(delegate, function(item) {
-                return item.objectName == "countLabel"
-            })
+            countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "text", "1")
         }
 
         function test_dynamicAlbums() {
-            var albumView = findItem(startPage, function(item) {
-                if (item.objectName == "albumsView")
-                    return item
-            })
+            var albumView = Util.findItemByName(startPage, "albumsView")
             verify(albumView !== undefined)
             compare(albumView.count, 2)
 
@@ -59,23 +53,19 @@ ApplicationWindow {
             testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
             tryCompare(albumView, "count", 4)
 
-            var delegate = findItem(albumView, function(item) {
+            var delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "Album 1"
             }).parent
             verify(delegate !== undefined)
 
-            var countLabel = findItem(delegate, function(item) {
-                return item.objectName == "countLabel"
-            })
+            var countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "text", "3")
 
-            delegate = findItem(albumView, function(item) {
+            delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "Album 2"
             }).parent
             verify(delegate !== undefined)
-            countLabel = findItem(delegate, function(item) {
-                return item.objectName == "countLabel"
-            })
+            countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "text", "4")
 
             // Remove an item.
@@ -83,12 +73,12 @@ ApplicationWindow {
             testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
             tryCompare(albumView, "count", 3)
 
-            delegate = findItem(albumView, function(item) {
+            delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "Album 1"
             })
             verify(delegate === undefined)
 
-            delegate = findItem(albumView, function(item) {
+            delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "Album 2"
             }).parent
             verify(delegate !== undefined)
@@ -97,7 +87,7 @@ ApplicationWindow {
             albumsModel.append({ "identifier": "album1", "title": "Album 1", "count": "3" })
             testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
             tryCompare(albumView, "count", 4)
-            delegate = findItem(albumView, function(item) {
+            delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "Album 1"
             }).parent
             verify(delegate !== undefined)
@@ -109,7 +99,7 @@ ApplicationWindow {
         }
 
         function test_openAlbum() {
-            var delegate = findItem(startPage, function(item) {
+            var delegate = Util.findItem(startPage, function(item) {
                 return item.objectName == "titleLabel" && item.text == qsTrId("gallery-bt-photos")
             }).parent
             verify(delegate !== undefined)
@@ -119,24 +109,12 @@ ApplicationWindow {
             tryCompare(window, "currentPageName", "gridPage")
 
             // Use the view count to verify the correct page has been loaded.
-            var gridView = findItem(window.pageStack.currentPage, function(item) {
-                return item.objectName == "gridView"
-            })
+            var gridView = Util.findItemByName(window.pageStack.currentPage, "gridView")
             verify(gridView !== undefined)
             compare(gridView.count, 2)
 
             // Return to the start page
             window.pageStack.pop(window.pageStack.currentPage, true)
-        }
-    }
-
-    function findItem(item, isItem) {
-        if (isItem(item))
-            return item
-        for (var i = 0; i < item.children.length; ++i) {
-            var child = findItem(item.children[i], isItem)
-            if (child !== undefined)
-                return child
         }
     }
 
@@ -158,18 +136,18 @@ ApplicationWindow {
     ListModel {
         id: albumModel1
 
-        ListElement { identifier: "photo1"; url: "/home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"  }
-        ListElement { identifier: "photo2"; url: "/home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2" }
-        ListElement { identifier: "photo3"; url: "/home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3" }
+        ListElement { identifier: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"  }
+        ListElement { identifier: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2" }
+        ListElement { identifier: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3" }
     }
 
     ListModel {
         id: albumModel2
 
-        ListElement { identifier: "photo1"; url: "/home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1" }
-        ListElement { identifier: "photo2"; url: "/home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2" }
-        ListElement { identifier: "photo3"; url: "/home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3" }
-        ListElement { identifier: "photo4"; url: "/home/nemo/Pictures/photo4.jpg"; mimeType: "image/jpeg"; title: "Photo 4" }
+        ListElement { identifier: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1" }
+        ListElement { identifier: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2" }
+        ListElement { identifier: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3" }
+        ListElement { identifier: "photo4"; url: "file:///home/nemo/Pictures/photo4.jpg"; mimeType: "image/jpeg"; title: "Photo 4" }
     }
 
     TestDBusService {

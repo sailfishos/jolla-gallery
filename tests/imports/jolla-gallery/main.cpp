@@ -137,7 +137,7 @@ public:
 class TestDBusInterface : public DeclarativeDBusInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl removedFile READ removedFile)
+    Q_PROPERTY(QUrl removedFile READ removedFile WRITE removeFile NOTIFY removedFileChanged)
     Q_PROPERTY(bool allowRemove READ allowRemove WRITE setAllowRemove)
 public:
     TestDBusInterface(QObject *parent = 0) : DeclarativeDBusInterface(parent), m_allowRemove(true) {}
@@ -148,7 +148,17 @@ public:
     void setAllowRemove(bool allow) { m_allowRemove = allow; }
 
     // Overwrite the function from DeclarativeDBusInterface.
-    Q_INVOKABLE bool removeFile(const QUrl &url) { m_removedFile = url; return m_allowRemove; }
+    Q_INVOKABLE bool removeFile(const QUrl &url)
+    {
+        if (m_allowRemove) {
+            m_removedFile = url;
+            emit removedFileChanged();
+        }
+        return m_allowRemove;
+    }
+
+signals:
+    void removedFileChanged();
 
 private:
     QUrl m_removedFile;

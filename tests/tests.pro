@@ -2,9 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS = imports
 
-auto.files = \
-    auto/*.qml \
-    auto/run-tests.sh
+auto.files = auto/*
 auto.path = /opt/tests/jolla-gallery/auto
 
 definition.files = test-definition/tests.xml
