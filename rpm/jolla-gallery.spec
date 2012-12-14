@@ -21,6 +21,7 @@ Requires:  jollacomponents
 Requires:  libdeclarative-gallery
 Requires:  mapplauncherd-booster-jolla
 Requires:  libdeclarative-multimedia
+Requires:  nemo-qml-plugins-gstvideo-thumbnailer
 
 %description
 The Jolla Gallery application.
