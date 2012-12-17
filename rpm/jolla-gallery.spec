@@ -68,11 +68,11 @@ desktop-file-install --delete-original       \
 %{_datadir}/applications/*.desktop
 %{_datadir}/jolla-gallery/*
 %{_bindir}/jolla-gallery
-/usr/share/translations/gallery_eng_en.qm
+%{_datadir}/translations/gallery_eng_en.qm
 
 %files ts-devel
 %defattr(-,root,root,-)
-/usr/share/translations/source/gallery.ts
+%{_datadir}/translations/source/gallery.ts
 
 %files tests
 %defattr(-,root,root,-)
