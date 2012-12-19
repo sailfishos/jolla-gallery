@@ -106,7 +106,6 @@ Page {
                 onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryDetailsPage.qml"), {modelItem: model.get(currentIndex).itemId} )
             }
             MenuItem {
-                objectName: "deleteItem"
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
                 onClicked: {
@@ -123,7 +122,6 @@ Page {
                 }
             }
             MenuItem {
-                objectName: "ambienceItem"
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
                 onClicked: {
