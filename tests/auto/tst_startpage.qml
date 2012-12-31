@@ -21,10 +21,19 @@ ApplicationWindow {
         name: "StartPage"
         when: windowShown
 
+        function cleanup() {
+            // Clear all items.
+            albumsModel.clear()
+            testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
+
+            // Return to the start page
+            window.pageStack.pop(null, true)
+        }
+
         function test_staticAlbums() {
             var albumView = Util.findItemByName(startPage, "albumsView")
             verify(albumView !== undefined)
-            compare(albumView.count, 2)
+            tryCompare(albumView, "count", 2)
 
             var delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == qsTrId("gallery-bt-photos")
@@ -91,11 +100,6 @@ ApplicationWindow {
                 return item.objectName == "titleLabel" && item.text == "Album 1"
             }).parent
             verify(delegate !== undefined)
-
-            // Clear all items.
-            albumsModel.clear()
-            testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
-            tryCompare(albumView, "count", 2)
         }
 
         function test_openAlbum() {
@@ -112,9 +116,6 @@ ApplicationWindow {
             var gridView = Util.findItemByName(window.pageStack.currentPage, "gridView")
             verify(gridView !== undefined)
             compare(gridView.count, 2)
-
-            // Return to the start page
-            window.pageStack.pop(window.pageStack.currentPage, true)
         }
     }
 
@@ -166,10 +167,10 @@ ApplicationWindow {
             } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nfo:Video}} GROUP BY ?x") {
                 model = videoModel
                 printRow  = function(row) { returnRow([row.identifier, "http://www.tracker-project.org/temp/nfo#Video", row.url, row.mimeType, row.title]) }
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nmm:Photo}FILTER(nie:isLogicalPartOf(?x)=<album1>)} GROUP BY ?x") {
+            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nmm:Photo}{<album1> nfo:hasMediaFileListEntry ?entry}FILTER(nie:url(?x) = nfo:entryUrl(?entry))} GROUP BY ?x") {
                 model = albumModel1
                 printRow  = printPhotoRow
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nmm:Photo}FILTER(nie:isLogicalPartOf(?x)=<album2>)} GROUP BY ?x") {
+            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nmm:Photo}{<album2> nfo:hasMediaFileListEntry ?entry}FILTER(nie:url(?x) = nfo:entryUrl(?entry))} GROUP BY ?x") {
                 model = albumModel2
                 printRow  = printPhotoRow
             } else {
