@@ -130,8 +130,27 @@ Page {
             }
         }
 
-        header: PageHeader {
-            title: model.get(currentIndex).title
+        // Workaround to clip title correctly.
+        // TODO: When we have Jolla style to truncate
+        //       too long lines, replace this code with it.
+        header: Item {
+            height: theme.pageHeaderHeight
+            width: parent.width * 0.7
+            x: parent.width * 0.3
+
+            Text {
+                text: model.get(currentIndex).title
+                width: parent.width
+                elide: Text.ElideRight
+                color: theme.highlightColor
+                anchors.verticalCenter: parent.verticalCenter
+
+                font {
+                    pixelSize: theme.fontSizeLarge
+                    family: theme.fontFamilyHeading
+                }
+
+            }
         }
 
         delegate: BackgroundItem {
