@@ -144,7 +144,8 @@ Page {
                 elide: Text.ElideRight
                 color: theme.highlightColor
                 anchors.verticalCenter: parent.verticalCenter
-
+                objectName: "imageTitle"
+                horizontalAlignment: Text.AlignRight
                 font {
                     pixelSize: theme.fontSizeLarge
                     family: theme.fontFamilyHeading
