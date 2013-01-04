@@ -40,7 +40,7 @@ Page {
                             "Facebook",
                             //% "Email"
                             qsTrId("gallery-bt-share_email"),
-                            //% "MMS"
+                            //% "Multimedia message"
                             qsTrId("gallery-bt-share_mms"),
                             "Picasa",
                             "Evernote",
