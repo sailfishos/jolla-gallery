@@ -146,6 +146,7 @@ ApplicationWindow {
         }
 
         function test_delete() {
+
             var gridView = Util.findItemByName(gridPage, "gridView")
             verify(gridView !== undefined)
 
@@ -166,6 +167,10 @@ ApplicationWindow {
 
             compare(AlbumManager.albumManager().removedFile, "file:///home/nemo/Pictures/photo2.jpg")
             tryCompare(testService, "trackerInfoDeleted", true)
+
+            // We can't rely here the implementation of the ContextMenu, instead make sure
+            // that the context menu is hidden by hiding it.
+            gridView.contextMenu.hide()
 
             // Don't return until the menu has closed, and opacity has been returned to all items.
             tryCompare(gridView, "menuHeight", 0)
