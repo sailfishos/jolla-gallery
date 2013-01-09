@@ -59,8 +59,8 @@ Item {
 
             onSeek: video.seek(position)
 
-            ToolIcon {
-                iconSource: video.playing ? "images/icon-m-pause.png" : "images/icon-m-play.png"
+            IconButton {
+                icon.source: video.playing ? "images/icon-m-pause.png" : "images/icon-m-play.png"
                 onClicked: video.playing = !video.playing
             }
         }
