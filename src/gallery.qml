@@ -7,6 +7,7 @@ import "pages/scripts/AlbumManager.js" as AlbumManager
 ApplicationWindow {
     id: window
 
+    // All pages support portrait and landscape orientations
     allowedOrientations: Orientation.Portrait | Orientation.Landscape
 
     // Ensure the Wallpapers album exists and has the correct translated name.
