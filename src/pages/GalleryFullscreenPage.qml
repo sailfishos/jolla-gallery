@@ -91,10 +91,11 @@ Page {
         anchors {
             left: parent.left
             top: parent.top
-            right: window.isPortrait ? parent.right : parent.horizontalCenter
-            bottom: window.isPortrait ? parent.verticalCenter : parent.bottom
+            right: isPortrait ? parent.right : parent.horizontalCenter
+            bottom: isPortrait ? parent.verticalCenter : parent.bottom
         }
         clip: true
+        visible: imageList.menuProgress != 0
         model: actionsModel
 
         PullDownMenu {
@@ -189,14 +190,14 @@ Page {
             id: image
 
             fillMode: Image.PreserveAspectCrop
-            width: window.isPortrait ? window.height : window.width
-            height: window.isPortrait ? window.width : window.height
+            width: isPortrait ? window.height : window.width
+            height: isPortrait ? window.width : window.height
             source: theme.backgroundImage
             transform: Rotation {
-                angle: !window.isPortrait ? -90 : 0
+                angle: !isPortrait ? -90 : 0
                 origin {
-                    x: !window.isPortrait ? window.height / 2 : 0
-                    y: !window.isPortrait ? window.height / 2 : 0
+                    x: !isPortrait ? window.height / 2 : 0
+                    y: !isPortrait ? window.height / 2 : 0
                 }
             }
         }
@@ -211,7 +212,6 @@ Page {
     // Element for handling the actual flicking and image buffering
     FlickableImageView {
         id: imageList
-        property bool isPortrait: window.isPortrait
         property real menuProgress: alignMiddle ? 1.0 : 0
 
         function toggleMenuMode() {
@@ -219,6 +219,7 @@ Page {
         }
 
         objectName: "flickableView"
+        isPortrait: fullscreenPage.isPortrait
 
         // can't just alias fullscreenPage.currentIndex to this currentIndex due to PathView bug
         currentIndex: fullscreenPage.currentIndex
@@ -231,8 +232,8 @@ Page {
 
         anchors {
             fill: parent
-            leftMargin: window.isPortrait ? 0 : menuProgress * parent.width / 2
-            topMargin: window.isPortrait ? menuProgress * parent.height / 2 : 0
+            leftMargin: isPortrait ? 0 : menuProgress * parent.width / 2
+            topMargin: isPortrait ? menuProgress * parent.height / 2 : 0
         }
     }
 }

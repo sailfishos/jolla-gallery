@@ -8,6 +8,7 @@ SlideshowView {
     property bool alignMiddle
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem !== null && currentItem.x === 0
+    property bool isPortrait
 
     function currentItemUrl() {
         return model.get(currentIndex).url
@@ -31,6 +32,7 @@ SlideshowView {
         alignTop: view.alignMiddle
         enableZoom: view.enableZoom
         isCurrentItem: container == currentItem
+        isPortrait: view.isPortrait
         // Adjust opacity based on item position
         opacity: Math.abs(x) <= view.width ? 1.0 -  (Math.abs(x) / view.width) : 0
 

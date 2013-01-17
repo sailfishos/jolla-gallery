@@ -31,7 +31,7 @@ Page {
         property bool showTitle
 
         property int firstVisible: Math.max(0, grid.indexAt(0, grid.contentY))
-        property int columnCount: window.isPortrait ? 3 : 5
+        property int columnCount: isPortrait ? 3 : 5
 
         property Item contextMenu
         property Item menuItem: contextMenu !== null ? contextMenu.parent : null
