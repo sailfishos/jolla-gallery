@@ -11,6 +11,7 @@ Item {
     property bool alignTop
     property bool imageItem: mimeType.substring(0,5) !== "video"
     property bool isCurrentItem
+    property bool isPortrait
     property QtObject mediaItem: null
 
     signal clicked
@@ -25,6 +26,7 @@ Item {
             source: fsMediaItem.source
             alignTop: fsMediaItem.alignTop
             clip: fsMediaItem.alignTop
+            isPortrait: fsMediaItem.isPortrait
 
             onClicked: fsMediaItem.clicked()
         }

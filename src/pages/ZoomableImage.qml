@@ -10,6 +10,7 @@ JollaFlickable {
     property alias source: photo.source
     property real minimumDimension: Math.min(window.width, window.height)
     property real maximumDimension: Math.max(window.width, window.height)
+    property bool isPortrait
 
     signal clicked
 
@@ -50,7 +51,7 @@ JollaFlickable {
         var oldWidth = contentWidth
         var oldHeight = contentHeight
 
-        if (window.isPortrait) {
+        if (isPortrait) {
             // Scale and bounds check the width, and then apply the same scale to height.
             newWidth = contentWidth * scale
             if (newWidth <= minimumDimension) {
@@ -98,7 +99,7 @@ JollaFlickable {
 
             property real fittedScale
             property real scale
-            property bool isPortrait: window.isPortrait
+            property bool isPortrait: flickable.isPortrait
             property bool isImagePortrait: photo.implicitWidth < photo.implicitHeight
 
             function updateScale() {
@@ -108,7 +109,7 @@ JollaFlickable {
                 if (alignTop) {
                     fittedScale = minimumDimension / (isImagePortrait ? photo.implicitWidth : photo.implicitHeight)
                 } else {
-                    fittedScale = window.isPortrait
+                    fittedScale = isPortrait
                             ? minimumDimension / photo.implicitWidth
                             : minimumDimension / photo.implicitHeight
                 }

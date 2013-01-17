@@ -10,10 +10,10 @@ Item {
     property bool alignTop
     property bool showControls: player.alignTop || !video.playing
 
-    property real windowWidth: window.isPortrait
+    property real windowWidth: isPortrait
             ? Math.min(window.width, window.height)
             : Math.max(window.width, window.height)
-    property real windowHeight: window.isPortrait
+    property real windowHeight: isPortrait
             ? Math.max(window.width, window.height)
             : Math.min(window.width, window.height)
 
@@ -31,7 +31,7 @@ Item {
         height: minimumDimension
 
         anchors.centerIn: parent
-        rotation: window.isPortrait ? 90 : 0
+        rotation: isPortrait ? 90 : 0
 
         MouseArea {
             anchors.fill: parent
@@ -47,7 +47,7 @@ Item {
         Media.PlayerControls {
             id: controls
 
-            width: window.isPortrait ? player.height : player.width
+            width: isPortrait ? player.height : player.width
             anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
 
             opacity: player.showControls  ? 1.0 : 0.0
