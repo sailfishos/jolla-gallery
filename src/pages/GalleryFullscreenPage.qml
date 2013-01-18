@@ -179,34 +179,11 @@ Page {
         }
     }
 
-    // Hide the menu items from the pulldown menu with this image.
-    // Handle landscape & portrait changes also here.
-    Item {
+    // Fade out the background image so it isn't visually conflicting
+    Rectangle {
         anchors.fill: parent
-        opacity: imageList.alignMiddle ? 0 : 1
-        Behavior on opacity { NumberAnimation { duration: 300 } }
-
-        Image {
-            id: image
-
-            fillMode: Image.PreserveAspectCrop
-            width: isPortrait ? window.height : window.width
-            height: isPortrait ? window.width : window.height
-            source: theme.backgroundImage
-            transform: Rotation {
-                angle: !isPortrait ? -90 : 0
-                origin {
-                    x: !isPortrait ? window.height / 2 : 0
-                    y: !isPortrait ? window.height / 2 : 0
-                }
-            }
-        }
-
-        Rectangle {
-            anchors.fill: parent
-            opacity: 0.65
-            color: "black"
-        }
+        opacity: 0.65
+        color: "black"
     }
 
     // Element for handling the actual flicking and image buffering
