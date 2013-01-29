@@ -1,5 +1,7 @@
 import QtQuick 1.1
 import com.jolla.components 1.0
+import Sailfish.Silica.TransferEngine 1.0
+import com.jolla.components.accounts 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
 /**
@@ -30,46 +32,6 @@ Page {
     clip: imageList.alignMiddle
     backNavigation: imageList.alignMiddle
 
-    ListModel {
-        id: actionsModel
-
-        function title(index)
-        {
-            if (title["text"] === undefined) {
-                title.text = [
-                            "Facebook",
-                            //% "Email"
-                            qsTrId("gallery-bt-share_email"),
-                            //% "Multimedia message"
-                            qsTrId("gallery-bt-share_mms"),
-                            "Picasa",
-                            "Evernote",
-                            "Bluetooth"
-                        ]
-            }
-            return title.text[index]
-        }
-
-        ListElement {
-            // placeholder for Facebook
-        }
-        ListElement {
-            // placeholder for Email
-        }
-        ListElement {
-            // placeholder for MMS
-        }
-        ListElement {
-            // placeholder for Picasa
-        }
-        ListElement {
-            // placeholder for Evernote
-        }
-        ListElement {
-            // placeholder for Bluetooth
-        }
-    }
-
     Connections {
         target: window
         // reset the page state if gallery is pushed to the background
@@ -83,7 +45,9 @@ Page {
         }
     }
 
-    JollaListView {
+    // This is the share method list, but it also
+    // includes the pulley menu
+    ShareMethodList {
         id: menuList
 
         objectName: "menuList"
@@ -96,7 +60,8 @@ Page {
         }
         clip: true
         visible: imageList.menuProgress != 0
-        model: actionsModel
+        //% "Share"
+        listHeader: qsTrId("gallery-la-share")
 
         PullDownMenu {
             id: pullDownMenu
@@ -155,28 +120,44 @@ Page {
             }
         }
 
-        delegate: BackgroundItem {
-            width: menuList.width
+        // Add "add account" to the footer. User must be able to
+        // create accounts in a case there are none.
+        footer: BackgroundItem {
             Label {
-                x: 26
-                text: actionsModel.title(index)
+                //% "Add account"
+                text: qsTrId("gallery-la-add_account")
                 anchors.verticalCenter: parent.verticalCenter
+            }
+
+            onClicked: pageStack.push(accountsPage)
+        }
+
+        Component {
+            id: accountsPage
+            AccountsPage {
+                // If we don't do this, pageStack goes grazy
+                Component.onCompleted: pageStack.busyChanged.disconnect(maybePushMaybePop)
             }
         }
 
-        Label {
-            //% "Share"
-            text: qsTrId("gallery-la-share")
-            color: theme.highlightColor
-            height: theme.standardItemHeight
-            verticalAlignment: Text.AlignVCenter
-            anchors {
-                top: parent.top
-                topMargin: theme.pageHeaderHeight - menuList.contentY
-                right: parent.right
-                rightMargin: 24
-            }
+        onShareMethodClicked: {
+            var item  = fullscreenPage.model.get(fullscreenPage.currentIndex)
+            var sharePage = shareDialog.createObject(null)
+            sharePage.displayName = displayName
+            sharePage.accountName = userName
+            sharePage.methodId    = methodId
+            sharePage.accountId   = accountId
+            sharePage.accountRequired = accountRequired
+            sharePage.source      = item.url
+            sharePage.mimeType    = item.mimeType
+            sharePage.docItemId   = item.itemId
+            pageStack.openDialog(sharePage)
         }
+    }
+
+    Component {
+        id: shareDialog
+        ShareDialog { }
     }
 
     // Fade out the background image so it isn't visually conflicting
