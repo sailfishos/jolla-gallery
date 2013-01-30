@@ -44,13 +44,15 @@ Item {
     // We don't have a design for empty content so let's
     // just define a placeholder for it.
     // TODO: Remove this when the design exists.
-    Rectangle {
-        color: "black"
-        anchors.fill: parent
+    Label {
+        //% "Take some photos"
+        text: qsTrId("gallery-la-take_some_photos")
+        y: 28
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.width - 20
         visible: galleryModel.count == 0
-        Label {
-            anchors.centerIn: parent
-            text: "Gallery"
-        }
+        color: theme.secondaryColor
+        horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.Wrap
     }
 }
