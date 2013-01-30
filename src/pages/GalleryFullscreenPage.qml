@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import com.jolla.components 1.0
-import Sailfish.Silica.TransferEngine 1.0
+import Sailfish.TransferEngine 1.0
 import com.jolla.components.accounts 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
@@ -135,7 +135,7 @@ Page {
         Component {
             id: accountsPage
             AccountsPage {
-                // If we don't do this, pageStack goes grazy
+                // If we don't do this, pageStack goes grazy. Bug 4751
                 Component.onCompleted: pageStack.busyChanged.disconnect(maybePushMaybePop)
             }
         }
