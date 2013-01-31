@@ -15,7 +15,6 @@ BuildRequires:  pkgconfig(mlite)
 BuildRequires:  pkgconfig(QtGallery)
 BuildRequires:  pkgconfig(qdeclarative-boostable)
 
-Requires:  jollacomponents-internal
 Requires:  sailfishsilica
 Requires:  libdeclarative-gallery
 Requires:  mapplauncherd-booster-jolla
