@@ -1,6 +1,6 @@
 import QtQuickTest 1.0
 import QtQuick 1.1
-import com.jolla.components 1.0
+import Sailfish.Silica 1.0
 import com.jolla.gallery 1.0
 import com.jolla.gallery.test 1.0
 import "scripts/Util.js" as Util
