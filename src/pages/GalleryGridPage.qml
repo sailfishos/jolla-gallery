@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import com.jolla.components 1.0
+import Sailfish.Silica 1.0
 import QtMobility.gallery 1.1
 import "scripts/AlbumManager.js" as AlbumManager
 
@@ -26,7 +26,7 @@ Page {
         opacity: grid.showTitle ? 1 : 0
     }
 
-    JollaGridView {
+    SilicaGridView {
         id: grid
         property bool showTitle
 

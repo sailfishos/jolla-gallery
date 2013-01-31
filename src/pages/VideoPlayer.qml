@@ -1,5 +1,5 @@
 import QtQuick 1.1
-import com.jolla.components 1.0
+import Sailfish.Silica 1.0
 // Use a namespace to avoid any ambiguity between component VideoPlayer and this.
 import com.jolla.components.media 1.0 as Media
 
