@@ -100,7 +100,7 @@ Page {
         // TODO: When we have Jolla style to truncate
         //       too long lines, replace this code with it.
         header: Item {
-            height: theme.pageHeaderHeight
+            height: theme.itemSizeLarge
             width: parent.width * 0.7
             x: parent.width * 0.3
 

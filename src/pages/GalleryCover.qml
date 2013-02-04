@@ -49,7 +49,7 @@ Item {
         text: qsTrId("gallery-la-take_some_photos")
         y: 28
         anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width - 20
+        width: parent.width - theme.paddingLarge
         visible: galleryModel.count == 0
         color: theme.secondaryColor
         horizontalAlignment: Text.AlignHCenter
