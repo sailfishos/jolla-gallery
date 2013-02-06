@@ -9,9 +9,7 @@ import "/usr/share/jolla-gallery/pages/scripts/AlbumManager.js" as AlbumManager
 ApplicationWindow {
     id: window
 
-    isPortrait: true
-    lockOrientation: true
-
+    allowedOrientations: [Orientation.Portrait, Orientation.Landscape]
     property string currentPageName: pageStack.currentPage != null
             ? pageStack.currentPage.objectName
             : ""
@@ -31,7 +29,8 @@ ApplicationWindow {
             verify(gridView !== undefined)
 
             // Verify that in portrait mode the grid wraps after 3 items.
-            window.isPortrait = true
+            gridPage.orientation = Orientation.Portrait
+
             var item2 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo2.jpg"
             }).parent
@@ -40,8 +39,8 @@ ApplicationWindow {
             }).parent
             compare(item3.y, item2.y + gridView.cellHeight)
 
-            // Verify that in landscape mode the grid wraps after 5 items.
-            window.isPortrait = false
+            // Verify that in landscape mode the grid wraps after 5 items.            
+            gridPage.orientation = Orientation.Landscape
             var item4 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo4.jpg"
             }).parent
@@ -51,7 +50,7 @@ ApplicationWindow {
             compare(item3.y, item2.y)
             compare(item5.y, item4.y + gridView.cellHeight)
 
-            window.isPortrait = true
+            gridPage.orientation = Orientation.Portrait
             compare(item3.y, item2.y + gridView.cellHeight)
             compare(item5.y, item4.y)
         }
@@ -60,7 +59,7 @@ ApplicationWindow {
             var gridView = Util.findItemByName(gridPage, "gridView")
             verify(gridView !== undefined)
 
-            window.isPortrait = true
+            gridPage.orientation = Orientation.Portrait
             var thumbnail0 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo0.jpg"
             })
@@ -97,8 +96,9 @@ ApplicationWindow {
             mouseRelease(item1, gridView.cellWidth / 2, gridView.cellHeight / 2)
 
             // Wait for the context menu to fully open.
-            verify(gridView.contextMenu !== undefined)
-            tryCompare(gridView.contextMenu, "height", gridView.contextMenu.childrenRect.height)
+            verify(gridView.contextMenu !== undefined)          
+            verify(gridView.contextMenu.height > 0)
+            //tryCompare(gridView.contextMenu, "height", gridView.contextMenu.childrenRect.height)
 
             // Verify items on the line below the menu are offset by the height of the menu.
             compare(thumbnail0.y, 0)
@@ -115,15 +115,15 @@ ApplicationWindow {
             compare(item3.opacity, gridView.unfocusedOpacity)
             compare(item5.opacity, gridView.unfocusedOpacity)
 
-            // Rotate, and verify items that have moved to the same line as the menu are no longer offset.
-            window.isPortrait = false
+            // Rotate, and verify items that have moved to the same line as the menu are no longer offset.            
+            gridPage.orientation = Orientation.Landscape
             compare(thumbnail0.y, 0)
             compare(thumbnail1.y, 0)
             tryCompare(thumbnail3, "y", 0)
             compare(thumbnail5.y, gridView.contextMenu.height)
 
-            // Rotate back.
-            window.isPortrait = true
+            // Rotate back.            
+            gridPage.orientation = Orientation.Portrait
             compare(thumbnail0.y, 0)
             compare(thumbnail1.y, 0)
             tryCompare(thumbnail3, "y", gridView.contextMenu.height)
@@ -147,6 +147,7 @@ ApplicationWindow {
 
         function test_delete() {
 
+            gridPage.orientation = Orientation.Portrait
             var gridView = Util.findItemByName(gridPage, "gridView")
             verify(gridView !== undefined)
 
@@ -176,21 +177,22 @@ ApplicationWindow {
             tryCompare(gridView, "menuHeight", 0)
             tryCompare(gridView, "unfocusedOpacity", 1)
         }
+
     }
 
     ListModel {
         id: albumModel
 
-        ListElement { itemId: "photo0"; url: "file:///home/nemo/Pictures/photo0.jpg"; mimeType: "image/jpeg"; title: "Photo 0"  }
-        ListElement { itemId: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"  }
-        ListElement { itemId: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2" }
-        ListElement { itemId: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3" }
-        ListElement { itemId: "photo4"; url: "file:///home/nemo/Pictures/photo4.jpg"; mimeType: "image/jpeg"; title: "Photo 4" }
-        ListElement { itemId: "photo5"; url: "file:///home/nemo/Pictures/photo5.jpg"; mimeType: "image/jpeg"; title: "Photo 5" }
-        ListElement { itemId: "photo6"; url: "file:///home/nemo/Pictures/photo6.jpg"; mimeType: "image/jpeg"; title: "Photo 6" }
-        ListElement { itemId: "photo7"; url: "file:///home/nemo/Pictures/photo7.jpg"; mimeType: "image/jpeg"; title: "Photo 7" }
-        ListElement { itemId: "photo8"; url: "file:///home/nemo/Pictures/photo8.jpg"; mimeType: "image/jpeg"; title: "Photo 8" }
-        ListElement { itemId: "photo9"; url: "file:///home/nemo/Pictures/photo9.jpg"; mimeType: "image/jpeg"; title: "Photo 9" }
+        ListElement { itemId: "photo0"; url: "file:///home/nemo/Pictures/photo0.jpg"; mimeType: "image/jpeg"; title: "Photo 0"; dateTaken: "2010-11-05T08:15:30-05:0" }
+        ListElement { itemId: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"; dateTaken: "2010-10-05T08:15:30-05:0" }
+        ListElement { itemId: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2"; dateTaken: "2010-09-05T08:15:30-05:0" }
+        ListElement { itemId: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3"; dateTaken: "2010-08-05T08:15:30-05:0" }
+        ListElement { itemId: "photo4"; url: "file:///home/nemo/Pictures/photo4.jpg"; mimeType: "image/jpeg"; title: "Photo 4"; dateTaken: "2010-07-05T08:15:30-05:0" }
+        ListElement { itemId: "photo5"; url: "file:///home/nemo/Pictures/photo5.jpg"; mimeType: "image/jpeg"; title: "Photo 5"; dateTaken: "2010-06-05T08:15:30-05:0" }
+        ListElement { itemId: "photo6"; url: "file:///home/nemo/Pictures/photo6.jpg"; mimeType: "image/jpeg"; title: "Photo 6"; dateTaken: "2010-05-05T08:15:30-05:0" }
+        ListElement { itemId: "photo7"; url: "file:///home/nemo/Pictures/photo7.jpg"; mimeType: "image/jpeg"; title: "Photo 7"; dateTaken: "2010-04-05T08:15:30-05:0" }
+        ListElement { itemId: "photo8"; url: "file:///home/nemo/Pictures/photo8.jpg"; mimeType: "image/jpeg"; title: "Photo 8"; dateTaken: "2010-03-05T08:15:30-05:0" }
+        ListElement { itemId: "photo9"; url: "file:///home/nemo/Pictures/photo9.jpg"; mimeType: "image/jpeg"; title: "Photo 9"; dateTaken: "2010-02-05T08:15:30-05:0" }
     }
 
     TestDBusService {

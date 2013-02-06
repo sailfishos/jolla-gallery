@@ -7,6 +7,7 @@ import "scripts/Util.js" as Util
 
 ApplicationWindow {
     id: window
+    allowedOrientations: [Orientation.Portrait]
 
     property string currentPageName: pageStack.currentPage != null
             ? pageStack.currentPage.objectName
@@ -15,6 +16,7 @@ ApplicationWindow {
     initialPage: GalleryStartPage {
         id: startPage
         objectName: "startPage"
+        orientation: Orientation.Portrait
     }
 
     TestCase {
@@ -46,6 +48,7 @@ ApplicationWindow {
             delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == qsTrId("gallery-bt-videos")
             }).parent
+
             verify(delegate !== undefined)
             countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "text", "1")
@@ -115,7 +118,7 @@ ApplicationWindow {
             // Use the view count to verify the correct page has been loaded.
             var gridView = Util.findItemByName(window.pageStack.currentPage, "gridView")
             verify(gridView !== undefined)
-            compare(gridView.count, 2)
+            tryCompare(gridView, "count", 2)
         }
     }
 
@@ -125,30 +128,30 @@ ApplicationWindow {
 
     ListModel {
         id: photoModel
-        ListElement { identifier: "photo1"; url: "/home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"  }
-        ListElement { identifier: "photo2"; url: "/home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2" }
+        ListElement { identifier: "photo1"; url: "/home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"; dateTaken: "2010-11-05T08:15:30-05:0" }
+        ListElement { identifier: "photo2"; url: "/home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2"; dateTaken: "2010-10-05T08:15:30-05:0" }
     }
 
     ListModel {
         id: videoModel
-        ListElement { identifier: "video1"; url: "/home/nemo/Videos1.ogv"; mimeType: "video/ogg"; title: "Video 1" }
+        ListElement { identifier: "video1"; url: "/home/nemo/Videos1.ogv"; mimeType: "video/ogg"; title: "Video 1"}
     }
 
     ListModel {
         id: albumModel1
 
-        ListElement { identifier: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"  }
-        ListElement { identifier: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2" }
-        ListElement { identifier: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3" }
+        ListElement { identifier: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"; dateTaken: "2010-11-05T08:15:30-05:0" }
+        ListElement { identifier: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2"; dateTaken: "2010-10-05T08:15:30-05:0" }
+        ListElement { identifier: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3"; dateTaken: "2010-09-05T08:15:30-05:0" }
     }
 
     ListModel {
         id: albumModel2
 
-        ListElement { identifier: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1" }
-        ListElement { identifier: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2" }
-        ListElement { identifier: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3" }
-        ListElement { identifier: "photo4"; url: "file:///home/nemo/Pictures/photo4.jpg"; mimeType: "image/jpeg"; title: "Photo 4" }
+        ListElement { identifier: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"; dateTaken: "2010-11-05T08:15:30-05:0" }
+        ListElement { identifier: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2"; dateTaken: "2010-10-05T08:15:30-05:0" }
+        ListElement { identifier: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3"; dateTaken: "2010-09-05T08:15:30-05:0" }
+        ListElement { identifier: "photo4"; url: "file:///home/nemo/Pictures/photo4.jpg"; mimeType: "image/jpeg"; title: "Photo 4"; dateTaken: "2010-08-05T08:15:30-05:0" }
     }
 
     TestDBusService {
@@ -157,20 +160,21 @@ ApplicationWindow {
         onQuery: {
             var model
             var printRow
-            var printPhotoRow = function(row) { returnRow([row.identifier, "http://www.tracker-project.org/temp/nmm#Photo", row.url, row.mimeType, row.title]) }
+            var printPhotoRow = function(row) { returnRow([row.identifier, "http://www.tracker-project.org/temp/nmm#Photo", row.url, row.mimeType, row.title, row.dateTaken]) }
+
             if (argument == "SELECT ?x nie:title(?x) nfo:entryCounter(?x) WHERE {{?x rdf:type nmm:ImageList}} GROUP BY ?x ORDER BY ASC(nie:title(?x))") {
                 model = albumsModel
                 printRow  = function(row) { returnRow([row.identifier, row.title, row.count]) }
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nmm:Photo}} GROUP BY ?x") {
+            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) nie:contentCreated(?x) WHERE {{?x rdf:type nmm:Photo}} GROUP BY ?x ORDER BY DESC(nie:contentCreated(?x))") {
                 model = photoModel
                 printRow  = printPhotoRow
             } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nfo:Video}} GROUP BY ?x") {
                 model = videoModel
                 printRow  = function(row) { returnRow([row.identifier, "http://www.tracker-project.org/temp/nfo#Video", row.url, row.mimeType, row.title]) }
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nmm:Photo}{<album1> nfo:hasMediaFileListEntry ?entry}FILTER(nie:url(?x) = nfo:entryUrl(?entry))} GROUP BY ?x") {
+            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) nie:contentCreated(?x) WHERE {{?x rdf:type nmm:Photo}{<album1> nfo:hasMediaFileListEntry ?entry}FILTER(nie:url(?x) = nfo:entryUrl(?entry))} GROUP BY ?x ORDER BY DESC(nie:contentCreated(?x))") {
                 model = albumModel1
                 printRow  = printPhotoRow
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nmm:Photo}{<album2> nfo:hasMediaFileListEntry ?entry}FILTER(nie:url(?x) = nfo:entryUrl(?entry))} GROUP BY ?x") {
+            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) nie:contentCreated(?x) WHERE {{?x rdf:type nmm:Photo}{<album2> nfo:hasMediaFileListEntry ?entry}FILTER(nie:url(?x) = nfo:entryUrl(?entry))} GROUP BY ?x ORDER BY DESC(nie:contentCreated(?x))") {
                 model = albumModel2
                 printRow  = printPhotoRow
             } else {

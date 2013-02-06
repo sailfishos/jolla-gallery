@@ -67,6 +67,8 @@ Page {
                 title: qsTrId("gallery-bt-photos")
                 icon: "PhotoIcon.qml"
                 type: DocumentGallery.Image
+                properties: ["url", "mimeType", "title", "dateTaken"]
+                sortProperties: ["-dateTaken"]
             }
 
             DocumentGallerySource {
@@ -80,6 +82,7 @@ Page {
                 model: DocumentGalleryModel {
                     id: albumModel
                     properties: [ "url", "mimeType", "title", "dateTaken" ]
+                    sortProperties: ["-dateTaken"]
                     autoUpdate: true
                     rootType: DocumentGallery.Image
                     rootItem: albumId
