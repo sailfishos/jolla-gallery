@@ -7,8 +7,9 @@ MediaSource {
     property alias filter: galleryModel.filter
     model: DocumentGalleryModel {
         id: galleryModel
-        properties: [ "url", "mimeType", "title" ]
-        autoUpdate: true
+        properties: [ "url", "mimeType", "title", "dateTaken" ]
+        autoUpdate: true        
+        sortProperties: ["-dateTaken"]
     }
     count: galleryModel.count
     ready: true

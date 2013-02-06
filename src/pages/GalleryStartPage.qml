@@ -79,7 +79,7 @@ Page {
             albumDelegate: MediaSource {
                 model: DocumentGalleryModel {
                     id: albumModel
-                    properties: [ "url", "mimeType", "title" ]
+                    properties: [ "url", "mimeType", "title", "dateTaken" ]
                     autoUpdate: true
                     rootType: DocumentGallery.Image
                     rootItem: albumId

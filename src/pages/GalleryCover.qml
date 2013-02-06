@@ -25,9 +25,11 @@ Item {
         model: DocumentGalleryModel {
             id: galleryModel
             rootType: DocumentGallery.Image
-            properties: [ "url", "mimeType" ]
+            properties: [ "url", "mimeType", "dateTaken" ]
             filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Pictures/" }
             limit: 6
+            sortProperties: ["-dateTaken"]
+            autoUpdate: true
         }
 
         delegate: Thumbnail {
