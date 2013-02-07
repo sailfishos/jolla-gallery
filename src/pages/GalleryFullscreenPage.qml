@@ -127,6 +127,7 @@ Page {
                 //% "Add account"
                 text: qsTrId("gallery-la-add_account")
                 anchors.verticalCenter: parent.verticalCenter
+                color: parent.down ? theme.highlightColor : theme.primaryColor
             }
 
             onClicked: pageStack.push(accountsPage)

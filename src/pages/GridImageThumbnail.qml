@@ -11,8 +11,6 @@ MouseArea {
 
     property alias menuOffset: thumbnail.y
 
-    z: thumbnail.scale > 1 ? 100 : 0
-
     Thumbnail {
         id: thumbnail
 
@@ -29,9 +27,6 @@ MouseArea {
         source: url
         mimeType: model.mimeType
         opacity: delegate.GridView.view.showTitle && secondRow ? 0 : 1
-        smooth: scale != 1.0
-        // Indicate selection by scaling the thumbnail
-        scale: delegate.pressed ? 1.1 : 1.0
         priority: index >= grid.firstVisible && index < grid.firstVisible + 15
                   ? Thumbnail.NormalPriority
                   : Thumbnail.LowPriority
@@ -45,7 +40,5 @@ MouseArea {
             onCompleted: delegate.GridView.view.showTitle = false
             running: delegate.GridView.view.showTitle
         }
-
-        Behavior on scale { NumberAnimation { duration: 150 }}
     }
 }
