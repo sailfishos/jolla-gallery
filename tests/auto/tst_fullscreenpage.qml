@@ -7,8 +7,8 @@ import "scripts/Util.js" as Util
 
 ApplicationWindow {
     id: window
-    isPortrait: true
-    lockOrientation: true
+
+    allowedOrientations: [Orientation.Portrait, Orientation.Landscape ]
 
     // For GalleryFullscreenPage we need to have something on a page stack first
     // or otherwise we will get warnings.
@@ -21,6 +21,7 @@ ApplicationWindow {
         id: fullscreenPage
         model: albumModel
         currentIndex: 0
+        orientation: Orientation.Portrait
     }
 
     TestCase {
@@ -46,8 +47,8 @@ ApplicationWindow {
             verify(imageTitle.implicitWidth < imageTitle.width)
             verify(imageTitle.width > imageTitle.paintedWidth)
 
-            // change orientation
-            window.isPortrait = false
+            // change orientation            
+            fullscreenPage.orientation = Orientation.Landscape
 
             imageView.currentIndex = 2
             compare(imageTitle.text, "Photo 2 With Long Name")

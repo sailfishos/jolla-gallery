@@ -2,6 +2,8 @@ TEMPLATE = subdirs
 
 SUBDIRS = imports
 
+OTHER_FILES += auto/* auto/scripts/*
+
 auto.files = auto/*
 auto.path = /opt/tests/jolla-gallery/auto
 
