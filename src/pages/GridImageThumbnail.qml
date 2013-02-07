@@ -23,8 +23,8 @@ MouseArea {
         z: 1    // The context menu should be below the thumbnail if it is scaled.
         width: delegate.GridView.view.cellWidth
         height: delegate.GridView.view.cellHeight
-        sourceSize.width: 160
-        sourceSize.height: 160
+        sourceSize.width: screen.width/3
+        sourceSize.height: screen.width/3
 
         source: url
         mimeType: model.mimeType

@@ -55,8 +55,8 @@ Page {
     }
 
     Column {
-        y: 100
-        x: 24
+        y: theme.itemSizeLarge
+        x: theme.paddingLarge
 
         Label {
             height: 40

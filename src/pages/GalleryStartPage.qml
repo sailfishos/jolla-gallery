@@ -18,7 +18,7 @@ Page {
                 objectName: "countLabel"
                 anchors {
                     right: thumbnail.left
-                    rightMargin: 20
+                    rightMargin: theme.paddingLarge
                     verticalCenter: parent.verticalCenter
                 }
                 text: media.count
@@ -28,8 +28,8 @@ Page {
             // Load icon from a plugin
             Loader {
                 id: thumbnail
-                x: width - 20
-                width: 120
+                x: width - theme.paddingLarge
+                width: theme.itemSizeExtraLarge
                 height: width
                 source: media.icon
                 opacity: delegateItem.down ? 0.5 : 1
@@ -44,7 +44,7 @@ Page {
                 anchors {
                     left: thumbnail.right
                     right: parent.right
-                    leftMargin: 20
+                    leftMargin: theme.paddingLarge
                     verticalCenter: parent.verticalCenter
                 }
             }
