@@ -143,17 +143,17 @@ Page {
         }
 
         onShareMethodClicked: {
-            var item  = fullscreenPage.model.get(fullscreenPage.currentIndex)
-            var sharePage = shareDialog.createObject(null)
-            sharePage.displayName = displayName
-            sharePage.accountName = userName
-            sharePage.methodId    = methodId
-            sharePage.accountId   = accountId
-            sharePage.accountRequired = accountRequired
-            sharePage.source      = item.url
-            sharePage.mimeType    = item.mimeType
-            sharePage.docItemId   = item.itemId
-            pageStack.openDialog(sharePage)
+            var item  = fullscreenPage.model.get(fullscreenPage.currentIndex)            
+            pageStack.openDialog(shareDialog, {
+                                     displayName: displayName,
+                                     accountName: userName,
+                                     methodId: methodId,
+                                     accountId: accountId,
+                                     accountRequired: accountRequired,
+                                     source: item.url,
+                                     mimeType: item.mimeType,
+                                     docItemId: item.itemId
+                                 })
         }
     }
 
@@ -169,7 +169,6 @@ Page {
         color: "black"
         Behavior on opacity { NumberAnimation { duration: 300 }}
     }
-
 
     // Element for handling the actual flicking and image buffering
     FlickableImageView {
