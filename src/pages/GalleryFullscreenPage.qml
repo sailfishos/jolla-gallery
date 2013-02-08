@@ -170,7 +170,6 @@ Page {
         Behavior on opacity { NumberAnimation { duration: 300 }}
     }
 
-
     // Element for handling the actual flicking and image buffering
     FlickableImageView {
         id: imageList
