@@ -22,6 +22,7 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
                 text: media.count
+                color: delegateItem.down ? theme.highlightColor : theme.primaryColor
                 font.pixelSize: theme.fontSizeLarge
             }
 
@@ -41,6 +42,7 @@ Page {
                 elide: Text.ElideRight
                 font.pixelSize: theme.fontSizeLarge
                 text: media.title
+                color: delegateItem.down ? theme.highlightColor : theme.primaryColor
                 anchors {
                     left: thumbnail.right
                     right: parent.right

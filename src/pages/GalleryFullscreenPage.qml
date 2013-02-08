@@ -101,8 +101,8 @@ Page {
         //       too long lines, replace this code with it.
         header: Item {
             height: theme.itemSizeLarge
-            width: parent.width * 0.7
-            x: parent.width * 0.3
+            width: menuList.width * 0.7 - theme.paddingLarge
+            x: menuList.width * 0.3
 
             Text {
                 text: model.get(currentIndex).title
@@ -126,7 +126,9 @@ Page {
             Label {
                 //% "Add account"
                 text: qsTrId("gallery-la-add_account")
+                x: theme.paddingLarge
                 anchors.verticalCenter: parent.verticalCenter
+                color: parent.down ? theme.highlightColor : theme.primaryColor
             }
 
             onClicked: pageStack.push(accountsPage)
