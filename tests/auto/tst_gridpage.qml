@@ -9,7 +9,6 @@ import "/usr/share/jolla-gallery/pages/scripts/AlbumManager.js" as AlbumManager
 ApplicationWindow {
     id: window
 
-    allowedOrientations: [Orientation.Portrait, Orientation.Landscape]
     property string currentPageName: pageStack.currentPage != null
             ? pageStack.currentPage.objectName
             : ""
@@ -18,35 +17,45 @@ ApplicationWindow {
         id: gridPage;
         model: albumModel
         title: "Test"
+        orientation: Orientation.Portrait
+        allowedOrientations: Orientation.Portrait | Orientation.Landscape
+        thumbnailDelegate: "file:///usr/share/jolla-gallery/pages/GridImageThumbnail.qml"
     }
 
     TestCase {
         name: "GridPage"
         when: windowShown
 
+        function init() {
+            gridPage.orientation = Orientation.Portrait
+            gridPage.allowedOrientations = Orientation.Portrait
+        }
+
         function test_orientation() {
             var gridView = Util.findItemByName(gridPage, "gridView")
             verify(gridView !== undefined)
+
+            gridPage.allowedOrientations = Orientation.Portrait | Orientation.Landscape
 
             // Verify that in portrait mode the grid wraps after 3 items.
             gridPage.orientation = Orientation.Portrait
 
             var item2 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo2.jpg"
-            }).parent
+            }).parent.parent
             var item3 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo3.jpg"
-            }).parent
-            compare(item3.y, item2.y + gridView.cellHeight)
+            }).parent.parent
+            tryCompare(item3, "y", item2.y + gridView.cellHeight)
 
             // Verify that in landscape mode the grid wraps after 5 items.            
             gridPage.orientation = Orientation.Landscape
             var item4 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo4.jpg"
-            }).parent
+            }).parent.parent
             var item5 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo5.jpg"
-            }).parent
+            }).parent.parent
             compare(item3.y, item2.y)
             compare(item5.y, item4.y + gridView.cellHeight)
 
@@ -62,22 +71,22 @@ ApplicationWindow {
             gridPage.orientation = Orientation.Portrait
             var thumbnail0 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo0.jpg"
-            })
+            }).parent
             var item0 = thumbnail0.parent
 
             var thumbnail1 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo1.jpg"
-            })
+            }).parent
             var item1 = thumbnail1.parent
 
             var thumbnail3 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo3.jpg"
-            })
+            }).parent
             var item3 = thumbnail3.parent
 
             var thumbnail5 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo5.jpg"
-            })
+            }).parent
             var item5 = thumbnail5.parent
 
             // Menu is closed, no thumbnail positions are offset, and all items are fully opaque.
@@ -88,7 +97,7 @@ ApplicationWindow {
 
             compare(item0.opacity, 1.0)
             compare(item1.opacity, 1.0)
-            compare(item3.opacity, 1.0)
+            tryCompare(item3 , "opacity", 1.0)
             compare(item5.opacity, 1.0)
 
             mousePress(item1, gridView.cellWidth / 2, gridView.cellHeight / 2)
@@ -153,7 +162,8 @@ ApplicationWindow {
 
             var item2 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo2.jpg"
-            })
+            }).parent
+            verify(item2 !== undefined)
 
             // Open the context menu.
             mousePress(item2, gridView.cellWidth / 2, gridView.cellHeight / 2)

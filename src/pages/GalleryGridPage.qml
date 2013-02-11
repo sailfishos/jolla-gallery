@@ -12,6 +12,7 @@ Page {
     property alias model: grid.model
     property alias title: titleText.text
     property alias currentIndex: grid.currentIndex
+    property url thumbnailDelegate
 
     objectName: "gridPage"
 
@@ -30,7 +31,7 @@ Page {
         id: grid
         property bool showTitle
         property int firstVisible: Math.max(0, grid.indexAt(0, grid.contentY))
-        property int columnCount: isPortrait ? 3 : 5
+        property int columnCount: gridPage.isPortrait ? 3 : 5
         property alias contextMenu: contextMenuItem
         property Item remorseItem
         property Item expandItem: remorseItem !== null ? remorseItem.parent : (contextMenu.active ? contextMenu.parent : null)
@@ -66,15 +67,16 @@ Page {
             }
         }
 
-        // TODO: For better performance, we could have here dedicated thumbnails for images and videos
-        //       currently only images are supported.
-        delegate: GridImageThumbnail {
+        delegate: MouseArea {
             id: thumbnail
 
             property bool itemDeleted
             property bool isItemExpanded: grid.expandItem == thumbnail
             property int modelIndex: index
             property url mediaUrl: url
+            property bool secondRow: gridPage.isPortrait
+                    ? index <= 5 && 3 <= index
+                    : index <= 9 && 5 <= index
 
             function remove() {
                 grid.remorseItem = removalComponent.createObject(null, { 'parent': thumbnail })
@@ -92,7 +94,6 @@ Page {
             width: grid.cellWidth
             height: isItemExpanded ? grid.cellHeight + grid.expandHeight : grid.cellHeight
             opacity: GridView.isCurrentItem && (grid.remorseItem !== null || grid.contextMenu.active) ? 1.0 : grid.unfocusedOpacity
-            menuOffset: index >= grid.minimumOffsetIndex ? grid.expandHeight : 0.0
             enabled: isItemExpanded || !grid.contextMenu.active
             Behavior on opacity { enabled: itemDeleted; NumberAnimation { duration: 1600 }}
 
@@ -109,6 +110,26 @@ Page {
                    return
                }
                pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
+            }
+
+            Loader {
+                y: index >= grid.minimumOffsetIndex ? grid.expandHeight : 0.0
+                z: 1    // The context menu should be below the thumbnail if it is scaled.
+                width: grid.cellWidth
+                height: grid.cellHeight
+
+                source: thumbnailDelegate
+
+                // Animation for displaying a title. Used only once for the
+                // second row items.
+                opacity: grid.showTitle && secondRow ? 0 : 1
+                NumberAnimation on opacity {
+                    id: opacityAnimation
+                    duration: 1500
+                    to: 1
+                    onCompleted: grid.showTitle = false
+                    running: grid.showTitle
+                }
             }
         }
 

@@ -8,7 +8,6 @@ import "scripts/Util.js" as Util
 ApplicationWindow {
     id: window
 
-    allowedOrientations: [Orientation.Portrait, Orientation.Landscape ]
 
     // For GalleryFullscreenPage we need to have something on a page stack first
     // or otherwise we will get warnings.
@@ -22,6 +21,7 @@ ApplicationWindow {
         model: albumModel
         currentIndex: 0
         orientation: Orientation.Portrait
+        allowedOrientations: Orientation.Portrait | Orientation.Landscape
     }
 
     TestCase {
