@@ -66,7 +66,9 @@ Page {
 
             function remove() {
                 grid.remorseItem = removalComponent.createObject(null, { 'parent': thumbnail })
-                grid.remorseItem.remorse.execute(grid.remorseItem, "Deleting",
+                //: Deleting image in 5 seconds
+                //% "Deleting"
+                grid.remorseItem.remorse.execute(grid.remorseItem, qsTrId("gallery-la-deleting"),
                                                  function() { AlbumManager.deleteMedia(thumbnail.mediaUrl) })
             }
 
