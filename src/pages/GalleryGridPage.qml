@@ -34,14 +34,15 @@ Page {
         property int columnCount: isPortrait ? 3 : 5
 
         property Item contextMenu
-        property Item menuItem: contextMenu !== null ? contextMenu.parent : null
-        property real menuHeight: contextMenu !== null ? contextMenu.height : 0.0
-        property int minimumOffsetIndex: menuItem != null
-                ? menuItem.modelIndex + columnCount - (menuItem.modelIndex % columnCount)
+        property Item remorseItem
+        property Item expandItem: remorseItem !== null ? remorseItem.parent : (contextMenu !== null ? contextMenu.parent : null)
+        property real expandHeight: remorseItem !== null ? remorseItem.height : (contextMenu !== null ? contextMenu.height : 0.0)
+        property int minimumOffsetIndex: expandItem != null
+                ? expandItem.modelIndex + columnCount - (expandItem.modelIndex % columnCount)
                 : 0
 
         property real unfocusedOpacity: (currentItem != null && currentItem.pressed)
-                || (contextMenu != null && contextMenu.active) ? 0.2 : 1.0
+                || (contextMenu != null && contextMenu.active) || remorseItem ? 0.2 : 1.0
         Behavior on unfocusedOpacity { NumberAnimation { duration: 200 }}
 
         objectName: "gridView"
@@ -59,15 +60,22 @@ Page {
         delegate: GridImageThumbnail {
             id: thumbnail
 
-            property bool isMenuItem: grid.menuItem == thumbnail
+            property bool isItemExpanded: grid.expandItem == thumbnail
             property int modelIndex: index
             property url mediaUrl: url
 
+            function remove() {
+                grid.remorseItem = removalComponent.createObject(null, { 'parent': thumbnail })
+                grid.remorseItem.remorse.execute(grid.remorseItem, "Deleting",
+                                                 function() { AlbumManager.deleteMedia(thumbnail.mediaUrl) })
+            }
+
+            z: isItemExpanded ? 1000 : 1
             width: grid.cellWidth
-            height: isMenuItem ? grid.cellHeight + grid.menuHeight : grid.cellHeight
+            height: isItemExpanded ? grid.cellHeight + grid.expandHeight : grid.cellHeight
             opacity: GridView.isCurrentItem ? 1.0 : grid.unfocusedOpacity
-            menuOffset: index >= grid.minimumOffsetIndex ? grid.menuHeight : 0.0
-            enabled: isMenuItem || grid.contextMenu === null || !grid.contextMenu.active
+            menuOffset: index >= grid.minimumOffsetIndex ? grid.expandHeight : 0.0
+            enabled: isItemExpanded || grid.contextMenu === null || !grid.contextMenu.active
             onClicked: pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
             onPressAndHold: {
                 if (grid.contextMenu === null)
@@ -77,12 +85,39 @@ Page {
             onPressed: grid.currentIndex = index;
         }
 
-        ScrollDecorator {}
+        VerticalScrollDecorator {}
 
         // Padding so there is space for the menu and displaced items at the
         // bottom of the contentItem.
         footer: Item {
-            height: grid.menuHeight
+            height: grid.expandHeight
+        }
+    }
+
+    Component {
+        id: removalComponent
+        Item {
+            id: remorseContainer
+            property alias remorse: remorseItem
+            y: parent.height - height
+            x: -parent.x
+            width: grid.width
+            height: theme.itemSizeSmall
+
+            SequentialAnimation {
+                id: destroyAnim
+                NumberAnimation { target: remorseContainer; property: "height"; to: 0; duration: 200 }
+                ScriptAction { script: { grid.remorseItem = null; remorseContainer.destroy() } }
+            }
+            RemorseItem {
+                id: remorseItem
+                onTriggered: destroyAnim.start()
+                onCanceled: destroyAnim.start()
+            }
+            InverseMouseArea {
+                anchors.fill: parent
+                stealPress: true
+            }
         }
     }
 
@@ -97,7 +132,7 @@ Page {
                 objectName: "deleteItem"
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
-                onClicked: AlbumManager.deleteMedia(grid.menuItem.mediaUrl)
+                onClicked: grid.expandItem.remove()
             }
         }
     }

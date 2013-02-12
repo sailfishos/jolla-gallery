@@ -16,6 +16,7 @@ Page {
 
     property alias model: imageList.model
     property int currentIndex
+    property Item _remorsePopup
 
     onCurrentIndexChanged: {
         if (status !== PageStatus.Active) {
@@ -74,9 +75,22 @@ Page {
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
                 onClicked: {
-                    pageStack.pop()
-                    AlbumManager.deleteMedia(imageList.currentItemUrl())
+                    if (_remorsePopup === null) {
+                        _remorsePopup = remorsePopupComponent.createObject(fullscreenPage)
+                    }
 
+                    //: Deleting image in 5 seconds
+                    //% "Deleting image"
+                    _remorsePopup.execute(qsTrId("gallery-la-removing_image"),
+                                              function() {
+                                                  pageStack.pop()
+                                                  AlbumManager.deleteMedia(imageList.currentItemUrl())
+                                              }
+                                          )
+                }
+                Component {
+                    id: remorsePopupComponent
+                    RemorsePopup {}
                 }
             }
             MenuItem {
