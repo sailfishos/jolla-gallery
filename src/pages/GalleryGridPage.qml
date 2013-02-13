@@ -33,7 +33,7 @@ Page {
         property int firstVisible: Math.max(0, grid.indexAt(0, grid.contentY))
         property int columnCount: isPortrait ? 3 : 5
 
-        property Item contextMenu
+        property Item contextMenu: contextMenuComponent.createObject(grid)
         property Item remorseItem
         property Item expandItem: remorseItem !== null ? remorseItem.parent : (contextMenu !== null ? contextMenu.parent : null)
         property real expandHeight: remorseItem !== null ? remorseItem.height : (contextMenu !== null ? contextMenu.height : 0.0)
@@ -75,16 +75,27 @@ Page {
             z: isItemExpanded ? 1000 : 1
             width: grid.cellWidth
             height: isItemExpanded ? grid.cellHeight + grid.expandHeight : grid.cellHeight
-            opacity: GridView.isCurrentItem ? 1.0 : grid.unfocusedOpacity
+            opacity: GridView.isCurrentItem && (grid.remorseItem !== null || grid.contextMenu.active) && !highlightItem.visible ? 1.0 : grid.unfocusedOpacity
             menuOffset: index >= grid.minimumOffsetIndex ? grid.expandHeight : 0.0
             enabled: isItemExpanded || grid.contextMenu === null || !grid.contextMenu.active
-            onClicked: pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
+
+
             onPressAndHold: {
-                if (grid.contextMenu === null)
-                    grid.contextMenu = contextMenuComponent.createObject(grid)
                 grid.contextMenu.show(thumbnail)
             }
-            onPressed: grid.currentIndex = index;
+
+            onPressed: {
+                grid.currentIndex = index;
+            }
+
+            onReleased: {
+               if (grid.contextMenu.active) {
+                   return
+               }
+               pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
+            }
+
+
         }
 
         VerticalScrollDecorator {}
@@ -94,6 +105,18 @@ Page {
         footer: Item {
             height: grid.expandHeight
         }
+    }
+
+    // We have one highlight item, which will be positioned on tapped thumbnail
+    Rectangle {
+        id: highlightItem
+        color: theme.highlightBackgroundColor
+        width: grid.cellWidth
+        height: grid.cellHeight
+        opacity: 0.5
+        visible: grid.currentItem.pressed && grid.currentItem.containsMouse && !grid.contextMenu.active && grid.remorseItem === null
+        x: grid.currentItem.x
+        y: grid.currentItem.y - grid.contentY
     }
 
     Component {
