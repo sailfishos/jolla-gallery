@@ -35,14 +35,14 @@ Page {
 
         property Item contextMenu: contextMenuComponent.createObject(grid)
         property Item remorseItem
-        property Item expandItem: remorseItem !== null ? remorseItem.parent : (contextMenu !== null ? contextMenu.parent : null)
-        property real expandHeight: remorseItem !== null ? remorseItem.height : (contextMenu !== null ? contextMenu.height : 0.0)
+        property Item expandItem: remorseItem !== null ? remorseItem.parent : (contextMenu.active ? contextMenu.parent : null)
+        property real expandHeight: remorseItem !== null ? remorseItem.height : (contextMenu.active ? contextMenu.height : 0.0)
         property int minimumOffsetIndex: expandItem != null
                 ? expandItem.modelIndex + columnCount - (expandItem.modelIndex % columnCount)
                 : 0
 
         property real unfocusedOpacity: (currentItem != null && currentItem.pressed)
-                || (contextMenu != null && contextMenu.active) || remorseItem ? 0.2 : 1.0
+                || contextMenu.active || remorseItem ? 0.2 : 1.0
         Behavior on unfocusedOpacity { NumberAnimation { duration: 200 }}
 
         objectName: "gridView"
@@ -75,9 +75,9 @@ Page {
             z: isItemExpanded ? 1000 : 1
             width: grid.cellWidth
             height: isItemExpanded ? grid.cellHeight + grid.expandHeight : grid.cellHeight
-            opacity: GridView.isCurrentItem && (grid.remorseItem !== null || grid.contextMenu.active) && !highlightItem.visible ? 1.0 : grid.unfocusedOpacity
+            opacity: GridView.isCurrentItem && (grid.remorseItem !== null || grid.contextMenu.active) ? 1.0 : grid.unfocusedOpacity
             menuOffset: index >= grid.minimumOffsetIndex ? grid.expandHeight : 0.0
-            enabled: isItemExpanded || grid.contextMenu === null || !grid.contextMenu.active
+            enabled: isItemExpanded || !grid.contextMenu.active
 
 
             onPressAndHold: {
@@ -94,8 +94,6 @@ Page {
                }
                pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
             }
-
-
         }
 
         VerticalScrollDecorator {}
@@ -114,7 +112,8 @@ Page {
         width: grid.cellWidth
         height: grid.cellHeight
         opacity: 0.5
-        visible: grid.currentItem.pressed && grid.currentItem.containsMouse && !grid.contextMenu.active && grid.remorseItem === null
+        visible: grid.currentItem.pressed && grid.currentItem.containsMouse &&
+                 !grid.contextMenu.active && grid.remorseItem === null
         x: grid.currentItem.x
         y: grid.currentItem.y - grid.contentY
     }
