@@ -15,6 +15,7 @@ BuildRequires:  pkgconfig(mlite)
 BuildRequires:  pkgconfig(QtGallery)
 BuildRequires:  pkgconfig(qdeclarative-boostable)
 
+Requires:  ambient-icons-closed
 Requires:  sailfishsilica
 Requires:  libdeclarative-gallery
 Requires:  mapplauncherd-booster-jolla
