@@ -167,8 +167,6 @@ Page {
 
         onShareMethodClicked: {
             var item  = fullscreenPage.model.get(fullscreenPage.currentIndex)
-            console.log("Item URL: ", item.url)
-
             pageStack.openDialog(shareDialog, {
                                      displayName: displayName,
                                      accountName: userName,
