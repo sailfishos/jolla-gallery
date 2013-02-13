@@ -29,11 +29,9 @@ Page {
     SilicaGridView {
         id: grid
         property bool showTitle
-
         property int firstVisible: Math.max(0, grid.indexAt(0, grid.contentY))
         property int columnCount: isPortrait ? 3 : 5
-
-        property Item contextMenu: contextMenuComponent.createObject(grid)
+        property alias contextMenu: contextMenuItem
         property Item remorseItem
         property Item expandItem: remorseItem !== null ? remorseItem.parent : (contextMenu.active ? contextMenu.parent : null)
         property real expandHeight: remorseItem !== null ? remorseItem.height : (contextMenu.active ? contextMenu.height : 0.0)
@@ -54,6 +52,19 @@ Page {
         width: parent.width
         cacheBuffer: cellHeight * 5
         pressDelay: 75
+
+        ContextMenu {
+            id: contextMenuItem
+            parent: null
+            x: parent !== null ? -parent.x : 0.0
+
+            MenuItem {
+                objectName: "deleteItem"
+                //% "Delete"
+                text: qsTrId("gallery-me-delete")
+                onClicked: grid.expandItem.remove()
+            }
+        }
 
         // TODO: For better performance, we could have here dedicated thumbnails for images and videos
         //       currently only images are supported.
@@ -90,7 +101,7 @@ Page {
             }
 
             onPressed: {
-                grid.currentIndex = index;
+                grid.currentIndex = index
             }
 
             onReleased: {
@@ -150,19 +161,5 @@ Page {
         }
     }
 
-    Component {
-        id: contextMenuComponent
 
-        ContextMenu {
-            parent: null
-            x: parent !== null ? -parent.x : 0.0
-
-            MenuItem {
-                objectName: "deleteItem"
-                //% "Delete"
-                text: qsTrId("gallery-me-delete")
-                onClicked: grid.expandItem.remove()
-            }
-        }
-    }
 }
