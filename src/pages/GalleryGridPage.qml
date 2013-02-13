@@ -60,6 +60,7 @@ Page {
         delegate: GridImageThumbnail {
             id: thumbnail
 
+            property bool itemDeleted
             property bool isItemExpanded: grid.expandItem == thumbnail
             property int modelIndex: index
             property url mediaUrl: url
@@ -69,7 +70,11 @@ Page {
                 //: Deleting image in 5 seconds
                 //% "Deleting"
                 grid.remorseItem.remorse.execute(grid.remorseItem, qsTrId("gallery-la-deleting"),
-                                                 function() { AlbumManager.deleteMedia(thumbnail.mediaUrl) })
+                                                 function() {
+                                                     itemDeleted = true
+                                                     opacity = 0
+                                                     AlbumManager.deleteMedia(thumbnail.mediaUrl)
+                                                 })
             }
 
             z: isItemExpanded ? 1000 : 1
@@ -78,7 +83,7 @@ Page {
             opacity: GridView.isCurrentItem && (grid.remorseItem !== null || grid.contextMenu.active) ? 1.0 : grid.unfocusedOpacity
             menuOffset: index >= grid.minimumOffsetIndex ? grid.expandHeight : 0.0
             enabled: isItemExpanded || !grid.contextMenu.active
-
+            Behavior on opacity { enabled: itemDeleted; NumberAnimation { duration: 1600 }}
 
             onPressAndHold: {
                 grid.contextMenu.show(thumbnail)
