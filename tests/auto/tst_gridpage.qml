@@ -164,8 +164,19 @@ ApplicationWindow {
             var deleteMenu = Util.findItemByName(gridView.contextMenu, "deleteItem")
             verify(deleteMenu !== undefined)
 
+            // Test remorse item and canceling the delete operation
             deleteMenu.clicked(null)
+            verify(gridView.remorseItem !== undefined)
 
+            verify(gridView.remorseItem.remorse !== undefined)
+            gridView.remorseItem.remorse.clicked(null)
+            tryCompare(testService, "trackerInfoDeleted", false)
+
+
+            // Next test deletion
+            deleteMenu.clicked(null)
+            // Wait that remorse timeout has exceeded
+            wait(6000)
             compare(AlbumManager.albumManager().removedFile, "file:///home/nemo/Pictures/photo2.jpg")
             tryCompare(testService, "trackerInfoDeleted", true)
 
@@ -174,7 +185,7 @@ ApplicationWindow {
             gridView.contextMenu.hide()
 
             // Don't return until the menu has closed, and opacity has been returned to all items.
-            tryCompare(gridView, "menuHeight", 0)
+            tryCompare(gridView, "expandHeight", 0)
             tryCompare(gridView, "unfocusedOpacity", 1)
         }
 
