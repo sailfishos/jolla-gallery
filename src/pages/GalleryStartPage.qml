@@ -3,9 +3,7 @@ import Sailfish.Silica 1.0
 import com.jolla.gallery 1.0
 import QtMobility.gallery 1.1
 
-
 Page {
-
     Component {
         id: delegate
         BackgroundItem {
@@ -32,7 +30,7 @@ Page {
                 x: width - theme.paddingLarge
                 width: theme.itemSizeExtraLarge
                 height: width
-                source: media.icon
+                source: media.icon != "" ? media.icon : "PhotoIcon.qml"
                 opacity: delegateItem.down ? 0.5 : 1
             }
 
@@ -51,7 +49,11 @@ Page {
                 }
             }
 
-            onClicked: { window.pageStack.push(Qt.resolvedUrl("GalleryGridPage.qml"), {title: media.title, model: media.model} ) }
+            onClicked: { window.pageStack.push(Qt.resolvedUrl("GalleryGridPage.qml"), {
+                    title: media.title,
+                    model: media.model,
+                    thumbnailDelegate: media.thumbnail != "" ? media.thumbnail : Qt.resolvedUrl("GridImageThumbnail.qml")
+            } ) }
         }
     }
 
@@ -67,7 +69,6 @@ Page {
                 //: Main screen
                 //% "Photos"
                 title: qsTrId("gallery-bt-photos")
-                icon: "PhotoIcon.qml"
                 type: DocumentGallery.Image
                 properties: ["url", "mimeType", "title", "dateTaken"]
                 sortProperties: ["-dateTaken"]
@@ -76,7 +77,6 @@ Page {
             DocumentGallerySource {
                 //% "Videos"
                 title: qsTrId("gallery-bt-videos")
-                icon: "PhotoIcon.qml"
                 type: DocumentGallery.Video
             }
 
@@ -91,7 +91,6 @@ Page {
                 }
                 title: albumTitle
                 count: albumModel.count
-                icon: "PhotoIcon.qml"
                 ready: true
             }
         }

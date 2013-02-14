@@ -7,8 +7,6 @@ import "scripts/Util.js" as Util
 
 ApplicationWindow {
     id: window
-    allowedOrientations: [Orientation.Portrait]
-
     property string currentPageName: pageStack.currentPage != null
             ? pageStack.currentPage.objectName
             : ""
@@ -16,6 +14,7 @@ ApplicationWindow {
     initialPage: GalleryStartPage {
         id: startPage
         objectName: "startPage"
+        allowedOrientations: Orientation.Portrait
         orientation: Orientation.Portrait
     }
 

@@ -38,6 +38,19 @@ void DeclarativeMediaSource::setIcon(const QUrl &url)
     }
 }
 
+QUrl DeclarativeMediaSource::thumbnail() const
+{
+    return m_thumbnail;
+}
+
+void DeclarativeMediaSource::setThumbnail(const QUrl &url)
+{
+    if (m_thumbnail != url) {
+        m_thumbnail = url;
+        emit thumbnailChanged();
+    }
+}
+
 QString DeclarativeMediaSource::title() const
 {
     return m_title;
