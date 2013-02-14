@@ -19,6 +19,10 @@ Page {
 
     signal deleteMedia(int index)
 
+    objectName: "fullscreenPage"
+    clip: imageList.alignMiddle
+    backNavigation: imageList.alignMiddle
+
     onCurrentIndexChanged: {
         if (status !== PageStatus.Active) {
             return
@@ -30,9 +34,14 @@ Page {
         }
     }
 
-    objectName: "fullscreenPage"
-    clip: imageList.alignMiddle
-    backNavigation: imageList.alignMiddle
+    onStatusChanged: {
+        if (status === PageStatus.Inactive) {
+            menuProgressBehavior.enabled = false
+            imageList.alignMiddle = false
+            menuProgressBehavior.enabled = true
+            pullDownMenu.hide()
+        }
+    }
 
     Connections {
         target: window
@@ -141,7 +150,7 @@ Page {
         }
 
         onShareMethodClicked: {
-            var item  = fullscreenPage.model.get(fullscreenPage.currentIndex)            
+            var item  = fullscreenPage.model.get(fullscreenPage.currentIndex)
             pageStack.openDialog(shareDialog, {
                                      displayName: displayName,
                                      accountName: userName,
