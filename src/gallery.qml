@@ -21,6 +21,6 @@ ApplicationWindow {
     }
 
     cover: GalleryCover {}
-    initialPage: GalleryStartPage {}
+    initialPage: Component { GalleryStartPage {} }
 }
 
