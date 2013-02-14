@@ -15,6 +15,13 @@ Page {
 
     objectName: "gridPage"
 
+    function deleteMedia(index) {
+        pageStack.pop()
+        grid.currentIndex = index
+        grid.currentItem.remove()
+        grid.positionViewAtIndex(index, GridView.Visible)
+    }
+
     // Title for the grid
     Label {
         id: titleText
@@ -53,6 +60,14 @@ Page {
         cacheBuffer: cellHeight * 5
         pressDelay: 75
 
+        onContentYChanged: {
+            if (remorseItem) {
+                // Make sure that the closing menu doesn't hide the RemorseItem at the
+                // end of the view
+                contentY = Math.max(remorseItem.mapToItem(contentItem, 0, remorseItem.height).y - height, contentY)
+            }
+        }
+
         ContextMenu {
             id: contextMenuItem
             parent: null
@@ -77,7 +92,7 @@ Page {
             property url mediaUrl: url
 
             function remove() {
-                grid.remorseItem = removalComponent.createObject(null, { 'parent': thumbnail })
+                grid.remorseItem = removalComponent.createObject(thumbnail)
                 //: Deleting image in 5 seconds
                 //% "Deleting"
                 grid.remorseItem.remorse.execute(grid.remorseItem, qsTrId("gallery-la-deleting"),
@@ -109,6 +124,7 @@ Page {
                    return
                }
                pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
+               pageStack.currentPage.deleteMedia.connect(gridPage.deleteMedia)
             }
         }
 
@@ -147,7 +163,13 @@ Page {
             SequentialAnimation {
                 id: destroyAnim
                 NumberAnimation { target: remorseContainer; property: "height"; to: 0; duration: 200 }
-                ScriptAction { script: { grid.remorseItem = null; remorseContainer.destroy() } }
+                ScriptAction {
+                    script: {
+                        grid.remorseItem = null
+                        remorseContainer.destroy()
+                        grid.returnToBounds()
+                    }
+                }
             }
             RemorseItem {
                 id: remorseItem
@@ -160,6 +182,4 @@ Page {
             }
         }
     }
-
-
 }

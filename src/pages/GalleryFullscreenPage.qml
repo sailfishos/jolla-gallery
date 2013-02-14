@@ -16,7 +16,8 @@ Page {
 
     property alias model: imageList.model
     property int currentIndex
-    property Item _remorsePopup
+
+    signal deleteMedia(int index)
 
     objectName: "fullscreenPage"
     clip: imageList.alignMiddle
@@ -83,24 +84,7 @@ Page {
             MenuItem {
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
-                onClicked: {
-                    if (_remorsePopup === null) {
-                        _remorsePopup = remorsePopupComponent.createObject(fullscreenPage)
-                    }
-
-                    //: Deleting image in 5 seconds
-                    //% "Deleting image"
-                    _remorsePopup.execute(qsTrId("gallery-la-removing_image"),
-                                              function() {
-                                                  pageStack.pop()
-                                                  AlbumManager.deleteMedia(imageList.currentItemUrl())
-                                              }
-                                          )
-                }
-                Component {
-                    id: remorsePopupComponent
-                    RemorsePopup {}
-                }
+                onClicked: fullscreenPage.deleteMedia(fullscreenPage.currentIndex)
             }
             MenuItem {
                 //% "Edit"
