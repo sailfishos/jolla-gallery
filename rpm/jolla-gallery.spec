@@ -10,6 +10,7 @@ BuildRequires:  pkgconfig(QtCore) >= 4.8.0
 BuildRequires:  pkgconfig(QtDeclarative)
 BuildRequires:  pkgconfig(QtGui)
 BuildRequires:  pkgconfig(QtOpenGL)
+BuildRequires:  pkgconfig(QtNetwork)
 BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(mlite)
 BuildRequires:  pkgconfig(QtGallery)
