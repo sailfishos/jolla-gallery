@@ -5,6 +5,8 @@
 #include <QUrl>
 
 class MGConfItem;
+class QNetworkAccessManager;
+class QNetworkReply;
 class DeclarativeWallpaper : public QObject
 {
     Q_OBJECT
@@ -14,11 +16,19 @@ public:
     QUrl source() const;
     void setSource(const QUrl & url);
 
-signals:
+Q_SIGNALS:
     void sourceChanged();
+
+private Q_SLOTS:
+    void finished(QNetworkReply *reply);
+
+private:
+    void setOnlineImage(const QUrl &url);
+    QString nextOnlineFileName();
 
 private:
     MGConfItem * m_gconfItem;
+    QNetworkAccessManager *m_netMgr;
 };
 
 #endif // DECLARATIVEWALLPAPER_H

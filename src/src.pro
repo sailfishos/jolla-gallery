@@ -3,7 +3,7 @@ include(../common.pri)
 TARGET = jolla-gallery
 target.path = /usr/bin
 
-QT += declarative dbus script
+QT += declarative dbus script network
 CONFIG += mobility
 MOBILITY += multimedia
 

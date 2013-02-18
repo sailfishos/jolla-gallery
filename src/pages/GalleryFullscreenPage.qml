@@ -96,9 +96,12 @@ Page {
             MenuItem {
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
-                onClicked: {
-                    wallpaper.source = imageList.currentItemUrl()
-                    AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", wallpaper.source)
+
+                onClicked: wallpaper.source = imageList.currentItemUrl()
+
+                Connections {
+                    target: wallpaper
+                    onSourceChanged: AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", wallpaper.source)
                 }
             }
         }
