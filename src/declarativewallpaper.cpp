@@ -46,7 +46,7 @@ void DeclarativeWallpaper::setOnlineImage(const QUrl &url)
 void DeclarativeWallpaper::finished(QNetworkReply *reply)
 {
     if (reply->error() != QNetworkReply::NoError) {
-        qDebug() << "Error in" << reply->url() << ":" << reply->errorString();
+        qWarning() << "Error in" << reply->url() << ":" << reply->errorString();
         return;
     }
 
@@ -67,8 +67,8 @@ void DeclarativeWallpaper::finished(QNetworkReply *reply)
 
 QString DeclarativeWallpaper::nextOnlineFileName()
 {
-    const QString path = QDir::homePath() + QDir::separator() + "Pictures";
+    const QString path = QDir::homePath() + QDir::separator() + QLatin1String("Pictures");
     QDir imageDir(path);
     QStringList fileList = imageDir.entryList(QStringList() << "online_img*", QDir::Files, QDir::Name);
-    return path + QDir::separator() + "online_img" + QString::number(fileList.count()) + ".jpg";
+    return path + QDir::separator() + QLatin1String("online_img") + QString::number(fileList.count()) + QLatin1String(".jpg");
 }
