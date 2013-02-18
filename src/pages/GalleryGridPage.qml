@@ -32,6 +32,7 @@ Page {
         font { pixelSize: theme.fontSizeExtraLarge; family: theme.fontFamilyHeading }
         onTextChanged: grid.showTitle = true
         opacity: grid.showTitle ? 1 : 0
+        Behavior on opacity { NumberAnimation { duration: 300 }}
     }
 
     SilicaGridView {
