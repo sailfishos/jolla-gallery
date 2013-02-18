@@ -10,7 +10,7 @@ import "scripts/AlbumManager.js" as AlbumManager
 Page {
     id: gridPage
     property alias model: grid.model
-    property alias title: titleText.text
+    property string title
     property alias currentIndex: grid.currentIndex
     property url thumbnailDelegate
 
@@ -32,7 +32,6 @@ Page {
         font { pixelSize: theme.fontSizeExtraLarge; family: theme.fontFamilyHeading }
         onTextChanged: grid.showTitle = true
         opacity: grid.showTitle ? 1 : 0
-        Behavior on opacity { NumberAnimation { duration: 300 }}
     }
 
     SilicaGridView {
