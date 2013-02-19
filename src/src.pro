@@ -31,13 +31,15 @@ HEADERS += \
     declarativewallpaper.h \
     declarativemediamodel.h \
     declarativemediasource.h \
-    declarativedbusinterface.h
+    declarativedbusinterface.h \
+    declarativefileinfo.h
 
 SOURCES += gallery.cpp \
     declarativewallpaper.cpp \
     declarativemediamodel.cpp \
     declarativemediasource.cpp \
-    declarativedbusinterface.cpp
+    declarativedbusinterface.cpp \
+    declarativefileinfo.cpp
 
 INSTALLS += target qml
 

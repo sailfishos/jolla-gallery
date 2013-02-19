@@ -12,6 +12,7 @@
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
 #include "declarativedbusinterface.h"
+#include "declarativefileinfo.h"
 
 #ifdef HAS_BOOSTER
 #include <MDeclarativeCache>
@@ -53,7 +54,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qApp->installTranslator(&translator);
 
 
-
+    qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
     qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");

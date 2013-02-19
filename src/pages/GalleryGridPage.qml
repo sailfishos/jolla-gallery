@@ -10,7 +10,7 @@ import "scripts/AlbumManager.js" as AlbumManager
 Page {
     id: gridPage
     property alias model: grid.model
-    property alias title: titleText.text
+    property string title
     property alias currentIndex: grid.currentIndex
     property url thumbnailDelegate
 
@@ -23,20 +23,8 @@ Page {
         grid.positionViewAtIndex(index, GridView.Visible)
     }
 
-    // Title for the grid
-    Label {
-        id: titleText
-        y: grid.contentItem.y + grid.cellHeight + (grid.cellHeight - titleText.paintedHeight) / 2
-        anchors { right: grid.right; rightMargin: theme.paddingMedium }
-        color: theme.highlightColor
-        font { pixelSize: theme.fontSizeExtraLarge; family: theme.fontFamilyHeading }
-        onTextChanged: grid.showTitle = true
-        opacity: grid.showTitle ? 1 : 0
-    }
-
     SilicaGridView {
         id: grid
-        property bool showTitle
         property int firstVisible: Math.max(0, grid.indexAt(0, grid.contentY))
         property int columnCount: gridPage.isPortrait ? 3 : 5
         property alias contextMenu: contextMenuItem
@@ -56,10 +44,12 @@ Page {
         flickDeceleration: 1400
         cellWidth: Math.floor(width / columnCount)
         cellHeight: cellWidth
-        height: parent.height
-        width: parent.width
+        anchors.fill: parent
         cacheBuffer: cellHeight * 5
         pressDelay: 75
+
+        // Make sure that header is visible when Grid is shown for the first time
+        Component.onCompleted: grid.positionViewAtBeginning()
 
         onContentYChanged: {
             if (remorseItem) {
@@ -82,6 +72,8 @@ Page {
             }
         }
 
+        header: PageHeader { title: gridPage.title }
+
         delegate: MouseArea {
             id: thumbnail
 
@@ -89,9 +81,6 @@ Page {
             property bool isItemExpanded: grid.expandItem == thumbnail
             property int modelIndex: index
             property url mediaUrl: url
-            property bool secondRow: gridPage.isPortrait
-                    ? index <= 5 && 3 <= index
-                    : index <= 9 && 5 <= index
 
             function remove() {
                 grid.remorseItem = removalComponent.createObject(thumbnail)
@@ -133,29 +122,11 @@ Page {
                 z: 1    // The context menu should be below the thumbnail if it is scaled.
                 width: grid.cellWidth
                 height: grid.cellHeight
-
                 source: thumbnailDelegate
-
-                // Animation for displaying a title. Used only once for the
-                // second row items.
-                opacity: grid.showTitle && secondRow ? 0 : 1
-                NumberAnimation on opacity {
-                    id: opacityAnimation
-                    duration: 1500
-                    to: 1
-                    onCompleted: grid.showTitle = false
-                    running: grid.showTitle
-                }
             }
         }
 
         VerticalScrollDecorator {}
-
-        // Padding so there is space for the menu and displaced items at the
-        // bottom of the contentItem.
-        footer: Item {
-            height: grid.expandHeight
-        }
     }
 
     // We have one highlight item, which will be positioned on tapped thumbnail
@@ -165,6 +136,7 @@ Page {
         width: grid.cellWidth
         height: grid.cellHeight
         opacity: 0.5
+        objectName: "highlightItem"
         visible: grid.currentItem.pressed && grid.currentItem.containsMouse &&
                  !grid.contextMenu.active && grid.remorseItem === null
         x: grid.currentItem.x

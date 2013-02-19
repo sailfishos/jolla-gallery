@@ -2,6 +2,7 @@ import QtQuick 1.1
 import Sailfish.Silica 1.0
 import Sailfish.TransferEngine 1.0
 import com.jolla.components.accounts 1.0
+import com.jolla.gallery 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
 /**
@@ -56,12 +57,21 @@ Page {
         }
     }
 
+
+    FileInfo {
+        id: fileInfo
+        source: model.get(currentIndex).url
+    }
+
+    SailfishTransferMethodsModel {id: transferMethodsModel }
+
     // This is the share method list, but it also
     // includes the pulley menu
     ShareMethodList {
         id: menuList
 
         objectName: "menuList"
+        model:  fileInfo.localFile ? transferMethodsModel : null
 
         anchors {
             left: parent.left
@@ -72,23 +82,26 @@ Page {
         clip: true
         visible: imageList.menuProgress != 0
         //% "Share"
-        listHeader: qsTrId("gallery-la-share")
+        listHeader: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
 
         PullDownMenu {
             id: pullDownMenu
             MenuItem {
                 //% "Details"
                 text: qsTrId("gallery-me-details")
+                visible: fileInfo.localFile
                 onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryDetailsPage.qml"), {modelItem: model.get(currentIndex).itemId} )
             }
             MenuItem {
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
+                visible: fileInfo.localFile
                 onClicked: fullscreenPage.deleteMedia(fullscreenPage.currentIndex)
             }
             MenuItem {
                 //% "Edit"
                 text: qsTrId("gallery-me-edit")
+                visible: fileInfo.localFile
                 onClicked: {
                     console.log("Delete clicked")
                 }
@@ -114,14 +127,16 @@ Page {
             width: menuList.width * 0.7 - theme.paddingLarge
             x: menuList.width * 0.3
 
+
             Text {
-                text: model.get(currentIndex).title
+                text: fileInfo.localFile ? model.get(currentIndex).title : ""
                 width: parent.width
                 elide: Text.ElideRight
                 color: theme.highlightColor
                 anchors.verticalCenter: parent.verticalCenter
                 objectName: "imageTitle"
                 horizontalAlignment: Text.AlignRight
+
                 font {
                     pixelSize: theme.fontSizeLarge
                     family: theme.fontFamilyHeading
@@ -139,6 +154,7 @@ Page {
                 x: theme.paddingLarge
                 anchors.verticalCenter: parent.verticalCenter
                 color: parent.down ? theme.highlightColor : theme.primaryColor
+                visible: fileInfo.localFile
             }
 
             onClicked: pageStack.push(accountsPage)
