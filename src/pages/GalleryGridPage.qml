@@ -136,6 +136,7 @@ Page {
         width: grid.cellWidth
         height: grid.cellHeight
         opacity: 0.5
+        objectName: "highlightItem"
         visible: grid.currentItem.pressed && grid.currentItem.containsMouse &&
                  !grid.contextMenu.active && grid.remorseItem === null
         x: grid.currentItem.x
