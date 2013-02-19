@@ -2,6 +2,7 @@
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
 #include "declarativedbusinterface.h"
+#include "declarativefileinfo.h"
 
 #include <QDeclarativeExtensionPlugin>
 #include <qdeclarative.h>
@@ -176,6 +177,7 @@ public:
         qDBusRegisterMetaType<TrackerChange>();
         qDBusRegisterMetaType<QVector<TrackerChange> >();
 
+        qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
         qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
         qmlRegisterType<TestMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
         qmlRegisterType<TestDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");

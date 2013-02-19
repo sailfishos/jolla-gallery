@@ -13,6 +13,8 @@ ApplicationWindow {
 
     initialPage: GalleryStartPage {
         id: startPage
+        width: 480
+        height: 854
         objectName: "startPage"
         allowedOrientations: Orientation.Portrait
         orientation: Orientation.Portrait
@@ -21,6 +23,7 @@ ApplicationWindow {
     TestCase {
         name: "StartPage"
         when: windowShown
+
 
         function cleanup() {
             // Clear all items.
@@ -44,13 +47,15 @@ ApplicationWindow {
             var countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "text", "2")    // queries are asynchronous and the results may not be available immediately.
 
+
             delegate = Util.findItem(albumView, function(item) {
-                return item.objectName == "titleLabel" && item.text == qsTrId("gallery-bt-videos")
+                return item.objectName === "titleLabel" && item.text === qsTrId("gallery-bt-videos")
             }).parent
 
             verify(delegate !== undefined)
             countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "text", "1")
+
         }
 
         function test_dynamicAlbums() {

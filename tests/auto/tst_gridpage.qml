@@ -15,6 +15,8 @@ ApplicationWindow {
 
     initialPage: GalleryGridPage {
         id: gridPage;
+        width: 480
+        height: 854
         model: albumModel
         title: "Test"
         orientation: Orientation.Portrait
@@ -29,6 +31,13 @@ ApplicationWindow {
         function init() {
             gridPage.orientation = Orientation.Portrait
             gridPage.allowedOrientations = Orientation.Portrait
+            gridPage.width = 480
+            gridPage.height = 854
+
+            var gridView = Util.findItemByName(gridPage, "gridView")
+            verify(gridView !== undefined)
+            gridView.remorseItem = null
+            gridView.contextMenu.hide()
         }
 
         function test_orientation() {
@@ -48,7 +57,7 @@ ApplicationWindow {
             }).parent.parent
             tryCompare(item3, "y", item2.y + gridView.cellHeight)
 
-            // Verify that in landscape mode the grid wraps after 5 items.            
+            // Verify that in landscape mode the grid wraps after 5 items.
             gridPage.orientation = Orientation.Landscape
             var item4 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo4.jpg"
@@ -64,94 +73,100 @@ ApplicationWindow {
             compare(item5.y, item4.y)
         }
 
-        function test_menu() {
+        function test_highlightItem()
+        {
+            gridPage.orientation = Orientation.Portrait
+
             var gridView = Util.findItemByName(gridPage, "gridView")
             verify(gridView !== undefined)
 
-            gridPage.orientation = Orientation.Portrait
-            var thumbnail0 = Util.findItem(gridView.contentItem, function(item) {
-                return item.source == "file:///home/nemo/Pictures/photo0.jpg"
+            // Click the item at index 4 (2nd row, 2nd column)
+            var item4 = Util.findItem(gridView.contentItem, function(item) {
+                return item.source == "file:///home/nemo/Pictures/photo4.jpg"
             }).parent
-            var item0 = thumbnail0.parent
+            verify(item4 !== undefined)
 
-            var thumbnail1 = Util.findItem(gridView.contentItem, function(item) {
-                return item.source == "file:///home/nemo/Pictures/photo1.jpg"
+            var hlItem = Util.findItemByName(gridPage, "highlightItem")
+            verify(hlItem !== undefined)
+
+            // First make sure that highlight item is not visible
+            compare(hlItem.visible, false)
+
+            // Test the mouse press and make sure it's positioned to the second item
+            // and it should also be visible
+            mousePress(item4, gridView.cellWidth / 2, gridView.cellHeight / 2)
+            tryCompare(hlItem.x, gridView.currentItem.x)
+            tryCompare(hlItem.y, gridView.currentItem.y)
+
+            // highlight item can be visible only if context menu and remorse item are not visible
+            compare(gridView.contextMenu.active, false)
+            verify(gridView.remorseItem === null)
+            tryCompare(hlItem.visible, true)
+
+            // Release the mouse i.e. highlight item should be hidden
+            mouseRelease(item4, gridView.cellWidth / 2, gridView.cellHeight / 2)
+            tryCompare(hlItem.visible, false)
+        }
+
+
+        function test_context_menu() {
+
+            var gridView = Util.findItemByName(gridPage, "gridView")
+            verify(gridView !== undefined)
+
+            var item2 = Util.findItem(gridView.contentItem, function(item) {
+                return item.source == "file:///home/nemo/Pictures/photo2.jpg"
             }).parent
-            var item1 = thumbnail1.parent
+            verify(item2 !== undefined)
 
-            var thumbnail3 = Util.findItem(gridView.contentItem, function(item) {
+            var item3 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo3.jpg"
             }).parent
-            var item3 = thumbnail3.parent
+            verify(item3 !== undefined)
 
-            var thumbnail5 = Util.findItem(gridView.contentItem, function(item) {
+
+            var item5 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///home/nemo/Pictures/photo5.jpg"
             }).parent
-            var item5 = thumbnail5.parent
+            verify(item5 !== undefined)
 
-            // Menu is closed, no thumbnail positions are offset, and all items are fully opaque.
-            compare(thumbnail0.y, 0)
-            compare(thumbnail1.y, 0)
-            compare(thumbnail3.y, 0)
-            compare(thumbnail5.y, 0)
 
-            compare(item0.opacity, 1.0)
-            compare(item1.opacity, 1.0)
-            tryCompare(item3 , "opacity", 1.0)
-            compare(item5.opacity, 1.0)
-
-            mousePress(item1, gridView.cellWidth / 2, gridView.cellHeight / 2)
+            // Open the context menu.
+            mousePress(item2, gridView.cellWidth / 2, gridView.cellHeight / 2)
             wait(1000)
-            mouseRelease(item1, gridView.cellWidth / 2, gridView.cellHeight / 2)
+            mouseRelease(item2, gridView.cellWidth / 2, gridView.cellHeight / 2)
+            tryCompare(gridView.contextMenu.active, true)
 
-            // Wait for the context menu to fully open.
-            verify(gridView.contextMenu !== undefined)          
-            verify(gridView.contextMenu.height > 0)
-            //tryCompare(gridView.contextMenu, "height", gridView.contextMenu.childrenRect.height)
+            compare(item2.y, 0)
+            compare(item3.y, gridView.contextMenu.height)
+            compare(item2.opacity, 1)
+            tryCompare(item3.opacity, gridView.unfocusedOpacity)
 
-            // Verify items on the line below the menu are offset by the height of the menu.
-            compare(thumbnail0.y, 0)
-            compare(thumbnail1.y, 0)
-            compare(thumbnail3.y, gridView.contextMenu.height)
-            compare(thumbnail5.y, gridView.contextMenu.height)
 
-            // Just check that there is some transparency as even when the animation has completed
-            //  it may not settle on a exact value.
-            verify(gridView.unfocusedOpacity < 1.0)
-            // All items except the one with the open menu are faded.
-            compare(item0.opacity, gridView.unfocusedOpacity)
-            compare(item1.opacity, 1.0)
-            compare(item3.opacity, gridView.unfocusedOpacity)
-            compare(item5.opacity, gridView.unfocusedOpacity)
-
-            // Rotate, and verify items that have moved to the same line as the menu are no longer offset.            
-            gridPage.orientation = Orientation.Landscape
-            compare(thumbnail0.y, 0)
-            compare(thumbnail1.y, 0)
-            tryCompare(thumbnail3, "y", 0)
-            compare(thumbnail5.y, gridView.contextMenu.height)
-
-            // Rotate back.            
+            // Change the orientation. Now item3 should be above the
+            // context menu, so y=0, but item 5 should be below it.
             gridPage.orientation = Orientation.Portrait
-            compare(thumbnail0.y, 0)
-            compare(thumbnail1.y, 0)
-            tryCompare(thumbnail3, "y", gridView.contextMenu.height)
-            compare(thumbnail5.y, gridView.contextMenu.height)
+            gridPage.width = 854
+            gridPage.height= 480
 
-            // Close the menu.
-            mouseClick(item1, gridView.cellWidth / 2, gridView.cellHeight / 2)
-            tryCompare(gridView.contextMenu, "height", 0)
+            tryCompare(item2.y, 0)
+            tryCompare(item3.y, 0)
+            tryCompare(item5.y, gridView.contextMenu.height)
+            tryCompare(item2.opacity, 1)
+            tryCompare(item3.opacity, gridView.unfocusedOpacity)
+            tryCompare(item5.opacity, gridView.unfocusedOpacity)
 
-            // Thumbnails states are all restored.
-            compare(thumbnail0.y, 0)
-            compare(thumbnail1.y, 0)
-            compare(thumbnail3.y, 0)
-            compare(thumbnail5.y, 0)
 
-            tryCompare(item0, "opacity", 1.0)
-            compare(item1.opacity, 1.0)
-            tryCompare(item3, "opacity", 1.0)
-            tryCompare(item5, "opacity", 1.0)
+            // hide the menu by clicking outside the context menu
+            mouseClick(item5, gridView.cellWidth / 2, gridView.cellHeight / 2)
+            tryCompare(gridView.contextMenu.active, false)
+
+            compare(item2.y, 0)
+            compare(item3.y, 0)
+            compare(item5.y, 0)
+            compare(item2.opacity, 1)
+            compare(item3.opacity, 1)
+            compare(item5.opacity, 1)
         }
 
         function test_delete() {
