@@ -13,6 +13,7 @@
 #include "declarativemediasource.h"
 #include "declarativedbusinterface.h"
 #include "declarativefileinfo.h"
+#include <QtOpenGL/QGLWidget>
 
 #ifdef HAS_BOOSTER
 #include <MDeclarativeCache>
@@ -59,12 +60,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
     qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
 
-    view->setAttribute(Qt::WA_OpaquePaintEvent);
-    view->setAttribute(Qt::WA_NoSystemBackground);
-    view->setAutoFillBackground(false);
-    view->viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
-    view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
-    view->viewport()->setAutoFillBackground(false);
+    // OpenGL viewport is required for better Video performance. It also fixes the perf problem
+    // after the video playback has stopped.
+    view->setViewport(new QGLWidget);
 
     QString path;
     if (app->arguments().contains("-desktop")) {
