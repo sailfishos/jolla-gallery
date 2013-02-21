@@ -200,7 +200,7 @@ Page {
     // Fade out the background image so it isn't visually conflicting
     Rectangle {
         anchors.fill: parent
-        opacity: imageList.alignMiddle ? 0 : 0.65
+        opacity: menuList.active ? 0 : 0.65
         color: "black"
         Behavior on opacity { NumberAnimation { duration: 300 }}
     }
