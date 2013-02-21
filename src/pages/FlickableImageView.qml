@@ -5,7 +5,7 @@ SlideshowView {
     id: view
 
     property Item currentItem
-    property bool alignMiddle
+    property Item menu
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem !== null && currentItem.x === 0
     property bool isPortrait
@@ -29,7 +29,7 @@ SlideshowView {
 
         anchors { top: view.top; bottom: view.bottom }
         width: view.width
-        alignTop: view.alignMiddle
+        menu: view.menu
         enableZoom: view.enableZoom
         isCurrentItem: container == currentItem
         isPortrait: view.isPortrait

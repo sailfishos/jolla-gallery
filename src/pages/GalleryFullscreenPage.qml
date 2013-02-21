@@ -21,8 +21,8 @@ Page {
     signal deleteMedia(int index)
 
     objectName: "fullscreenPage"
-    clip: imageList.alignMiddle
-    backNavigation: imageList.alignMiddle
+    clip: menuList.visible
+    backNavigation: menuList.active
 
     onCurrentIndexChanged: {
         if (status !== PageStatus.Active) {
@@ -38,7 +38,7 @@ Page {
     onStatusChanged: {
         if (status === PageStatus.Inactive) {
             menuProgressBehavior.enabled = false
-            imageList.alignMiddle = false
+            menuList.active = false
             menuProgressBehavior.enabled = true
             pullDownMenu.hide()
         }
@@ -50,7 +50,7 @@ Page {
         onApplicationActiveChanged: {
             if (!window.applicationActive && pageStack.currentPage === fullscreenPage) {
                 menuProgressBehavior.enabled = false
-                imageList.alignMiddle = false
+                menuList.active = false
                 menuProgressBehavior.enabled = true
                 pullDownMenu.hide()
             }
@@ -70,6 +70,13 @@ Page {
     ShareMethodList {
         id: menuList
 
+        property bool active
+        property real progress: active ? 1.0 : 0.0
+        Behavior on progress {
+            id: menuProgressBehavior
+            NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
+        }
+
         objectName: "menuList"
         model:  fileInfo.localFile ? transferMethodsModel : null
 
@@ -80,7 +87,8 @@ Page {
             bottom: isPortrait ? parent.verticalCenter : parent.bottom
         }
         clip: true
-        visible: imageList.menuProgress != 0
+        visible: progress !== 0
+
         //% "Share"
         listHeader: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
 
@@ -199,10 +207,11 @@ Page {
     // Element for handling the actual flicking and image buffering
     FlickableImageView {
         id: imageList
-        property real menuProgress: alignMiddle ? 1.0 : 0
+
+        menu: menuList
 
         function toggleMenuMode() {
-            alignMiddle = !alignMiddle
+            menuList.active = !menuList.active
         }
 
         objectName: "flickableView"
@@ -212,15 +221,10 @@ Page {
         currentIndex: fullscreenPage.currentIndex
         onCurrentIndexChanged: fullscreenPage.currentIndex = currentIndex
 
-        Behavior on menuProgress {
-            id: menuProgressBehavior
-            NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-        }
-
         anchors {
             fill: parent
-            leftMargin: isPortrait ? 0 : menuProgress * parent.width / 2
-            topMargin: isPortrait ? menuProgress * parent.height / 2 : 0
+            leftMargin: isPortrait ? 0 : menuList.progress * parent.width / 2
+            topMargin: isPortrait ? menuList.progress * parent.height / 2 : 0
         }
     }
 }
