@@ -5,7 +5,7 @@ SilicaFlickable {
     id: flickable
 
     property bool itemScaled: false
-    property bool alignTop
+    property bool menuOpen
     property bool enableZoom: parent.enableZoom
     property alias source: photo.source
     property real minimumDimension: Math.min(window.width, window.height)
@@ -19,13 +19,13 @@ SilicaFlickable {
     contentWidth: itemScaled ? Math.max(width, photo.width) : width
     contentHeight: itemScaled ? Math.max(height, photo.height) : height
 
-    onAlignTopChanged: setSplitMode()
+    onMenuOpenChanged: setSplitMode()
 
     interactive: itemScaled
 
     function setSplitMode()
     {
-        if (alignTop) {
+        if (menuOpen) {
             scaleBehavior.enabled = true
             photo.updateScale()
         } else {
@@ -89,7 +89,7 @@ SilicaFlickable {
     children: ScrollDecorator {}
     PinchArea {
         id: pinchArea
-        enabled: !flickable.alignTop && flickable.enableZoom && photo.status == Image.Ready
+        enabled: !flickable.menuOpen && flickable.enableZoom && photo.status == Image.Ready
         anchors.fill: parent
         onPinchUpdated: scaleImage(1.0 + pinch.scale - pinch.previousScale, pinch.center)
         onPinchFinished: flickable.returnToBounds()
@@ -106,7 +106,7 @@ SilicaFlickable {
                 if (status != Image.Ready)
                     return
 
-                if (alignTop) {
+                if (menuOpen) {
                     fittedScale = minimumDimension / (isImagePortrait ? photo.implicitWidth : photo.implicitHeight)
                 } else {
                     fittedScale = isPortrait

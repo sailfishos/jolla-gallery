@@ -7,8 +7,7 @@ Item {
     id: player
     property alias source: video.source
     property alias mimeType: video.mimeType
-    property bool alignTop
-    property bool showControls: player.alignTop || !video.playing
+    property Item menu
 
     property real windowWidth: isPortrait
             ? Math.min(window.width, window.height)
@@ -22,16 +21,27 @@ Item {
 
     signal clicked
 
-    clip: alignTop
+    clip: menu.visible
 
     // Container item to lock the orientation to landscape as the current configuration of
     // QtMultimediaKit uses an X overlay which refuses to render in anything but landscape.
-    Item {
+    Rectangle {
         width: maximumDimension
         height: minimumDimension
 
         anchors.centerIn: parent
         rotation: isPortrait ? 90 : 0
+
+        color: "black"
+
+        Media.VideoPlayer {
+            id: video
+
+            anchors.fill: parent
+
+            suspend: !window.applicationActive || !fsMediaItem.isCurrentItem || player.menu.visible
+            active: window.applicationActive && fsMediaItem.isCurrentItem
+        }
 
         MouseArea {
             anchors.fill: parent
@@ -39,53 +49,43 @@ Item {
             onClicked: {
                 player.clicked()
             }
-        }  
-        
-        // Locate the controls behind the video and clip it when they should be visible.  This
-        // is because the video is an overlay and any thing not fully opaque will produce ugly
-        // artifacts when drawn over the video.
-        Media.PlayerControls {
-            id: controls
-
-            width: isPortrait ? player.height : player.width
-            anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
-
-            opacity: player.showControls  ? 1.0 : 0.0
-            Behavior on opacity { NumberAnimation { duration: 150 } }
-            visible: opacity !== 0.0
-
-            position: video.position
-            duration: video.duration
-
-            onSeek: video.seek(position)
-
-            IconButton {
-                icon.source: video.playing ? "images/icon-m-pause.png" : "images/icon-m-play.png"
-                onClicked: video.playing = !video.playing
-            }
         }
 
         Item {
-            anchors { fill: parent; bottomMargin: player.showControls ? controls.height : 0.0 }
-            Behavior on anchors.bottomMargin { NumberAnimation { duration: 150 } }
+            anchors.fill: parent
+            opacity: !video.playing ? 1.0 : menu.progress
+            Behavior on opacity { SmoothedAnimation { duration: -1; velocity: 200 } }
 
-            // Use the baseline to center the video vertically so its position doesn't change
-            // when the height of the clip rect changes.
-            baselineOffset: parent.height / 2
-
-            clip: anchors.bottomMargin != 0.0
-
-            Media.VideoPlayer {
-                id: video
-
-                width: maximumDimension
-                height: minimumDimension
-
-                anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.baseline }
-
-                suspend: !window.applicationActive || !fsMediaItem.isCurrentItem || alignTop
-                active: window.applicationActive && fsMediaItem.isCurrentItem
+            Rectangle {
+                anchors.fill: parent
+                color: "black"
+                opacity: 0.3
             }
-        }      
+
+            Image {
+                anchors.centerIn: parent
+                source: "image://theme/icon-cover-play"
+
+                MouseArea {
+                    anchors.fill: parent
+                    enabled: !video.playing
+                    onClicked: video.playing = true
+                }
+            }
+
+            Media.PlayerControls {
+                id: controls
+
+                width: isPortrait ? player.height : player.width
+                anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
+
+                visible: opacity !== 0.0
+
+                position: video.position
+                duration: video.duration
+
+                onSeek: video.seek(position)
+            }
+        }
     }
 }

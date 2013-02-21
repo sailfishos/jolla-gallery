@@ -8,7 +8,7 @@ Item {
     property string mimeType
     property bool itemScaled: mediaItem !== null && mediaItem.itemScaled
     property bool enableZoom
-    property bool alignTop
+    property Item menu
     property bool imageItem: mimeType.substring(0,5) !== "video"
     property bool isCurrentItem
     property bool isPortrait
@@ -24,8 +24,8 @@ Item {
 
             anchors.fill: parent
             source: fsMediaItem.source
-            alignTop: fsMediaItem.alignTop
-            clip: fsMediaItem.alignTop
+            menuOpen: fsMediaItem.menu.visible
+            clip: fsMediaItem.menu.visible
             isPortrait: fsMediaItem.isPortrait
 
             onClicked: fsMediaItem.clicked()
@@ -43,7 +43,7 @@ Item {
             anchors.fill: parent
             source: fsMediaItem.source
             mimeType: fsMediaItem.mimeType
-            alignTop: fsMediaItem.alignTop
+            menu: fsMediaItem.menu
 
             onClicked: fsMediaItem.clicked()
         }
