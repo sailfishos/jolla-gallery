@@ -40,7 +40,7 @@ Item {
             anchors.fill: parent
 
             suspend: !window.applicationActive || !fsMediaItem.isCurrentItem || player.menu.visible
-            active: window.applicationActive && fsMediaItem.isCurrentItem
+            active: window.applicationActive && fsMediaItem.isCurrentItem && fullscreenPage.status === PageStatus.Active
         }
 
         MouseArea {
