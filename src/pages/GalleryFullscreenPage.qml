@@ -109,7 +109,7 @@ Page {
             MenuItem {
                 //% "Edit"
                 text: qsTrId("gallery-me-edit")
-                visible: fileInfo.localFile
+                visible: fileInfo.localFile && imageList.currentItemIsImage
                 onClicked: {
                     console.log("Delete clicked")
                 }
@@ -119,6 +119,7 @@ Page {
                 text: qsTrId("gallery-me-create_ambience")
 
                 onClicked: wallpaper.source = imageList.currentItemUrl()
+                visible:  imageList.currentItemIsImage
 
                 Connections {
                     target: wallpaper
@@ -213,6 +214,8 @@ Page {
         function toggleMenuMode() {
             menuList.active = !menuList.active
         }
+
+        property bool currentItemIsImage: currentItem && currentItem.imageItem
 
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
