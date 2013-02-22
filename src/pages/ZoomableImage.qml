@@ -101,6 +101,7 @@ SilicaFlickable {
             property real scale
             property bool isPortrait: flickable.isPortrait
             property bool isImagePortrait: photo.implicitWidth < photo.implicitHeight
+            property bool reloadTried
 
             function updateScale() {
                 if (status != Image.Ready)
@@ -133,7 +134,15 @@ SilicaFlickable {
             asynchronous: true
             anchors.centerIn: parent
 
-            onStatusChanged: updateScale()
+            onStatusChanged: {
+                updateScale()
+
+                if (reloadTried === false && status === Image.Error) {
+                    reloadTried = true
+                    source = fileInfo.fromPercentEncoding(source)
+                }
+
+            }
             onIsPortraitChanged: updateScale()
             onSourceChanged: {
                 scaleBehavior.enabled = false

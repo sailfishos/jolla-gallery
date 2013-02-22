@@ -45,3 +45,7 @@ bool DeclarativeFileInfo::localFile() const
     return d->m_url.isLocalFile();
 }
 
+QUrl DeclarativeFileInfo::fromPercentEncoding(const QUrl &url) const
+{
+    return QUrl::fromPercentEncoding(QByteArray(url.toLocalFile().toUtf8()));
+}
