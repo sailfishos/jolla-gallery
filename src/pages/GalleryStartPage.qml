@@ -72,12 +72,14 @@ Page {
                 type: DocumentGallery.Image
                 properties: ["url", "mimeType", "title", "dateTaken"]
                 sortProperties: ["-dateTaken"]
+                filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Pictures/" }
             }
 
             DocumentGallerySource {
                 //% "Videos"
                 title: qsTrId("gallery-bt-videos")
                 type: DocumentGallery.Video
+                filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Videos/" }
             }
 
             albumDelegate: MediaSource {
