@@ -137,10 +137,10 @@ Page {
             x: menuList.width * 0.3
 
 
-            Text {
+            Label {
                 text: fileInfo.localFile ? model.get(currentIndex).title : ""
                 width: parent.width
-                elide: Text.ElideRight
+                truncationMode: TruncationMode.Fade
                 color: theme.highlightColor
                 anchors.verticalCenter: parent.verticalCenter
                 objectName: "imageTitle"

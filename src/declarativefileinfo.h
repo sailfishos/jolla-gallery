@@ -26,6 +26,7 @@ public:
 
     Q_INVOKABLE QUrl fromPercentEncoding(const QUrl &url) const;
 
+
 Q_SIGNALS:
     void sourceChanged();
     void localFileChanged();

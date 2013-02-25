@@ -137,6 +137,8 @@ SilicaFlickable {
             onStatusChanged: {
                 updateScale()
 
+                // Some images might have percent encoded file names,
+                // so in a case of error try to reload image with decoded filename.
                 if (reloadTried === false && status === Image.Error) {
                     reloadTried = true
                     source = fileInfo.fromPercentEncoding(source)

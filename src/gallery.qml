@@ -20,8 +20,6 @@ ApplicationWindow {
         AlbumManager.createAlbum("<urn:jolla-gallery:albums:wallpapers>", qsTrId("gallery-bt-ambience"))
     }
 
-    FileInfo { id: fileInfo }
-
     cover: GalleryCover {}
     initialPage: Component { GalleryStartPage {} }
 }

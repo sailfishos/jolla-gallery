@@ -1,5 +1,6 @@
 #include "declarativefileinfo.h"
 #include <QDebug>
+#include <QTextCodec>
 
 class DeclarativeFileInfoPrivate
 {
@@ -47,5 +48,6 @@ bool DeclarativeFileInfo::localFile() const
 
 QUrl DeclarativeFileInfo::fromPercentEncoding(const QUrl &url) const
 {
-    return QUrl::fromPercentEncoding(QByteArray(url.toLocalFile().toUtf8()));
+    return QUrl(QByteArray::fromPercentEncoding(url.toString().toLatin1()));
 }
+
