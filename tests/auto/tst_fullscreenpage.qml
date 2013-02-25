@@ -85,6 +85,13 @@ ApplicationWindow {
             // has removed
             imageView.currentIndex = 4
             tryCompare(zoomableImage.reloadTried, true)
+
+            imageView.currentIndex = 5
+            tryCompare(zoomableImage.reloadTried, true)
+
+            imageView.currentIndex = 5
+            tryCompare(zoomableImage.reloadTried, true)
+
         }
     }
 
@@ -95,7 +102,10 @@ ApplicationWindow {
         ListElement { itemId: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"  }
         ListElement { itemId: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2 With Long Name" }
         ListElement { itemId: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3" }
-        ListElement { itemId: "photo4"; url: "file:///home/nemo/Pictures/photo_ä_ö_å_é.jpg"; mimeType: "image/jpeg"; title: "Photo 4" }
+        ListElement { itemId: "photo4"; url: "file:///home/nemo/Pictures/photo_ä_ö_å_é.jpg";      mimeType: "image/jpeg"; title: "Photo 4" }
+        ListElement { itemId: "photo5"; url: "file:///home/nemo/Pictures/photo_%101%_%E4.jpg";    mimeType: "image/jpeg"; title: "Photo 5" }
+        ListElement { itemId: "photo6"; url: "file:///home/nemo/Pictures/photo_йггруузхц_%1.jpg"; mimeType: "image/jpeg"; title: "Photo 6" }
+
     }
 
 }
