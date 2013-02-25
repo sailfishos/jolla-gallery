@@ -80,15 +80,19 @@ ApplicationWindow {
 
             tryCompare(zoomableImage.reloadTried, false)
 
-            // Load an image with scandinavian letters. The first loading should fail,
-            // so it will try to reload the image with an url where percent enconding
-            // has removed
+            // Next test loading of "non-standard" filenames
+            // First load image, we know that should be loaded
+            // after that load another image that needs reloading
+            // with modified url.
+            imageView.currentIndex = 2
             imageView.currentIndex = 4
             tryCompare(zoomableImage.reloadTried, true)
 
+            imageView.currentIndex = 1
             imageView.currentIndex = 5
             tryCompare(zoomableImage.reloadTried, true)
 
+            imageView.currentIndex = 0
             imageView.currentIndex = 5
             tryCompare(zoomableImage.reloadTried, true)
 
