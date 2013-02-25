@@ -128,14 +128,10 @@ Page {
             }
         }
 
-        // Workaround to clip title correctly.
-        // TODO: When we have Jolla style to truncate
-        //       too long lines, replace this code with it.
         header: Item {
             height: theme.itemSizeLarge
             width: menuList.width * 0.7 - theme.paddingLarge
             x: menuList.width * 0.3
-
 
             Label {
                 text: fileInfo.localFile ? model.get(currentIndex).title : ""
@@ -145,12 +141,10 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
                 objectName: "imageTitle"
                 horizontalAlignment: Text.AlignRight
-
                 font {
                     pixelSize: theme.fontSizeLarge
                     family: theme.fontFamilyHeading
                 }
-
             }
         }
 

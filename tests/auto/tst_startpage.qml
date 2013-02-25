@@ -169,10 +169,10 @@ ApplicationWindow {
             if (argument == "SELECT ?x nie:title(?x) nfo:entryCounter(?x) WHERE {{?x rdf:type nmm:ImageList}} GROUP BY ?x ORDER BY ASC(nie:title(?x))") {
                 model = albumsModel
                 printRow  = function(row) { returnRow([row.identifier, row.title, row.count]) }
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) nie:contentCreated(?x) WHERE {{?x rdf:type nmm:Photo}} GROUP BY ?x ORDER BY DESC(nie:contentCreated(?x))") {
+            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) nie:contentCreated(?x) WHERE {{?x rdf:type nmm:Photo}FILTER(fn:starts-with(nie:url(?x),'file:///home/nemo/Pictures/'))} GROUP BY ?x ORDER BY DESC(nie:contentCreated(?x))") {
                 model = photoModel
                 printRow  = printPhotoRow
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nfo:Video}} GROUP BY ?x") {
+            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nfo:Video}FILTER(fn:starts-with(nie:url(?x),'file:///home/nemo/Videos/'))} GROUP BY ?x") {
                 model = videoModel
                 printRow  = function(row) { returnRow([row.identifier, "http://www.tracker-project.org/temp/nfo#Video", row.url, row.mimeType, row.title]) }
             } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) nie:contentCreated(?x) WHERE {{?x rdf:type nmm:Photo}{<album1> nfo:hasMediaFileListEntry ?entry}FILTER(nie:url(?x) = nfo:entryUrl(?entry))} GROUP BY ?x ORDER BY DESC(nie:contentCreated(?x))") {

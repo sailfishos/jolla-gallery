@@ -123,6 +123,7 @@ SilicaFlickable {
                 }
             }
 
+            objectName: "zoomableImage"
             // This Behavior is used only when user has aligned image i.e. we are on a split screen mode
             Behavior on scale { id: scaleBehavior; NumberAnimation {  duration: 300; alwaysRunToEnd: true } }
 

@@ -29,7 +29,10 @@ ApplicationWindow {
         when: windowShown
 
         function test_title() {
-
+            // Can't test long title anymore because now it uses opacity ramp effect,
+            // which doesn't really change the width of the painted text. For now
+            // Let's just skip this test.
+            skip()
             pageStack.push(fullscreenPage)
 
             var imageView = Util.findItemByName(fullscreenPage, "flickableView")
@@ -47,7 +50,7 @@ ApplicationWindow {
             verify(imageTitle.implicitWidth < imageTitle.width)
             verify(imageTitle.width > imageTitle.paintedWidth)
 
-            // change orientation            
+            // change orientation
             fullscreenPage.orientation = Orientation.Landscape
 
             imageView.currentIndex = 2
@@ -60,6 +63,29 @@ ApplicationWindow {
             verify(imageTitle.implicitWidth < imageTitle.width)
             verify(imageTitle.width > imageTitle.paintedWidth)
         }
+
+        function test_accented_file_name_loading()
+        {
+            pageStack.push(fullscreenPage)
+
+            var imageView = Util.findItemByName(fullscreenPage, "flickableView")
+            verify(imageView !== undefined)
+
+            // Load normal image
+            imageView.currentIndex = 3
+
+            // Get zoomable image
+            var zoomableImage = Util.findItemByName(imageView, "zoomableImage")
+            verify(zoomableImage !== undefined)
+
+            tryCompare(zoomableImage.reloadTried, false)
+
+            // Load an image with scandinavian letters. The first loading should fail,
+            // so it will try to reload the image with an url where percent enconding
+            // has removed
+            imageView.currentIndex = 4
+            tryCompare(zoomableImage.reloadTried, true)
+        }
     }
 
     ListModel {
@@ -69,6 +95,7 @@ ApplicationWindow {
         ListElement { itemId: "photo1"; url: "file:///home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"  }
         ListElement { itemId: "photo2"; url: "file:///home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2 With Long Name" }
         ListElement { itemId: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3" }
+        ListElement { itemId: "photo4"; url: "file:///home/nemo/Pictures/photo_ä_ö_å_é.jpg"; mimeType: "image/jpeg"; title: "Photo 4" }
     }
 
 }
