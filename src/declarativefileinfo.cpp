@@ -1,6 +1,5 @@
 #include "declarativefileinfo.h"
-#include <QDebug>
-#include <QTextCodec>
+
 
 class DeclarativeFileInfoPrivate
 {
