@@ -1,6 +1,5 @@
 import QtQuick 1.1
 import QtMobility.gallery 1.1
-import org.nemomobile.thumbnailer 1.0
 import Sailfish.Silica 1.0
 
 Item {
@@ -23,7 +22,7 @@ Item {
             autoUpdate: true
         }
 
-        delegate: Thumbnail {
+        delegate: GalleryThumbnail {
             source: url
             mimeType: model.mimeType
             width: grid.cellWidth
