@@ -11,6 +11,10 @@ ApplicationWindow {
             ? pageStack.currentPage.objectName
             : ""
 
+    FileInfo {
+        id: thumbnailHelper
+    }
+
     initialPage: GalleryStartPage {
         id: startPage
         width: 480

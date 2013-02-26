@@ -13,6 +13,10 @@ ApplicationWindow {
             ? pageStack.currentPage.objectName
             : ""
 
+    FileInfo {
+        id: thumbnailHelper
+    }
+
     initialPage: GalleryGridPage {
         id: gridPage;
         width: 480

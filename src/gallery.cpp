@@ -59,6 +59,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
     qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
+    qmlRegisterType<DeclarativeWallpaper>("com.jolla.gallery", 1, 0, "Wallpaper");
 
     // OpenGL viewport is required for better Video performance. It also fixes the perf problem
     // after the video playback has stopped.
@@ -70,9 +71,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     } else {
         path = QString(DEPLOYMENT_PATH);
     }
-
-    DeclarativeWallpaper wallpaper;
-    view->rootContext()->setContextProperty("wallpaper", &wallpaper);
 
     view->setSource(path + QLatin1String("gallery.qml"));
 

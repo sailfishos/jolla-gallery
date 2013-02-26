@@ -63,6 +63,11 @@ Page {
         source: model.get(currentIndex).url
     }
 
+    Wallpaper {
+        id: wallpaper
+        onSourceChanged: AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", source)
+    }
+
     SailfishTransferMethodsModel {id: transferMethodsModel }
 
     // This is the share method list, but it also
@@ -120,11 +125,6 @@ Page {
 
                 onClicked: wallpaper.source = imageList.currentItemUrl()
                 visible:  imageList.currentItemIsImage
-
-                Connections {
-                    target: wallpaper
-                    onSourceChanged: AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", wallpaper.source)
-                }
             }
         }
 
