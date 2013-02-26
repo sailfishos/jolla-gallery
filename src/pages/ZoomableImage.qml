@@ -101,6 +101,7 @@ SilicaFlickable {
             property real scale
             property bool isPortrait: flickable.isPortrait
             property bool isImagePortrait: photo.implicitWidth < photo.implicitHeight
+            property bool reloadTried
 
             function updateScale() {
                 if (status != Image.Ready)
@@ -122,6 +123,7 @@ SilicaFlickable {
                 }
             }
 
+            objectName: "zoomableImage"
             // This Behavior is used only when user has aligned image i.e. we are on a split screen mode
             Behavior on scale { id: scaleBehavior; NumberAnimation {  duration: 300; alwaysRunToEnd: true } }
 
@@ -133,7 +135,17 @@ SilicaFlickable {
             asynchronous: true
             anchors.centerIn: parent
 
-            onStatusChanged: updateScale()
+            onStatusChanged: {
+                updateScale()
+
+                // Some images might have percent encoded file names,
+                // so in a case of error try to reload image with decoded filename.
+                if (reloadTried === false && status === Image.Error) {
+                    reloadTried = true
+                    source = fileInfo.fromPercentEncoding(source)
+                }
+
+            }
             onIsPortraitChanged: updateScale()
             onSourceChanged: {
                 scaleBehavior.enabled = false

@@ -63,6 +63,11 @@ Page {
         source: model.get(currentIndex).url
     }
 
+    Wallpaper {
+        id: wallpaper
+        onSourceChanged: AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", source)
+    }
+
     SailfishTransferMethodsModel {id: transferMethodsModel }
 
     // This is the share method list, but it also
@@ -120,37 +125,26 @@ Page {
 
                 onClicked: wallpaper.source = imageList.currentItemUrl()
                 visible:  imageList.currentItemIsImage
-
-                Connections {
-                    target: wallpaper
-                    onSourceChanged: AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", wallpaper.source)
-                }
             }
         }
 
-        // Workaround to clip title correctly.
-        // TODO: When we have Jolla style to truncate
-        //       too long lines, replace this code with it.
         header: Item {
             height: theme.itemSizeLarge
             width: menuList.width * 0.7 - theme.paddingLarge
             x: menuList.width * 0.3
 
-
-            Text {
+            Label {
                 text: fileInfo.localFile ? model.get(currentIndex).title : ""
                 width: parent.width
-                elide: Text.ElideRight
+                truncationMode: TruncationMode.Fade
                 color: theme.highlightColor
                 anchors.verticalCenter: parent.verticalCenter
                 objectName: "imageTitle"
                 horizontalAlignment: Text.AlignRight
-
                 font {
                     pixelSize: theme.fontSizeLarge
                     family: theme.fontFamilyHeading
                 }
-
             }
         }
 

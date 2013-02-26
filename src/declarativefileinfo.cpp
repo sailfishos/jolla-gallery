@@ -1,5 +1,5 @@
 #include "declarativefileinfo.h"
-#include <QDebug>
+
 
 class DeclarativeFileInfoPrivate
 {
@@ -43,5 +43,10 @@ bool DeclarativeFileInfo::localFile() const
 {
     Q_D(const DeclarativeFileInfo);
     return d->m_url.isLocalFile();
+}
+
+QUrl DeclarativeFileInfo::fromPercentEncoding(const QUrl &url) const
+{
+    return QUrl(QByteArray::fromPercentEncoding(url.toString().toLatin1()));
 }
 

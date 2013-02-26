@@ -6,8 +6,10 @@ include (../imports.pri)
 GALLERY_SOURCE_PATH = $$PWD/../../../src
 
 QT += dbus declarative script
-CONFIG += mobility
+CONFIG += mobility link_pkgconfig
 MOBILITY += gallery
+
+PKGCONFIG += mlite
 
 INCLUDEPATH += $$GALLERY_SOURCE_PATH
 
@@ -15,14 +17,17 @@ HEADERS += \
         $$GALLERY_SOURCE_PATH/declarativedbusinterface.h \
         $$GALLERY_SOURCE_PATH/declarativemediamodel.h \
         $$GALLERY_SOURCE_PATH/declarativemediasource.h \
-        $$GALLERY_SOURCE_PATH/declarativefileinfo.h
+        $$GALLERY_SOURCE_PATH/declarativefileinfo.h \
+        $$GALLERY_SOURCE_PATH/declarativewallpaper.h
 
 SOURCES += \
         main.cpp \
         $$GALLERY_SOURCE_PATH/declarativedbusinterface.cpp \
         $$GALLERY_SOURCE_PATH/declarativemediamodel.cpp \
         $$GALLERY_SOURCE_PATH/declarativemediasource.cpp \
-        $$GALLERY_SOURCE_PATH/declarativefileinfo.cpp
+        $$GALLERY_SOURCE_PATH/declarativefileinfo.cpp \
+        $$GALLERY_SOURCE_PATH/declarativewallpaper.cpp
+
 
 import.files = qmldir
 import.path = $$TARGETPATH

@@ -4,7 +4,7 @@ import org.nemomobile.thumbnailer 1.0
 Item {
     id: thumbnail
 
-    Thumbnail {
+    GalleryThumbnail {
         id: icon1
         sourceSize.width: thumbnail.width
         sourceSize.height: thumbnail.height
@@ -13,7 +13,7 @@ Item {
         Behavior on opacity { NumberAnimation { duration: 1500 }}
     }
 
-    Thumbnail {
+    GalleryThumbnail {
         id: icon2
         // Just show the first item from the model in the beginning.
         // after everything's loaded, we use timer to make a slideshow
