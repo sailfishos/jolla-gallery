@@ -10,6 +10,8 @@ Page {
             id: delegateItem
             width: view.width
             height: thumbnail.height
+            enabled: media.count > 0
+            opacity: enabled ? 1.0 : 0.5
 
             Label {
                 id: countLabel
