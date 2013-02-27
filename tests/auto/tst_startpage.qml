@@ -35,7 +35,7 @@ ApplicationWindow {
             testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
 
             // Return to the start page
-            window.pageStack.pop(null, true)
+            window.pageStack.pop(null, PageStackAction.Immediate)
         }
 
         function test_staticAlbums() {
@@ -120,6 +120,7 @@ ApplicationWindow {
             verify(delegate !== undefined)
 
             mouseClick(delegate, delegate.width / 2, delegate.height / 2)
+            tryCompare(window.pageStack, "busy", false)
 
             tryCompare(window, "currentPageName", "gridPage")
 
