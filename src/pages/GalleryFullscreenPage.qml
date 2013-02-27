@@ -180,7 +180,6 @@ Page {
                                      accountName: userName,
                                      methodId: methodId,
                                      accountId: accountId,
-                                     accountRequired: accountRequired,
                                      shareUIPath: shareUIPath,
                                      source: item.url,
                                      mimeType: item.mimeType,
