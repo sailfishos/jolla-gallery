@@ -68,7 +68,10 @@ Page {
         onSourceChanged: AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", source)
     }
 
-    SailfishTransferMethodsModel {id: transferMethodsModel }
+    SailfishTransferMethodsModel {
+        id: transferMethodsModel
+        filter: fileInfo.localFile ? fullscreenPage.model.get(fullscreenPage.currentIndex).mimeType : ""
+    }
 
     // This is the share method list, but it also
     // includes the pulley menu
@@ -84,7 +87,6 @@ Page {
 
         objectName: "menuList"
         model:  fileInfo.localFile ? transferMethodsModel : null
-
         anchors {
             left: parent.left
             top: parent.top
@@ -179,6 +181,7 @@ Page {
                                      methodId: methodId,
                                      accountId: accountId,
                                      accountRequired: accountRequired,
+                                     shareUIPath: shareUIPath,
                                      source: item.url,
                                      mimeType: item.mimeType,
                                      docItemId: item.itemId
