@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.0.52
+Version:    0.0.53
 Release:    1
 Group:      Applications/Multimedia
 License:    TBD
@@ -21,7 +21,7 @@ Requires:  sailfishsilica
 Requires:  libdeclarative-gallery
 Requires:  mapplauncherd-booster-jolla
 Requires:  libdeclarative-multimedia
-Requires:  declarative-transferengine
+Requires:  declarative-transferengine => 0.0.12
 Requires:  nemo-qml-plugins-accounts
 Requires:  nemo-qml-plugins-gstvideo-thumbnailer
 Requires:  nemo-qml-plugins-thumbnailer
