@@ -15,6 +15,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(mlite)
 BuildRequires:  pkgconfig(QtGallery)
 BuildRequires:  pkgconfig(qdeclarative-boostable)
+BuildRequires:  pkgconfig(libjollasignonuiservice)
 
 Requires:  ambient-icons-closed
 Requires:  sailfishsilica
@@ -54,7 +55,7 @@ This package contains QML unit tests for Jolla Gallery application
 
 %build
 
-%qmake 
+%qmake
 
 make %{?jobs:-j%jobs}
 
@@ -73,6 +74,7 @@ desktop-file-install --delete-original       \
 %{_datadir}/jolla-gallery/*
 %{_bindir}/jolla-gallery
 %{_datadir}/translations/gallery_eng_en.qm
+%{_datadir}/dbus-1/services/com.jolla.gallery.service
 
 %files ts-devel
 %defattr(-,root,root,-)

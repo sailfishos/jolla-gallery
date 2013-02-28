@@ -8,12 +8,17 @@
 #include <QTranslator>
 #include <QLocale>
 
+#include <QtDBus/QDBusConnection>
+#include <libjollasignonuiservice/signonuiservice.h>
+
 #include "declarativewallpaper.h"
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
 #include "declarativedbusinterface.h"
 #include "declarativefileinfo.h"
 #include <QtOpenGL/QGLWidget>
+
+
 
 #ifdef HAS_BOOSTER
 #include <MDeclarativeCache>
@@ -54,6 +59,20 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     translator.load(QLocale(), "gallery", "-", translationPath);
     qApp->installTranslator(&translator);
 
+    // We want to have SignonUI in process, if user wants to create account from Gallery
+    SignonUiService *ssoui = new SignonUiService(0, true); // in process
+    QDBusConnection sessionBus = QDBusConnection::sessionBus();
+    bool registeredService = sessionBus.registerService(QLatin1String("com.jolla.gallery"));
+    bool registeredObject = sessionBus.registerObject(QLatin1String("/JollaGallerySignonUi"), ssoui,
+            QDBusConnection::ExportAllContents);
+
+    if (!registeredService || !registeredObject) {
+        qWarning() << Q_FUNC_INFO << "CRITICAL: unable to register signon ui service:"
+                   << QLatin1String("com.jolla.gallery") << "at object path:"
+                   << QLatin1String("/JollaGallerySignonUi");
+    }
+
+    view->rootContext()->setContextProperty("jolla_signon_ui_service", ssoui);
 
     qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
@@ -83,6 +102,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         view->showFullScreen();
     }
 
-    return app->exec();
-}
+    int retn = app->exec();
 
+    if (registeredService)
+        sessionBus.unregisterService(QLatin1String("com.jolla.gallery"));
+    if (registeredObject)
+        sessionBus.unregisterObject(QLatin1String("/JollaGallerySignonUi"));
+    delete ssoui;
+    return retn;
+}

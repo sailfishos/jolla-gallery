@@ -5,22 +5,20 @@ target.path = /usr/bin
 
 QT += declarative dbus script network
 CONFIG += mobility
-MOBILITY += multimedia
+CONFIG += link_pkgconfig
+MOBILITY += multimedia gallery
+PKGCONFIG += mlite libjollasignonuiservice
+
+
 
 qml.files = *.qml pages images
 qml.path = $$DEPLOYMENT_PATH
 
-CONFIG += mobility
-
-MOBILITY += gallery
 
 contains(CONFIG, desktop) {
     DEFINES *= DESKTOP
 }
 
-CONFIG += link_pkgconfig
-
-PKGCONFIG += mlite
 
 OTHER_FILES += \
     *.qml \
