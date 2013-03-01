@@ -61,6 +61,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     // We want to have SignonUI in process, if user wants to create account from Gallery
     SignonUiService *ssoui = new SignonUiService(0, true); // in process
+    ssoui->setProperty("inProcessServiceName", QLatin1String("com.jolla.gallery"));
+    ssoui->setProperty("inProcessObjectPath", QLatin1String("/JollaGallerySignonUi"));
+
     QDBusConnection sessionBus = QDBusConnection::sessionBus();
     bool registeredService = sessionBus.registerService(QLatin1String("com.jolla.gallery"));
     bool registeredObject = sessionBus.registerObject(QLatin1String("/JollaGallerySignonUi"), ssoui,
