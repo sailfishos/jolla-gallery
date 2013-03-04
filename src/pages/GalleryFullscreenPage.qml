@@ -170,10 +170,7 @@ Page {
 
         Component {
             id: accountsPage
-            AccountsPage {
-                // If we don't do this, pageStack goes grazy. Bug 4751
-                //Component.onCompleted: pageStack.busyChanged.disconnect(maybePushMaybePop)
-            }
+            AccountsPage { }
         }
 
         onShareMethodClicked: {
