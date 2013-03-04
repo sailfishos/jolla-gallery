@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.0.53
+Version:    0.0.54
 Release:    1
 Group:      Applications/Multimedia
 License:    TBD
