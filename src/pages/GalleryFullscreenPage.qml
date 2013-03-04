@@ -162,15 +162,15 @@ Page {
                 visible: fileInfo.localFile
             }
 
-            onClicked: pageStack.push(accountsPage)
+            onClicked: {
+                jolla_signon_ui_service.inProcessParent = fullscreenPage
+                pageStack.push(accountsPage)
+            }
         }
 
         Component {
             id: accountsPage
-            AccountsPage {
-                // If we don't do this, pageStack goes grazy. Bug 4751
-                Component.onCompleted: pageStack.busyChanged.disconnect(maybePushMaybePop)
-            }
+            AccountsPage { }
         }
 
         onShareMethodClicked: {
