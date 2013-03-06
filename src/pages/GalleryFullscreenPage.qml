@@ -87,6 +87,8 @@ Page {
 
         objectName: "menuList"
         model:  fileInfo.localFile ? transferMethodsModel : null
+        source: fullscreenPage.model.get(fullscreenPage.currentIndex).url
+
         anchors {
             left: parent.left
             top: parent.top
@@ -171,20 +173,6 @@ Page {
         Component {
             id: accountsPage
             AccountsPage { }
-        }
-
-        onShareMethodClicked: {
-            var item  = fullscreenPage.model.get(fullscreenPage.currentIndex)
-            pageStack.openDialog(shareDialog, {
-                                     displayName: displayName,
-                                     accountName: userName,
-                                     methodId: methodId,
-                                     accountId: accountId,
-                                     shareUIPath: shareUIPath,
-                                     source: item.url,
-                                     mimeType: item.mimeType,
-                                     docItemId: item.itemId
-                                 })
         }
     }
 
