@@ -16,6 +16,7 @@ Page {
     property url thumbnailDelegate
 
     objectName: "gridPage"
+    allowedOrientations: window.allowedOrientations
 
     function deleteMedia(index) {
         pageStack.pop()

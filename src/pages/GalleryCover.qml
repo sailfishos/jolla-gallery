@@ -2,8 +2,7 @@ import QtQuick 1.1
 import QtMobility.gallery 1.1
 import Sailfish.Silica 1.0
 
-Item {
-    anchors.fill: parent
+CoverBackground {
 
     GridView{
         id: grid

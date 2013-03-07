@@ -6,6 +6,8 @@ Page {
     id: detailsPage
     property alias modelItem: galleryItem.item
 
+    allowedOrientations: window.allowedOrientations
+
     PageHeader {
         //% "Details"
         title: qsTrId("gallery-he-details")

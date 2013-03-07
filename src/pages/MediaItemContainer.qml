@@ -8,13 +8,14 @@ Item {
     property string mimeType
     property bool itemScaled: mediaItem !== null && mediaItem.itemScaled
     property bool enableZoom
-    property Item menu
     property bool imageItem: mimeType.substring(0,5) !== "video"
     property bool isCurrentItem
     property bool isPortrait
+    property bool menuOpen
     property QtObject mediaItem: null
 
     signal clicked
+    clip: true
 
     Component {
         id: imageComponent
@@ -24,8 +25,7 @@ Item {
 
             anchors.fill: parent
             source: fsMediaItem.source
-            menuOpen: fsMediaItem.menu.visible
-            clip: fsMediaItem.menu.visible
+            menuOpen: fsMediaItem.menuOpen
             isPortrait: fsMediaItem.isPortrait
 
             onClicked: fsMediaItem.clicked()
@@ -43,7 +43,7 @@ Item {
             anchors.fill: parent
             source: fsMediaItem.source
             mimeType: fsMediaItem.mimeType
-            menu: fsMediaItem.menu
+            menuOpen: fsMediaItem.menuOpen
 
             onClicked: fsMediaItem.clicked()
         }
