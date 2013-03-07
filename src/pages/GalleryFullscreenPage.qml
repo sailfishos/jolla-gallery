@@ -2,6 +2,7 @@ import QtQuick 1.1
 import Sailfish.Silica 1.0
 import Sailfish.TransferEngine 1.0
 import com.jolla.components.accounts 1.0
+import com.jolla.components.views 1.0
 import com.jolla.gallery 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
@@ -12,7 +13,7 @@ import "scripts/AlbumManager.js" as AlbumManager
   * NOTE: Current implementation will be replaced with a new one in the following
   *       commits.
   */
-Page {
+SplitViewPage {
     id: fullscreenPage
 
     property alias model: imageList.model
@@ -21,8 +22,7 @@ Page {
     signal deleteMedia(int index)
 
     objectName: "fullscreenPage"
-    clip: menuList.visible
-    backNavigation: menuList.active
+    allowedOrientations: window.allowedOrientations
 
     onCurrentIndexChanged: {
         if (status !== PageStatus.Active) {
@@ -32,28 +32,6 @@ Page {
         var grid = pageStack.previousPage()
         if (grid !== null) {
             grid.currentIndex = currentIndex
-        }
-    }
-
-    onStatusChanged: {
-        if (status === PageStatus.Inactive) {
-            menuProgressBehavior.enabled = false
-            menuList.active = false
-            menuProgressBehavior.enabled = true
-            pullDownMenu.hide()
-        }
-    }
-
-    Connections {
-        target: window
-        // reset the page state if gallery is pushed to the background
-        onApplicationActiveChanged: {
-            if (!window.applicationActive && pageStack.currentPage === fullscreenPage) {
-                menuProgressBehavior.enabled = false
-                menuList.active = false
-                menuProgressBehavior.enabled = true
-                pullDownMenu.hide()
-            }
         }
     }
 
@@ -78,12 +56,6 @@ Page {
     ShareMethodList {
         id: menuList
 
-        property bool active
-        property real progress: active ? 1.0 : 0.0
-        Behavior on progress {
-            id: menuProgressBehavior
-            NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-        }
 
         objectName: "menuList"
         model:  fileInfo.localFile ? transferMethodsModel : null
@@ -95,8 +67,6 @@ Page {
             right: isPortrait ? parent.right : parent.horizontalCenter
             bottom: isPortrait ? parent.verticalCenter : parent.bottom
         }
-        clip: true
-        visible: progress !== 0
 
         //% "Share"
         listHeader: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
@@ -109,20 +79,14 @@ Page {
                 visible: fileInfo.localFile
                 onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryDetailsPage.qml"), {modelItem: model.get(currentIndex).itemId} )
             }
+
             MenuItem {
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
                 visible: fileInfo.localFile
                 onClicked: fullscreenPage.deleteMedia(fullscreenPage.currentIndex)
             }
-            MenuItem {
-                //% "Edit"
-                text: qsTrId("gallery-me-edit")
-                visible: fileInfo.localFile && imageList.currentItemIsImage
-                onClicked: {
-                    console.log("Delete clicked")
-                }
-            }
+
             MenuItem {
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
@@ -176,42 +140,21 @@ Page {
         }
     }
 
-    Component {
-        id: shareDialog
-        ShareDialog { }
-    }
-
-    // Fade out the background image so it isn't visually conflicting
-    Rectangle {
-        anchors.fill: parent
-        opacity: menuList.active ? 0 : 0.65
-        color: "black"
-        Behavior on opacity { NumberAnimation { duration: 300 }}
-    }
 
     // Element for handling the actual flicking and image buffering
-    FlickableImageView {
+    // Bind it to SplitView's contentItem property
+    contentItem: FlickableImageView {
         id: imageList
-
-        menu: menuList
-
-        function toggleMenuMode() {
-            menuList.active = !menuList.active
-        }
 
         property bool currentItemIsImage: currentItem && currentItem.imageItem
 
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
+        menuOpen: fullscreenPage.splitActive
 
         // can't just alias fullscreenPage.currentIndex to this currentIndex due to PathView bug
         currentIndex: fullscreenPage.currentIndex
         onCurrentIndexChanged: fullscreenPage.currentIndex = currentIndex
-
-        anchors {
-            fill: parent
-            leftMargin: isPortrait ? 0 : menuList.progress * parent.width / 2
-            topMargin: isPortrait ? menuList.progress * parent.height / 2 : 0
-        }
+        onClicked: toggleSplit()
     }
 }

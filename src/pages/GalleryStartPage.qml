@@ -4,6 +4,9 @@ import com.jolla.gallery 1.0
 import QtMobility.gallery 1.1
 
 Page {
+
+    allowedOrientations: window.allowedOrientations
+
     Component {
         id: delegate
         BackgroundItem {

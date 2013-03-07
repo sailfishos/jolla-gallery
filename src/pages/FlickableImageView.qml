@@ -5,10 +5,12 @@ SlideshowView {
     id: view
 
     property Item currentItem
-    property Item menu
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem !== null && currentItem.x === 0
     property bool isPortrait
+    property bool menuOpen
+
+    signal clicked
 
     function currentItemUrl() {
         return model.get(currentIndex).url
@@ -29,14 +31,14 @@ SlideshowView {
 
         anchors { top: view.top; bottom: view.bottom }
         width: view.width
-        menu: view.menu
+        menuOpen: view.menuOpen
         enableZoom: view.enableZoom
         isCurrentItem: container == currentItem
         isPortrait: view.isPortrait
         // Adjust opacity based on item position
         opacity: Math.abs(x) <= view.width ? 1.0 -  (Math.abs(x) / view.width) : 0
 
-        onClicked: view.toggleMenuMode()
+        onClicked: view.clicked()
 
         onMediaUrlChanged: {
             loadMediaContent(model.url, model.mimeType)

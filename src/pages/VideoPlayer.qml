@@ -7,7 +7,7 @@ Item {
     id: player
     property alias source: video.source
     property alias mimeType: video.mimeType
-    property Item menu
+    property bool menuOpen
 
     property real windowWidth: isPortrait
             ? Math.min(window.width, window.height)
@@ -21,7 +21,7 @@ Item {
 
     signal clicked
 
-    clip: menu.visible
+    clip: menuOpen
 
     // Container item to lock the orientation to landscape as the current configuration of
     // QtMultimediaKit uses an X overlay which refuses to render in anything but landscape.
@@ -39,7 +39,7 @@ Item {
 
             anchors.fill: parent
 
-            suspend: !window.applicationActive || !fsMediaItem.isCurrentItem || player.menu.visible
+            suspend: !window.applicationActive || !fsMediaItem.isCurrentItem || player.menuOpen
             active: window.applicationActive && fsMediaItem.isCurrentItem && fullscreenPage.status === PageStatus.Active
         }
 
@@ -53,7 +53,7 @@ Item {
 
         Item {
             anchors.fill: parent
-            opacity: !video.playing ? 1.0 : menu.progress
+            opacity: video.suspend || !video.playing ? 1 : 0
             Behavior on opacity { SmoothedAnimation { duration: -1; velocity: 200 } }
 
             Rectangle {
@@ -79,7 +79,7 @@ Item {
                 width: isPortrait ? player.height : player.width
                 anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom }
 
-                visible: opacity !== 0.0
+                visible: video.playing && opacity
 
                 position: video.position
                 duration: video.duration
