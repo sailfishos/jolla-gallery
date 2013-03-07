@@ -67,7 +67,6 @@ SplitViewPage {
             right: isPortrait ? parent.right : parent.horizontalCenter
             bottom: isPortrait ? parent.verticalCenter : parent.bottom
         }
-        visible: fullscreenPage.splitActive
 
         //% "Share"
         listHeader: fileInfo.localFile ? qsTrId("gallery-la-share") : ""

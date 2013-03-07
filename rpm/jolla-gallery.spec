@@ -27,6 +27,7 @@ Requires:  nemo-qml-plugins-accounts
 Requires:  nemo-qml-plugins-gstvideo-thumbnailer
 Requires:  nemo-qml-plugins-thumbnailer
 Requires:  jolla-gallery-facebook
+Requires:  jollacomponents-internal
 
 %description
 The Jolla Gallery application.
