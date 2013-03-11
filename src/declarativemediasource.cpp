@@ -51,6 +51,19 @@ void DeclarativeMediaSource::setThumbnail(const QUrl &url)
     }
 }
 
+QUrl DeclarativeMediaSource::page() const
+{
+    return m_page;
+}
+
+void DeclarativeMediaSource::setPage(const QUrl &url)
+{
+    if (m_page != url) {
+        m_page = url;
+        emit pageChanged();
+    }
+}
+
 QString DeclarativeMediaSource::title() const
 {
     return m_title;
