@@ -55,7 +55,7 @@ Page {
             }
 
             onClicked: {
-                    window.pageStack.push(media.page != "" ? media.page : Qt.resolvedUrl("GalleryGridPage.qml") , {
+                    window.pageStack.push(media.page != "" ? Qt.resolvedUrl(media.page) : Qt.resolvedUrl("GalleryGridPage.qml") , {
                     title: media.title,
                     model: media.model,
                     thumbnailDelegate: media.thumbnail != "" ? media.thumbnail : Qt.resolvedUrl("GridImageThumbnail.qml")
