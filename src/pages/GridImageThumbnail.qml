@@ -9,13 +9,16 @@ import org.nemomobile.thumbnailer 1.0
 GalleryThumbnail {
     id: thumbnail
 
-    sourceSize.width: screen.width/3
-    sourceSize.height: screen.width/3
 
     source: url
     mimeType: model.mimeType
+    width:  size
+    height: size
+    sourceSize.width: width
+    sourceSize.height: height
 
-    priority: index >= grid.firstVisible && index < grid.firstVisible + 15
+    priority: index >= firstVisibleIndex && index < firstVisibleIndex + 15
               ? Thumbnail.NormalPriority
               : Thumbnail.LowPriority
+
 }
