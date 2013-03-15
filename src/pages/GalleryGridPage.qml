@@ -24,17 +24,18 @@ Page {
 
     ImageGridView {
         id: grid
-        anchors.fill: parent
-        property Item remorseItem
+
         property alias contextMenu: contextMenuItem
+        property Item remorseItem
         property Item expandItem
-        property real expandHeight: remorseItem != null
-                                    ? remorseItem.height
-                                    : contextMenu.height
+        property real expandHeight: remorseItem != null ? remorseItem.height : contextMenu.height
         property int minOffsetIndex: expandItem != null
                                      ? expandItem.modelIndex + columnCount - (expandItem.modelIndex % columnCount)
                                      : 0
 
+        anchors.fill: parent
+        unfocusHighlightEnabled: true
+        forceUnfocusHighlight: expandHeight > 0
         header: PageHeader { title: gridPage.title }
 
         delegate:  ThumbnailCustom {
