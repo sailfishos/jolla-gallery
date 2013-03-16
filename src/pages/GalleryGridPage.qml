@@ -32,11 +32,18 @@ Page {
         property int minOffsetIndex: expandItem != null
                                      ? expandItem.modelIndex + columnCount - (expandItem.modelIndex % columnCount)
                                      : 0
-
+        objectName: "gridView"
         anchors.fill: parent
         unfocusHighlightEnabled: true
         forceUnfocusHighlight: expandHeight > 0
         header: PageHeader { title: gridPage.title }
+
+        // Handle the closing the menu at the end of the grid
+        onContentYChanged: {
+            if (remorseItem) {
+                contentY = Math.max(remorseItem.mapToItem(contentItem, 0, remorseItem.height).y - height, contentY)
+            }
+        }
 
         delegate:  ThumbnailCustom {
             id: thumbnail
@@ -49,11 +56,12 @@ Page {
             source: mediaUrl
             thumbnailSource: thumbnailDelegate
             size: grid.cellSize
-            height: isItemExpanded ? grid.contextMenu.height + size : size
+            height: isItemExpanded ? grid.contextMenu.height + grid.cellSize : grid.cellSize
             contentYOffset: index >= grid.minOffsetIndex ? grid.expandHeight : 0.0
             z: isItemExpanded ? 1000 : 1
             enabled: isItemExpanded || !grid.contextMenu.active
             Behavior on opacity { enabled: itemDeleted; NumberAnimation { duration: 1600 }}
+            Component.onCompleted: console.log(source + " ," + index)
 
             function remove() {
                 grid.expandItem = thumbnail
@@ -103,7 +111,7 @@ Page {
         Item {
             id: remorseContainer
             property alias remorse: remorseItem
-            y: parent.height// - height
+            y: parent.size
             x: -parent.x
             width: grid.width
             height: theme.itemSizeSmall
