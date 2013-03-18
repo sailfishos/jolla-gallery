@@ -61,7 +61,6 @@ Page {
             z: isItemExpanded ? 1000 : 1
             enabled: isItemExpanded || !grid.contextMenu.active
             Behavior on opacity { enabled: itemDeleted; NumberAnimation { duration: 1600 }}
-            Component.onCompleted: console.log(source + " ," + index)
 
             function remove() {
                 grid.expandItem = thumbnail
