@@ -40,8 +40,6 @@ ApplicationWindow {
             verify(gridView !== undefined)
             gridView.remorseItem = null
             gridView.contextMenu.hide()
-
-
         }
 
 
@@ -175,8 +173,6 @@ ApplicationWindow {
             // that the context menu is hidden by hiding it.
             gridView.contextMenu.hide()
         }
-
-
     }
 
     ListModel {
@@ -198,7 +194,6 @@ ApplicationWindow {
         id: testService
 
         property bool trackerInfoDeleted: false
-
         property string removeQuery:
 "DELETE {
    ?y nfo:hasMediaFileListEntry ?x
