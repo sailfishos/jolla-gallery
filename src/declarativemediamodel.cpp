@@ -193,6 +193,11 @@ void DeclarativeMediaModel::componentComplete()
                 delete object;
             }
         }
+        if (component.isError()) {
+            Q_FOREACH(QDeclarativeError error, component.errors()) {
+                qWarning() << error.toString();
+            }
+        }
     }
 
     d->m_albumsRequest.setGallery(&d->m_gallery);
