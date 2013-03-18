@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.0.56
+Version:    0.0.58
 Release:    1
 Group:      Applications/Multimedia
 License:    TBD
@@ -27,7 +27,7 @@ Requires:  nemo-qml-plugins-accounts
 Requires:  nemo-qml-plugins-gstvideo-thumbnailer
 Requires:  nemo-qml-plugins-thumbnailer
 Requires:  jolla-gallery-facebook
-Requires:  jollacomponents-internal
+Requires:  jollacomponents-internal => 0.9.11
 
 %description
 The Jolla Gallery application.
