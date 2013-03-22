@@ -26,6 +26,7 @@ ApplicationWindow {
         orientation: Orientation.Portrait
         allowedOrientations: Orientation.Portrait | Orientation.Landscape
         thumbnailDelegate: "file:///usr/share/jolla-gallery/pages/GridImageThumbnail.qml"
+        _animationDuration: 0
     }
 
     TestCase {
