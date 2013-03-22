@@ -11,6 +11,7 @@ Page {
     property string title
     property alias currentIndex: grid.currentIndex
     property url thumbnailDelegate
+    property int _animationDuration: 150
 
     objectName: "gridPage"
     allowedOrientations: window.allowedOrientations
@@ -48,7 +49,6 @@ Page {
         delegate:  ThumbnailCustom {
             id: thumbnail
 
-            property bool itemDeleted
             property bool isItemExpanded: grid.expandItem === thumbnail
             property url mediaUrl: url
             property int modelIndex: index
@@ -60,7 +60,7 @@ Page {
             contentYOffset: index >= grid.minOffsetIndex ? grid.expandHeight : 0.0
             z: isItemExpanded ? 1000 : 1
             enabled: isItemExpanded || !grid.contextMenu.active
-            Behavior on opacity { enabled: itemDeleted; NumberAnimation { duration: 1600 }}
+            GridView.onAdd: AddAnimation { target: thumbnail; duration: _animationDuration }
 
             function remove() {
                 grid.expandItem = thumbnail
@@ -69,8 +69,7 @@ Page {
                 //% "Deleting"
                 grid.remorseItem.remorse.execute(grid.remorseItem, qsTrId("gallery-la-deleting"),
                                                  function() {
-                                                     itemDeleted = true
-                                                     opacity = 0
+                                                     removeAnimationComponent.createObject(thumbnail, { "target": thumbnail })
                                                      AlbumManager.deleteMedia(thumbnail.mediaUrl)
                                                  })
             }
@@ -104,6 +103,14 @@ Page {
         }
     }
 
+    Component {
+        id: removeAnimationComponent
+
+        RemoveAnimation {
+            running: true
+            duration: 1600
+        }
+    }
 
     Component {
         id: removalComponent
