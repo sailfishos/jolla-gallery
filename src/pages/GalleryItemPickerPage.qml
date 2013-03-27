@@ -1,0 +1,215 @@
+import QtQuick 1.1
+import Sailfish.Silica 1.0
+import com.jolla.components.gallery 1.0
+import "scripts/AlbumManager.js" as AlbumManager
+import QtMobility.gallery 1.1
+
+Page {
+    id: root
+
+    property alias model: selectionModel.docModel
+    property string title
+    signal itemsSelected(variant items)
+
+    allowedOrientations: window.allowedOrientations
+
+    function deleteClicked()
+    {
+        // Store selected items to the array
+        var array = []
+        for (var index = 0; index < selectionModel.count; index++) {
+            if(selectionModel.get(index).selected) {
+                array.push(selectionModel.get(index).url)
+            }
+        }
+
+        // Emit signal with selected items, to indicate that selection is done
+        itemsSelected(array)
+    }
+
+    function clearSelections()
+    {
+        selectionModel.selectOrClearAll(false)
+    }
+
+    function selectAll()
+    {
+        selectionModel.selectOrClearAll(true)
+    }
+
+    // A proxy model
+    QtObject {
+        id: selectionModel
+        property bool ready
+        property int count: model.count
+        property int selectionCount: 0
+        property ListModel model: ListModel {}
+        property QtObject docModel
+
+        function get(index)
+        {
+            return model.get(index)
+        }
+
+        function selectOrClearAll(select)
+        {
+            for(var i=0; i < docModel.count; i++) {
+                model.setProperty(i, "selected", select)
+            }
+
+            if (select) {
+                selectionCount = count
+            } else {
+                selectionCount = 0
+            }
+        }
+
+        function setSelected(index, selected)
+        {
+            model.setProperty(index, "selected", selected)
+
+            if (selected) {
+                ++selectionCount
+            } else {
+                --selectionCount
+            }
+        }
+
+        function _update()
+        {
+            if (docModel == undefined) {
+                return
+            }
+
+            // First time initialization
+            if (model.count == 0) {
+                for(var i=0; i < docModel.count; i++) {
+                    model.insert(i, {"url": docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
+
+                    // Just make the model ready when there are enough pics to show
+                    if (i > 20) {
+                        ready = true
+                    }
+                }
+                // In a case we are not ready yet (<20 images) make the model ready
+                ready = true
+                docModel.countChanged.connect(_update)
+            }
+
+            // TODO: I think worker script could do this one too to avoid blocking
+
+            // Images removed from the document model e.g. someone has removed the image via commandline
+            if (model.count > docModel.count) {
+                for (var i=0; i < model.count; i++) {
+                    var url = model.get(i).url
+                    var found = false
+                    for (var j=0; j < docModel.count; j++) {
+                        if (url === docModel.get(j).url) {
+                            found = true
+                            break
+                        }
+                    }
+
+                    // Removed item, let's remove it from the model
+                    if (!found) {
+                        model.remove(i)
+                    }
+                }
+            }
+
+            // Images have been added
+            if (model.count < docModel.count) {
+                for (var i=0; i < docModel.count; i++) {
+                    var url = docModel.get(i).url
+                    var found = false
+                    for (var j=0; j < model.count; j++) {
+                        if (url === model.get(j).url) {
+                            found = true
+                        }
+                    }
+                    // New item, let's add it to the model
+                    if (!found) {
+                        if (i < model.count) {
+                            model.insert(i, {"url": docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
+                        } else {
+                            model.append({"url": docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
+                        }
+                    }
+
+                }
+            }
+        }
+
+        onDocModelChanged: _update()
+    }
+
+    ImageGridView {
+        id: grid
+
+        property real offset: controlPanel.open ? controlPanel.height : 0
+        Behavior on offset { NumberAnimation {duration: 500; easing.type: Easing.OutQuad } }
+
+        model: selectionModel.ready ? selectionModel.model : null
+        //: Prefix for selection title
+        //% "Select "
+        header: PageHeader { title: qsTrId("gallery-me-select-title-prefix ") + root.title }
+        highlightEnabled: false
+
+        anchors {
+            fill: parent
+            bottomMargin: offset
+        }
+
+        PullDownMenu {
+            MenuItem {
+                //% "Clear All"
+                text: qsTrId("gallery-me-clear-selections")
+                onClicked: root.clearSelections()
+                visible: selectionModel.selectionCount > 0
+            }
+
+            MenuItem {
+                //% "Select All"
+                text: qsTrId("gallery-me-select-all")
+                onClicked: root.selectAll()
+                visible: selectionModel.count !== selectionModel.selectionCount
+            }
+        }
+
+        delegate: ThumbnailImage {
+            id: thumbnail
+            // Initialize selection status if delegate is instantiated again
+            source: url
+            size: grid.cellSize
+
+            onClicked: selectionModel.setSelected(index, !model.selected)
+
+            HighlightItem {
+                anchors.fill: parent
+                active: model.selected
+            }
+        }
+    }
+
+    DockedPanel {
+        id: controlPanel
+        width: parent.width
+        height: theme.itemSizeLarge + theme.paddingLarge
+        dock: Dock.Bottom
+        open: selectionModel.selectionCount > 0
+
+        Image {
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectFit
+            source: "image://theme/graphic-gradient-edge"
+        }
+
+        IconButton {
+            icon.source: "image://theme/icon-m-delete"
+            anchors.centerIn: parent
+            //: Remorse popup for multiple image deletion
+            //% "Deleting
+            onClicked: root.deleteClicked()
+        }
+    }
+}
