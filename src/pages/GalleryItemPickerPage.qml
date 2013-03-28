@@ -37,7 +37,9 @@ Page {
         selectionModel.selectOrClearAll(true)
     }
 
-    // A proxy model
+    // A proxy model for hiding the DocumentGalleryModel and to provide selection role for
+    // each item. This model also takes care of if items are removed or added in the background
+    // while this Page is active to keep the content up-to-date.
     QtObject {
         id: selectionModel
         property bool ready
@@ -45,6 +47,10 @@ Page {
         property int selectionCount: 0
         property ListModel model: ListModel {}
         property QtObject docModel
+        property bool active: root.status === PageStatus.Active || root.status === PageStatus.Activating
+
+        // Make sure not to call _update() when this page is not active anymore
+        onActiveChanged: if (!active) docModel.countChanged.disconnect(_update)
 
         function get(index)
         {
@@ -77,7 +83,7 @@ Page {
 
         function _update()
         {
-            if (docModel == undefined) {
+            if (active && docModel == null) {
                 return
             }
 
@@ -96,7 +102,10 @@ Page {
                 docModel.countChanged.connect(_update)
             }
 
-            // TODO: I think worker script could do this one too to avoid blocking
+            // TODO: Event though the next piece of code seems to block in some cases, I  think it's
+            //       better to handle these rare situations that kee this view not up-to-date.
+            //       Maybe using WorkerScript could provide some kind of solution for keeping model
+            //       updated.
 
             // Images removed from the document model e.g. someone has removed the image via commandline
             if (model.count > docModel.count) {
@@ -140,7 +149,7 @@ Page {
             }
         }
 
-        onDocModelChanged: _update()
+        onDocModelChanged: if (docModel !== null) _update()
     }
 
     ImageGridView {
@@ -194,7 +203,7 @@ Page {
     DockedPanel {
         id: controlPanel
         width: parent.width
-        height: theme.itemSizeLarge + theme.paddingLarge
+        height: theme.itemSizeLarge
         dock: Dock.Bottom
         open: selectionModel.selectionCount > 0
 

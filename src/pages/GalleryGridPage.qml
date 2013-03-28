@@ -37,17 +37,19 @@ Page {
                 console.log("deleteMultipleItems: no selected files!")
                 return
             }
-
-            for (var i=0; i < _selectedItems.length; i++) {
-                AlbumManager.deleteMedia(_selectedItems[i])
-            }
-
-            // For some reason calling pop() doesn't effect on the array's length property.
-            // So I can't do this in a while loop which would pop the items from
-            // the array nicely. Let's just clear _selected items by setting it null.
-            _selectedItems = null
+            fileRemover.deleteFiles(_selectedItems)
         })
     }
+
+    // File remover is a threaded object which can be used for file deletion in the background.
+    // TODO: The same approach could be used for editing when those are put in place.
+    // TODO: Not sure how we should deal with the error cases e.g. file couldn't be deleted and
+    //       we don't even have a design for that yet.
+    FileRemover {
+        id: fileRemover
+        onFinished: _selectedItems = null
+    }
+
 
     // Remorse popup for multiple item deletion
     RemorsePopup {
@@ -92,7 +94,7 @@ Page {
             }
         }
 
-        delegate:  ThumbnailCustom {
+        delegate: ThumbnailCustom {
             id: thumbnail
 
             property bool isItemExpanded: grid.expandItem === thumbnail
@@ -100,8 +102,8 @@ Page {
             property int modelIndex: index
 
             source: mediaUrl
-            thumbnailSource: thumbnailDelegate
             size: grid.cellSize
+            thumbnailSource: thumbnailDelegate
             height: isItemExpanded ? grid.contextMenu.height + grid.cellSize : grid.cellSize
             contentYOffset: index >= grid.minOffsetIndex ? grid.expandHeight : 0.0
             z: isItemExpanded ? 1000 : 1
@@ -131,8 +133,8 @@ Page {
             }
 
             onPressAndHold: {
-                grid.contextMenu.show(thumbnail)
                 grid.expandItem = thumbnail
+                grid.contextMenu.show(thumbnail)
             }
         }
 
