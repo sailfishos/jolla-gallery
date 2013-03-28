@@ -16,6 +16,7 @@
 #include "declarativemediasource.h"
 #include "declarativedbusinterface.h"
 #include "declarativefileinfo.h"
+#include "declarativethreadedfileremover.h"
 #include <QtOpenGL/QGLWidget>
 
 
@@ -82,6 +83,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
     qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
     qmlRegisterType<DeclarativeWallpaper>("com.jolla.gallery", 1, 0, "Wallpaper");
+    qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
 
     // OpenGL viewport is required for better Video performance. It also fixes the perf problem
     // after the video playback has stopped.

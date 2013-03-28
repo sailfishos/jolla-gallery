@@ -60,7 +60,7 @@ SplitViewPage {
         objectName: "menuList"
         model:  fileInfo.localFile ? transferMethodsModel : null
         source: fullscreenPage.model.get(fullscreenPage.currentIndex).url
-
+        clip: fullscreenPage.splitActive
         anchors {
             left: parent.left
             top: parent.top

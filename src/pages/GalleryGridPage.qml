@@ -12,15 +12,48 @@ Page {
     property alias currentIndex: grid.currentIndex
     property url thumbnailDelegate
     property int _animationDuration: 150
+    property variant _selectedItems: null
 
     objectName: "gridPage"
     allowedOrientations: window.allowedOrientations
 
-    function deleteMedia(index) {
+    function deleteItem(index) {
         pageStack.pop()
         grid.currentIndex = index
         grid.currentItem.remove()
         grid.positionViewAtIndex(index, GridView.Visible)
+    }
+
+    function deleteMultipleItems(list)
+    {
+        _selectedItems = list
+        pageStack.pop()
+
+        //: Remorse popup for multiple image deletion
+        //% "Deleting %1 item(s)"
+        clearRemorse.execute(qsTrId("gallery-me-deleting-%1-items").arg(_selectedItems.length), function()
+        {
+            if (!_selectedItems) {
+                console.log("deleteMultipleItems: no selected files!")
+                return
+            }
+            fileRemover.deleteFiles(_selectedItems)
+        })
+    }
+
+    // File remover is a threaded object which can be used for file deletion in the background.
+    // TODO: The same approach could be used for editing when those are put in place.
+    // TODO: Not sure how we should deal with the error cases e.g. file couldn't be deleted and
+    //       we don't even have a design for that yet.
+    FileRemover {
+        id: fileRemover
+        onFinished: _selectedItems = null
+    }
+
+
+    // Remorse popup for multiple item deletion
+    RemorsePopup {
+        id: clearRemorse
     }
 
     ImageGridView {
@@ -39,6 +72,21 @@ Page {
         forceUnfocusHighlight: expandHeight > 0
         header: PageHeader { title: gridPage.title }
 
+        PullDownMenu {
+            MenuItem {
+                //: Select multiple items for different operations
+                //% "Select "
+                text: qsTrId("gallery-me-select-prefix ") + gridPage.title
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("GalleryItemPickerPage.qml"),{
+                                       model: grid.model,
+                                       title: gridPage.title
+                                   })
+                    pageStack.currentPage.itemsSelected.connect(gridPage.deleteMultipleItems)
+                }
+            }
+        }
+
         // Handle the closing the menu at the end of the grid
         onContentYChanged: {
             if (remorseItem) {
@@ -46,7 +94,7 @@ Page {
             }
         }
 
-        delegate:  ThumbnailCustom {
+        delegate: ThumbnailCustom {
             id: thumbnail
 
             property bool isItemExpanded: grid.expandItem === thumbnail
@@ -54,8 +102,8 @@ Page {
             property int modelIndex: index
 
             source: mediaUrl
-            thumbnailSource: thumbnailDelegate
             size: grid.cellSize
+            thumbnailSource: thumbnailDelegate
             height: isItemExpanded ? grid.contextMenu.height + grid.cellSize : grid.cellSize
             contentYOffset: index >= grid.minOffsetIndex ? grid.expandHeight : 0.0
             z: isItemExpanded ? 1000 : 1
@@ -81,12 +129,12 @@ Page {
                 }
 
                 pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
-                pageStack.currentPage.deleteMedia.connect(gridPage.deleteMedia)
+                pageStack.currentPage.deleteMedia.connect(gridPage.deleteItem)
             }
 
             onPressAndHold: {
-                grid.contextMenu.show(thumbnail)
                 grid.expandItem = thumbnail
+                grid.contextMenu.show(thumbnail)
             }
         }
 

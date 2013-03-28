@@ -4,6 +4,7 @@
 #include "declarativedbusinterface.h"
 #include "declarativefileinfo.h"
 #include "declarativewallpaper.h"
+#include "declarativethreadedfileremover.h"
 
 #include <QDeclarativeExtensionPlugin>
 #include <qdeclarative.h>
@@ -183,6 +184,7 @@ public:
         qmlRegisterType<TestMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
         qmlRegisterType<TestDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
         qmlRegisterType<DeclarativeWallpaper>("com.jolla.gallery", 1, 0, "Wallpaper");
+        qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
 
         qmlRegisterType<TestDBusService>("com.jolla.gallery.test", 1, 0, "TestDBusService");
 
