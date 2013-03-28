@@ -11,10 +11,9 @@ class DeclarativeThreadedFileRemover : public QObject
 public:
     explicit DeclarativeThreadedFileRemover(QObject *parent = 0);
 
-
     Q_INVOKABLE void deleteFiles(const QStringList &files);
-signals:
 
+Q_SIGNALS:
     void finished();
 
 private:
