@@ -155,9 +155,6 @@ Page {
     ImageGridView {
         id: grid
 
-        property real offset: controlPanel.open ? controlPanel.height : 0
-        Behavior on offset { NumberAnimation {duration: 500; easing.type: Easing.OutQuad } }
-
         model: selectionModel.ready ? selectionModel.model : null
         //: Prefix for selection title
         //% "Select "
@@ -170,7 +167,6 @@ Page {
             left: parent.left
             right: parent.right
             bottom: controlPanel.top
-            //bottomMargin: offset
         }
 
         PullDownMenu {
