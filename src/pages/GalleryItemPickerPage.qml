@@ -155,18 +155,18 @@ Page {
     ImageGridView {
         id: grid
 
-        property real offset: controlPanel.open ? controlPanel.height : 0
-        Behavior on offset { NumberAnimation {duration: 500; easing.type: Easing.OutQuad } }
-
         model: selectionModel.ready ? selectionModel.model : null
         //: Prefix for selection title
         //% "Select "
         header: PageHeader { title: qsTrId("gallery-me-select-title-prefix ") + root.title }
         highlightEnabled: false
+        clip: true
 
         anchors {
-            fill: parent
-            bottomMargin: offset
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            bottom: controlPanel.top
         }
 
         PullDownMenu {
