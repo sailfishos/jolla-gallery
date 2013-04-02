@@ -163,10 +163,14 @@ Page {
         //% "Select "
         header: PageHeader { title: qsTrId("gallery-me-select-title-prefix ") + root.title }
         highlightEnabled: false
+        clip: true
 
         anchors {
-            fill: parent
-            bottomMargin: offset
+            top: parent.top
+            left: parent.left
+            right: parent.right
+            bottom: controlPanel.top
+            //bottomMargin: offset
         }
 
         PullDownMenu {
