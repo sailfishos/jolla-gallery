@@ -1,11 +1,26 @@
 import QtQuick 1.1
 import Sailfish.Silica 1.0
+import Sailfish.Silica.private 1.0
 import com.jolla.gallery 1.0
 import QtMobility.gallery 1.1
 
 Page {
+    id: startPage
 
     allowedOrientations: window.allowedOrientations
+
+    function showMedia(media, transition) {
+        var page = media.page != ""
+                ? Qt.resolvedUrl(media.page)
+                : Qt.resolvedUrl("GalleryGridPage.qml")
+        var thumbnail = media.thumbnail != ""
+                ? media.thumbnail
+                : Qt.resolvedUrl("GridImageThumbnail.qml")
+        window.pageStack.push(
+                    page,
+                    {  title: media.title, model: media.model, thumbnailDelegate: thumbnail },
+                    transition !== undefined ? transition : PageStackAction.Animated)
+    }
 
     Component {
         id: delegate
@@ -54,12 +69,7 @@ Page {
                 }
             }
 
-            onClicked: {
-                    window.pageStack.push(media.page != "" ? Qt.resolvedUrl(media.page) : Qt.resolvedUrl("GalleryGridPage.qml") , {
-                    title: media.title,
-                    model: media.model,
-                    thumbnailDelegate: media.thumbnail != "" ? media.thumbnail : Qt.resolvedUrl("GridImageThumbnail.qml")
-            } ) }
+            onClicked: showMedia(media)
         }
     }
 
@@ -72,6 +82,7 @@ Page {
         model: MediaSourceModel {
             id: mediaSourceModel
             DocumentGallerySource {
+                id: photoSource
                 //: Main screen
                 //% "Photos"
                 title: qsTrId("gallery-bt-photos")
@@ -82,6 +93,7 @@ Page {
             }
 
             DocumentGallerySource {
+                id: videoSource
                 //% "Videos"
                 title: qsTrId("gallery-bt-videos")
                 type: DocumentGallery.Video
@@ -101,6 +113,27 @@ Page {
                 count: albumModel.count
                 ready: true
             }
+        }
+    }
+
+    DBusAdaptor {
+        service: "com.jolla.gallery"
+        path: "/com/jolla/gallery/ui"
+        iface: "com.jolla.gallery.ui"
+
+        signal showPhotos
+        signal showVideos
+
+        onShowPhotos: {
+            window.pageStack.pop(startPage, PageStackAction.Immediate)
+            showMedia(photoSource, PageStackAction.Immediate)
+            activate()
+        }
+
+        onShowVideos: {
+            window.pageStack.pop(startPage, PageStackAction.Immediate)
+            showMedia(videoSource, PageStackAction.Immediate)
+            activate()
         }
     }
 }

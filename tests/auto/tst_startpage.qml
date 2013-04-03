@@ -129,6 +129,26 @@ ApplicationWindow {
             verify(gridView !== undefined)
             tryCompare(gridView, "count", 2)
         }
+
+        function test_dbusShowPhotos() {
+            galleryService.showPhotos()
+            tryCompare(window, "currentPageName", "gridPage")
+
+            // Use the view count to verify the correct page has been loaded.
+            var gridView = Util.findItemByName(window.pageStack.currentPage, "gridView")
+            verify(gridView !== undefined)
+            tryCompare(gridView, "count", 2)
+        }
+
+        function test_dbusShowVideos() {
+            galleryService.showVideos()
+            tryCompare(window, "currentPageName", "gridPage")
+
+            // Use the view count to verify the correct page has been loaded.
+            var gridView = Util.findItemByName(window.pageStack.currentPage, "gridView")
+            verify(gridView !== undefined)
+            tryCompare(gridView, "count", 1)
+        }
     }
 
     ListModel {
@@ -193,6 +213,23 @@ ApplicationWindow {
 
             for (var i = 0; i < model.count; ++i)
                 printRow(model.get(i))
+        }
+    }
+
+
+    DBusInterface {
+        id: galleryService
+
+        destination: "com.jolla.gallery"
+        path: "/com/jolla/gallery/ui"
+        iface: "com.jolla.gallery.ui"
+
+        function showPhotos() {
+            galleryService.call("showPhotos", undefined)
+        }
+
+        function showVideos() {
+            galleryService.call("showVideos", undefined)
         }
     }
 }
