@@ -8,11 +8,6 @@ Page {
 
     allowedOrientations: window.allowedOrientations
 
-    PageHeader {
-        //% "Details"
-        title: qsTrId("gallery-he-details")
-    }
-
     DocumentGalleryItem {
         id: galleryItem
         autoUpdate: false
@@ -20,16 +15,14 @@ Page {
 
         onStatusChanged: {
             if (status == DocumentGalleryItem.Finished) {
-                nameLabel.text = galleryItem.metaData.fileName
-                sizeLabel.text = sizeDescription(galleryItem.metaData.fileSize)
-                typeLabel.text = galleryItem.metaData.mimeType
-                widthLabel.text = galleryItem.metaData.width
-                heightLabel.text = galleryItem.metaData.height
+                nameItem.value = galleryItem.metaData.fileName
+                sizeItem.value = sizeDescription(galleryItem.metaData.fileSize)
+                typeItem.value = galleryItem.metaData.mimeType
+                widthItem.value = galleryItem.metaData.width
+                heightItem.value = galleryItem.metaData.height
 
                 if (itemType == DocumentGallery.Video) {
-                    //% "Duration"
-                    durationHeading.text = qsTrId("gallery-la-duration")
-                    durationLabel.text = durationDescription(galleryItem.metaData.duration)
+                    durationItem.value = durationDescription(galleryItem.metaData.duration)
                 }
             }
         }
@@ -57,80 +50,41 @@ Page {
     }
 
     Column {
-        y: theme.itemSizeLarge
-        x: theme.paddingLarge
-
-        Label {
-            height: 40
-            font.family: theme.fontFamilyHeading
-            //: Details page
+        width: parent.width
+        PageHeader {
+            //% "Details"
+            title: qsTrId("gallery-he-details")
+        }
+        GalleryDetailsItem {
+            id: nameItem
             //% "Filename"
-            text: qsTrId("gallery-la-filename")
+            detail: qsTrId("gallery-la-filename")
         }
-        Label {
-            id: nameLabel
-            height: 60
-            text: ""
-        }
-
-        Label {
-            height: 40
-            font.family: theme.fontFamilyHeading
+        GalleryDetailsItem {
+            id: sizeItem
             //% "Size"
-            text: qsTrId("gallery-la-size")
+            detail: qsTrId("gallery-la-size")
         }
-        Label {
-            id: sizeLabel
-            height: 60
-            text: ""
-        }
-
-        Label {
-            height: 40
-            font.family: theme.fontFamilyHeading
+        GalleryDetailsItem {
+            id: typeItem
             //% "Type"
-            text: qsTrId("gallery-la-type")
+            detail: qsTrId("gallery-la-type")
         }
-        Label {
-            id: typeLabel
-            height: 60
-            text: ""
-        }
-
-        Label {
-            height: 40
-            font.family: theme.fontFamilyHeading
+        GalleryDetailsItem {
+            id: widthItem
             //% "Width"
-            text: qsTrId("gallery-la-width")
+            detail: qsTrId("gallery-la-width")
         }
-        Label {
-            id: widthLabel
-            height: 60
-            text: ""
-        }
-
-        Label {
-            height: 40
-            font.family: theme.fontFamilyHeading
+        GalleryDetailsItem {
+            id: heightItem
             //% "Height"
-            text: qsTrId("gallery-la-height")
+            detail: qsTrId("gallery-la-height")
         }
-        Label {
-            id: heightLabel
-            height: 60
-            text: ""
-        }
-
-        Label {
-            id: durationHeading
-            height: 40
-            font.family: theme.fontFamilyHeading
-            text: ""
-        }
-        Label {
-            id: durationLabel
-            height: 60
-            text: ""
+        GalleryDetailsItem {
+            id: durationItem
+            //% "Duration"
+            detail: qsTrId("gallery-la-duration")
+            visible: value.length > 0
         }
     }
 }
