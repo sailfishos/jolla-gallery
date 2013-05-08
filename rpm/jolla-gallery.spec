@@ -30,6 +30,7 @@ Requires:  jolla-gallery-facebook
 Requires:  jollacomponents-internal => 0.9.11
 Requires:  sailfish-accounts
 Requires:  sailfish-media
+Requires:  sailfish-gallery
 
 %description
 The Jolla Gallery application.

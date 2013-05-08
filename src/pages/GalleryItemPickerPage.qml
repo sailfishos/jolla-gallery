@@ -1,6 +1,6 @@
 import QtQuick 1.1
 import Sailfish.Silica 1.0
-import com.jolla.components.gallery 1.0
+import Sailfish.Gallery 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 import QtMobility.gallery 1.1
 
