@@ -39,6 +39,7 @@ Page {
                     rightMargin: theme.paddingLarge
                     verticalCenter: parent.verticalCenter
                 }
+                opacity: 0.4
                 text: media.count
                 color: delegateItem.down ? theme.highlightColor : theme.primaryColor
                 font.pixelSize: theme.fontSizeLarge
@@ -47,7 +48,7 @@ Page {
             // Load icon from a plugin
             Loader {
                 id: thumbnail
-                x: width - theme.paddingLarge
+                x: theme.itemSizeExtraLarge
                 width: theme.itemSizeExtraLarge
                 height: width
                 source: media.icon != "" ? media.icon : "PhotoIcon.qml"
