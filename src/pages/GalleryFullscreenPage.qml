@@ -124,7 +124,7 @@ SplitViewPage {
                 text: qsTrId("gallery-la-add_account")
                 x: theme.paddingLarge
                 anchors.verticalCenter: parent.verticalCenter
-                color: parent.down ? theme.highlightColor : theme.primaryColor
+                color: highlighted ? theme.highlightColor : theme.primaryColor
                 visible: fileInfo.localFile
             }
 
