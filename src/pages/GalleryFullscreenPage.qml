@@ -2,7 +2,6 @@ import QtQuick 1.1
 import Sailfish.Silica 1.0
 import Sailfish.TransferEngine 1.0
 import Sailfish.Accounts 1.0
-import com.jolla.components.views 1.0
 import com.jolla.gallery 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
@@ -53,20 +52,14 @@ SplitViewPage {
 
     // This is the share method list, but it also
     // includes the pulley menu
-    ShareMethodList {
+    background: ShareMethodList {
         id: menuList
 
 
         objectName: "menuList"
         model:  fileInfo.localFile ? transferMethodsModel : null
         source: fullscreenPage.model.get(fullscreenPage.currentIndex).url
-        clip: fullscreenPage.splitActive
-        anchors {
-            left: parent.left
-            top: parent.top
-            right: isPortrait ? parent.right : parent.horizontalCenter
-            bottom: isPortrait ? parent.verticalCenter : parent.bottom
-        }
+        anchors.fill: parent
 
         //% "Share"
         listHeader: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
@@ -142,19 +135,18 @@ SplitViewPage {
 
 
     // Element for handling the actual flicking and image buffering
-    // Bind it to SplitView's contentItem property
-    contentItem: FlickableImageView {
+     foreground: FlickableImageView {
         id: imageList
 
         property bool currentItemIsImage: currentItem && currentItem.imageItem
 
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
-        menuOpen: fullscreenPage.splitActive
+        menuOpen: fullscreenPage.opened
 
         // can't just alias fullscreenPage.currentIndex to this currentIndex due to PathView bug
         currentIndex: fullscreenPage.currentIndex
         onCurrentIndexChanged: fullscreenPage.currentIndex = currentIndex
-        onClicked: toggleSplit()
+        onClicked: fullscreenPage.open = !fullscreenPage.open
     }
 }
