@@ -18,7 +18,7 @@ BuildRequires:  pkgconfig(qdeclarative-boostable)
 BuildRequires:  pkgconfig(libjollasignonuiservice)
 
 Requires:  ambient-icons-closed
-Requires:  sailfishsilica
+Requires:  sailfishsilica >= 0.8.40
 Requires:  libdeclarative-gallery
 Requires:  mapplauncherd-booster-jolla
 Requires:  libdeclarative-multimedia
@@ -27,7 +27,6 @@ Requires:  nemo-qml-plugins-accounts
 Requires:  nemo-qml-plugins-gstvideo-thumbnailer
 Requires:  nemo-qml-plugins-thumbnailer
 Requires:  jolla-gallery-facebook
-Requires:  jollacomponents-internal => 0.9.11
 Requires:  sailfish-components-accounts
 Requires:  sailfish-components-media
 Requires:  sailfish-components-gallery
