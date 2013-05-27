@@ -29,7 +29,7 @@ Requires:  nemo-qml-plugins-thumbnailer
 Requires:  jolla-gallery-facebook
 Requires:  sailfish-components-accounts
 Requires:  sailfish-components-media
-Requires:  sailfish-components-gallery >= 0.0.5
+Requires:  sailfish-components-gallery >= 0.0.6
 
 %description
 The Jolla Gallery application.

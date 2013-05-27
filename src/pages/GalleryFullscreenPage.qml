@@ -82,6 +82,15 @@ SplitViewPage {
             }
 
             MenuItem {
+                //: Gallery image edit, will lead to a page where user can perform edit operations.
+                //% "Edit"
+                text: qsTrId("gallery-me-edit")
+
+                onClicked: pageStack.push(imageEditPage, {source: imageList.currentItemUrl()})
+                visible:  imageList.currentItemIsImage
+            }
+
+            MenuItem {
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
 
@@ -149,5 +158,14 @@ SplitViewPage {
         currentIndex: fullscreenPage.currentIndex
         onCurrentIndexChanged: fullscreenPage.currentIndex = currentIndex
         onClicked: fullscreenPage.open = !fullscreenPage.open
+    }
+
+    Component {
+        id: imageEditPage
+
+        ImageEditPage {
+            allowedOrientations: window.allowedOrientations
+            splitOpen: true
+        }
     }
 }
