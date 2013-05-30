@@ -5,12 +5,9 @@ import com.jolla.gallery 1.0
 import Sailfish.Gallery 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
-Page {
+MediaSourcePage {
     id: gridPage
-    property alias model: grid.model
-    property string title
     property alias currentIndex: grid.currentIndex
-    property url thumbnailDelegate
     property int _animationDuration: 150
     property variant _selectedItems: null
 
@@ -71,6 +68,7 @@ Page {
         unfocusHighlightEnabled: true
         forceUnfocusHighlight: expandHeight > 0
         header: PageHeader { title: gridPage.title }
+        model: gridPage.model
 
         PullDownMenu {
             MenuItem {
@@ -94,7 +92,7 @@ Page {
             }
         }
 
-        delegate: ThumbnailCustom {
+        delegate: ThumbnailImage {
             id: thumbnail
 
             property bool isItemExpanded: grid.expandItem === thumbnail
@@ -103,7 +101,7 @@ Page {
 
             source: mediaUrl
             size: grid.cellSize
-            thumbnailSource: thumbnailDelegate
+            //thumbnailSource: thumbnailDelegate
             height: isItemExpanded ? grid.contextMenu.height + grid.cellSize : grid.cellSize
             contentYOffset: index >= grid.minOffsetIndex ? grid.expandHeight : 0.0
             z: isItemExpanded ? 1000 : 1

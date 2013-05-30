@@ -78,6 +78,9 @@ desktop-file-install --delete-original       \
 %{_bindir}/jolla-gallery
 %{_datadir}/translations/gallery_eng_en.qm
 %{_datadir}/dbus-1/services/com.jolla.gallery.service
+%{_libdir}/qt4/imports/com/jolla/gallery/*.qml
+%{_libdir}/qt4/imports/com/jolla/gallery/qmldir
+
 
 %files ts-devel
 %defattr(-,root,root,-)

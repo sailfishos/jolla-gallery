@@ -38,19 +38,6 @@ void DeclarativeMediaSource::setIcon(const QUrl &url)
     }
 }
 
-QUrl DeclarativeMediaSource::thumbnail() const
-{
-    return m_thumbnail;
-}
-
-void DeclarativeMediaSource::setThumbnail(const QUrl &url)
-{
-    if (m_thumbnail != url) {
-        m_thumbnail = url;
-        emit thumbnailChanged();
-    }
-}
-
 QUrl DeclarativeMediaSource::page() const
 {
     return m_page;
