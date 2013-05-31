@@ -9,6 +9,7 @@ CONFIG += link_pkgconfig
 MOBILITY += multimedia gallery
 PKGCONFIG += mlite libjollasignonuiservice
 
+MODULENAME = com/jolla/gallery
 
 
 qml.files = *.qml pages images
@@ -23,7 +24,15 @@ contains(CONFIG, desktop) {
 OTHER_FILES += \
     *.qml \
     pages/*.qml \
-    pages/scripts/*.js
+    pages/scripts/*.js \
+    components/*
+
+component.files += \
+    components/MediaSourceIcon.qml \
+    components/MediaSourcePage.qml \
+    components/qmldir
+component.path = $$[QT_INSTALL_IMPORTS]/$$MODULENAME
+
 
 HEADERS += \
     declarativewallpaper.h \
@@ -41,7 +50,7 @@ SOURCES += gallery.cpp \
     declarativefileinfo.cpp \
     declarativethreadedfileremover.cpp
 
-INSTALLS += target qml
+INSTALLS += target qml component
 
 packagesExist(qdeclarative-boostable) {
     message("Building with qdeclarative-boostable support")

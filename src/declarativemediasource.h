@@ -13,7 +13,6 @@
  *
  * MediaSource {
  *    icon: "/url/to/icon/component/Icon.qml"
- *    thumbnail: "/url/to/thumbnail/component/Thumbnail.qml"
  *    page: "/url/to/sourcepage/component/PluginPage.qml"
  *    title: "My Plugin"
  *    ready: model.count > 0
@@ -32,7 +31,6 @@ class DeclarativeMediaSource : public QObject
     Q_OBJECT
     Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
     Q_PROPERTY(QUrl icon READ icon WRITE setIcon NOTIFY iconChanged)
-    Q_PROPERTY(QUrl thumbnail READ thumbnail WRITE setThumbnail NOTIFY thumbnailChanged)
     Q_PROPERTY(QUrl page READ page WRITE setPage NOTIFY pageChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QObject *model READ model WRITE setModel NOTIFY modelChanged)
@@ -47,9 +45,6 @@ public:
 
     QUrl icon() const;
     void setIcon(const QUrl &url);
-
-    QUrl thumbnail() const;
-    void setThumbnail(const QUrl &url);
 
     QUrl page() const;
     void setPage(const QUrl &url);

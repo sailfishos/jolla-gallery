@@ -13,12 +13,9 @@ Page {
         var page = media.page != ""
                 ? Qt.resolvedUrl(media.page)
                 : Qt.resolvedUrl("GalleryGridPage.qml")
-        var thumbnail = media.thumbnail != ""
-                ? media.thumbnail
-                : Qt.resolvedUrl("GridImageThumbnail.qml")
         window.pageStack.push(
                     page,
-                    {  title: media.title, model: media.model, thumbnailDelegate: thumbnail },
+                    { title: media.title, model: media.model },
                     transition !== undefined ? transition : PageStackAction.Animated)
     }
 

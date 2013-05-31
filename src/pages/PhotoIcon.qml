@@ -1,8 +1,13 @@
 import QtQuick 1.1
 import org.nemomobile.thumbnailer 1.0
+import com.jolla.gallery 1.0
 
-Item {
+MediaSourceIcon {
     id: thumbnail
+
+    property int iconIndex: 1
+    timerInterval: 10000
+    timerEnabled: media.count > 1
 
     GalleryThumbnail {
         id: icon1
@@ -27,28 +32,22 @@ Item {
         Behavior on opacity { NumberAnimation { duration: 1500 }}
     }
 
-    Timer {
-        property int iconIndex: 1
-        interval: 10000
-        repeat: true
-        running: window.applicationActive && media.count > 1
-        onTriggered: {
-            var modelIndex = Math.floor((Math.random()*media.model.count));
+    onTimerTriggered: {
+        var modelIndex = Math.floor((Math.random()*media.model.count));
 
-            if (iconIndex % 2 == 0) {
-                var modelData = media.model.get(modelIndex)
-                icon2.source = modelData.url
-                icon2.mimeType = modelData.mimeType
-                icon1.opacity = 0
-                icon2.opacity = 1
-            } else {
-                var modelData = media.model.get(modelIndex)
-                icon1.source = modelData.url
-                icon1.mimeType = modelData.mimeType
-                icon2.opacity = 0
-                icon1.opacity = 1
-            }
-            ++iconIndex;
+        if (iconIndex % 2 == 0) {
+            var modelData = media.model.get(modelIndex)
+            icon2.source = modelData.url
+            icon2.mimeType = modelData.mimeType
+            icon1.opacity = 0
+            icon2.opacity = 1
+        } else {
+            var modelData = media.model.get(modelIndex)
+            icon1.source = modelData.url
+            icon1.mimeType = modelData.mimeType
+            icon2.opacity = 0
+            icon1.opacity = 1
         }
+        ++iconIndex;
     }
 }
