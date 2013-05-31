@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import org.nemomobile.thumbnailer 1.0
 
 // This is a workaround for a Tracker/DocumentGalleryModel bug where

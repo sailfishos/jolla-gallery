@@ -1,5 +1,6 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Silica.theme 1.0
 import Sailfish.Gallery 1.0
 import Sailfish.TransferEngine 1.0
 import Sailfish.Accounts 1.0
@@ -34,7 +35,6 @@ SplitViewPage {
             grid.currentIndex = currentIndex
         }
     }
-
 
     FileInfo {
         id: fileInfo
@@ -100,21 +100,21 @@ SplitViewPage {
         }
 
         header: Item {
-            height: theme.itemSizeLarge
-            width: menuList.width * 0.7 - theme.paddingLarge
+            height: Theme.itemSizeLarge
+            width: menuList.width * 0.7 - Theme.paddingLarge
             x: menuList.width * 0.3
 
             Label {
                 text: fileInfo.localFile ? model.get(currentIndex).title : ""
                 width: parent.width
                 truncationMode: TruncationMode.Fade
-                color: theme.highlightColor
+                color: Theme.highlightColor
                 anchors.verticalCenter: parent.verticalCenter
                 objectName: "imageTitle"
                 horizontalAlignment: Text.AlignRight
                 font {
-                    pixelSize: theme.fontSizeLarge
-                    family: theme.fontFamilyHeading
+                    pixelSize: Theme.fontSizeLarge
+                    family: Theme.fontFamilyHeading
                 }
             }
         }
@@ -125,9 +125,9 @@ SplitViewPage {
             Label {
                 //% "Add account"
                 text: qsTrId("gallery-la-add_account")
-                x: theme.paddingLarge
+                x: Theme.paddingLarge
                 anchors.verticalCenter: parent.verticalCenter
-                color: highlighted ? theme.highlightColor : theme.primaryColor
+                color: highlighted ? Theme.highlightColor : Theme.primaryColor
                 visible: fileInfo.localFile
             }
 
@@ -145,8 +145,11 @@ SplitViewPage {
 
 
     // Element for handling the actual flicking and image buffering
-     foreground: FlickableImageView {
+    FlickableImageView {
         id: imageList
+
+        // XXX Qt5 Port - workaround PathView bug
+        pathItemCount: 3
 
         property bool currentItemIsImage: currentItem && currentItem.imageItem
 

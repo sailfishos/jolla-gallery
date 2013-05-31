@@ -2,12 +2,11 @@
 
 #include <QDBusMessage>
 #include <QDBusConnection>
-#include <QScriptEngine>
-#include <QScriptValue>
+#include <QJSValue>
 #include <QFile>
 #include <QUrl>
 
-#include <qdeclarativeinfo.h>
+#include <qqmlinfo.h>
 #include <QtDebug>
 
 DeclarativeDBusInterface::DeclarativeDBusInterface(QObject *parent)
@@ -58,7 +57,7 @@ void DeclarativeDBusInterface::setInterface(const QString &interface)
     }
 }
 
-void DeclarativeDBusInterface::call(const QString &method, const QScriptValue &arguments)
+void DeclarativeDBusInterface::call(const QString &method, const QJSValue &arguments)
 {
     QVariantList dbusArguments;
 
@@ -71,7 +70,7 @@ void DeclarativeDBusInterface::call(const QString &method, const QScriptValue &a
     else if (arguments.isBool())
         dbusArguments.append(arguments.toBool());
     else if (arguments.isArray())
-        qScriptValueToSequence(arguments, dbusArguments);
+        dbusArguments = arguments.toVariant().toList();
 
     QDBusMessage message = QDBusMessage::createMethodCall(
                 m_destination,

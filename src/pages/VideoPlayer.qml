@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import Sailfish.Silica 1.0
 // Use a namespace to avoid any ambiguity between component VideoPlayer and this.
 import Sailfish.Media 1.0 as Media

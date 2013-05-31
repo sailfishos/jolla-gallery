@@ -1,6 +1,6 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import com.jolla.gallery 1.0
-import QtMobility.gallery 1.1
+import QtDocGallery 5.0
 
 MediaSource {
     property alias type: galleryModel.rootType

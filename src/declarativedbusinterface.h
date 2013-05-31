@@ -4,7 +4,7 @@
 #include <QObject>
 
 QT_BEGIN_NAMESPACE
-class QScriptValue;
+class QJSValue;
 class QUrl;
 QT_END_NAMESPACE
 
@@ -27,7 +27,7 @@ public:
     QString interface() const;
     void setInterface(const QString &interface);
 
-    Q_INVOKABLE void call(const QString &method, const QScriptValue &arguments);
+    Q_INVOKABLE void call(const QString &method, const QJSValue &arguments);
     Q_INVOKABLE bool removeFile(const QUrl &url);
 
 signals:

@@ -5,11 +5,11 @@ include (../imports.pri)
 
 GALLERY_SOURCE_PATH = $$PWD/../../../src
 
-QT += dbus declarative script
+QT += dbus qml quick docgallery multimedia concurrent
 CONFIG += mobility link_pkgconfig
 MOBILITY += gallery
 
-PKGCONFIG += mlite
+PKGCONFIG += mlite5
 
 INCLUDEPATH += $$GALLERY_SOURCE_PATH
 

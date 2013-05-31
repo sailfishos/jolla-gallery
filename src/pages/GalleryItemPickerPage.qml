@@ -1,8 +1,9 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Silica.theme 1.0
 import Sailfish.Gallery 1.0
 import "scripts/AlbumManager.js" as AlbumManager
-import QtMobility.gallery 1.1
+import QtDocGallery 5.0
 
 Page {
     id: root
@@ -203,7 +204,7 @@ Page {
     DockedPanel {
         id: controlPanel
         width: parent.width
-        height: theme.itemSizeLarge
+        height: Theme.itemSizeLarge
         dock: Dock.Bottom
         open: selectionModel.selectionCount > 0
 

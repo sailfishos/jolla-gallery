@@ -4,7 +4,7 @@
 
 #include <QObject>
 #include <QUrl>
-#include <QWeakPointer>
+#include <QPointer>
 
 /*!
  * \brief The DeclarativeMediaSource class
@@ -68,7 +68,7 @@ signals:
     void readyChanged();
 
 private:
-    QWeakPointer<QObject> m_model;
+    QPointer<QObject> m_model;
     QUrl m_icon;
     QUrl m_thumbnail;
     QUrl m_page;
