@@ -3,11 +3,10 @@ include(../common.pri)
 TARGET = jolla-gallery
 target.path = /usr/bin
 
-QT += declarative dbus script network
-CONFIG += mobility
+QT += qml quick dbus network docgallery multimedia concurrent
 CONFIG += link_pkgconfig
-MOBILITY += multimedia gallery
-PKGCONFIG += mlite libjollasignonuiservice
+PKGCONFIG += mlite5
+# libjollasignonuiservice
 
 MODULENAME = com/jolla/gallery
 
@@ -31,7 +30,7 @@ component.files += \
     components/MediaSourceIcon.qml \
     components/MediaSourcePage.qml \
     components/qmldir
-component.path = $$[QT_INSTALL_IMPORTS]/$$MODULENAME
+component.path = $$[QT_INSTALL_QML]/$$MODULENAME
 
 
 HEADERS += \
@@ -52,10 +51,10 @@ SOURCES += gallery.cpp \
 
 INSTALLS += target qml component
 
-packagesExist(qdeclarative-boostable) {
+packagesExist(qdeclarative5-boostable) {
     message("Building with qdeclarative-boostable support")
     DEFINES += HAS_BOOSTER
-    PKGCONFIG += qdeclarative-boostable
+    PKGCONFIG += qdeclarative5-boostable
 } else {
     warning("qdeclarative-boostable not available; startup times will be slower")
 }

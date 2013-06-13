@@ -6,8 +6,8 @@
 #include "declarativewallpaper.h"
 #include "declarativethreadedfileremover.h"
 
-#include <QDeclarativeExtensionPlugin>
-#include <qdeclarative.h>
+#include <QQmlExtensionPlugin>
+#include <qqml.h>
 
 #include <QtDebug>
 #include <QDBusAbstractAdaptor>
@@ -168,8 +168,11 @@ private:
     bool m_allowRemove;
 };
 
-class JollaGalleryPlugin : public QDeclarativeExtensionPlugin
+class JollaGalleryPlugin : public QQmlExtensionPlugin
 {
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "com.jolla.gallery")
+
 public:
     virtual void registerTypes(const char *uri)
     {
@@ -193,4 +196,3 @@ public:
 
 #include "main.moc"
 
-Q_EXPORT_PLUGIN2(jollagalleryplugin, JollaGalleryPlugin);

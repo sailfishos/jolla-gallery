@@ -1,15 +1,15 @@
 
-#include <QApplication>
-#include <QDeclarativeView>
-#include <QDeclarativeEngine>
-#include <QDeclarativeContext>
-#include <QtDeclarative>
+#include <QGuiApplication>
+#include <QQuickView>
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QtQml>
 #include <QDir>
 #include <QTranslator>
 #include <QLocale>
 
 #include <QtDBus/QDBusConnection>
-#include <libjollasignonuiservice/signonuiservice.h>
+//#include <libjollasignonuiservice/signonuiservice.h>
 
 #include "declarativewallpaper.h"
 #include "declarativemediamodel.h"
@@ -17,7 +17,6 @@
 #include "declarativedbusinterface.h"
 #include "declarativefileinfo.h"
 #include "declarativethreadedfileremover.h"
-#include <QtOpenGL/QGLWidget>
 
 
 
@@ -28,11 +27,11 @@
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
 #ifdef HAS_BOOSTER
-    QScopedPointer<QApplication> app(MDeclarativeCache::qApplication(argc, argv));
-    QScopedPointer<QDeclarativeView> view(MDeclarativeCache::qDeclarativeView());
+    QScopedPointer<QGuiApplication> app(MDeclarativeCache::qApplication(argc, argv));
+    QScopedPointer<QQuickView> view(MDeclarativeCache::qQuickView());
 #else
-    QScopedPointer<QApplication> app(new QApplication(argc, argv));
-    QScopedPointer<QDeclarativeView> view(new QDeclarativeView);
+    QScopedPointer<QGuiApplication> app(new QGuiApplication(argc, argv));
+    QScopedPointer<QQuickView> view(new QQuickView);
 #endif
 
     QString translationPath("/usr/share/translations/");
@@ -61,6 +60,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qApp->installTranslator(&translator);
 
     // We want to have SignonUI in process, if user wants to create account from Gallery
+    /*XXX Qt5 Port
     SignonUiService *ssoui = new SignonUiService(0, true); // in process
     ssoui->setInProcessServiceName(QLatin1String("com.jolla.gallery"));
     ssoui->setInProcessObjectPath(QLatin1String("/JollaGallerySignonUi"));
@@ -77,6 +77,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     }
 
     view->rootContext()->setContextProperty("jolla_signon_ui_service", ssoui);
+    */
 
     qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
@@ -85,34 +86,20 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeWallpaper>("com.jolla.gallery", 1, 0, "Wallpaper");
     qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
 
-    // OpenGL viewport is required for better Video performance. It also fixes the perf problem
-    // after the video playback has stopped.
-    view->setViewport(new QGLWidget);
-
-    QString path;
-    if (app->arguments().contains("-desktop")) {
-        path = app->applicationDirPath() + QDir::separator();
-    } else {
-        path = QString(DEPLOYMENT_PATH);
-    }
+    QString path = QString(DEPLOYMENT_PATH);
 
     view->setSource(path + QLatin1String("gallery.qml"));
 
-    if (app->arguments().contains("-desktop"))
-    {
-        view->setFixedSize(480, 854);
-        view->rootObject()->setProperty("_desktop", true);
-        view->show();
-    } else {
-        view->showFullScreen();
-    }
+    view->showFullScreen();
 
     int retn = app->exec();
 
+/*
     if (registeredService)
         sessionBus.unregisterService(QLatin1String("com.jolla.gallery"));
     if (registeredObject)
         sessionBus.unregisterObject(QLatin1String("/JollaGallerySignonUi"));
     delete ssoui;
+*/
     return retn;
 }

@@ -1,6 +1,7 @@
-import QtQuick 1.1
-import QtMobility.gallery 1.1
+import QtQuick 2.0
+import QtDocGallery 5.0
 import Sailfish.Silica 1.0
+import Sailfish.Silica.theme 1.0
 
 CoverBackground {
 
@@ -40,9 +41,9 @@ CoverBackground {
         text: qsTrId("gallery-la-take_some_photos")
         y: 28
         anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width - theme.paddingLarge
+        width: parent.width - Theme.paddingLarge
         visible: galleryModel.count == 0
-        color: theme.secondaryColor
+        color: Theme.secondaryColor
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.Wrap
     }

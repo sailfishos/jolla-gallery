@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 SlideshowView {
@@ -28,6 +28,7 @@ SlideshowView {
         id: container
 
         property url mediaUrl: model.url
+        property string mediaMimeType: model.mimeType
 
         anchors { top: view.top; bottom: view.bottom }
         width: view.width
@@ -40,9 +41,8 @@ SlideshowView {
 
         onClicked: view.clicked()
 
-        onMediaUrlChanged: {
-            loadMediaContent(model.url, model.mimeType)
-        }
+        onMediaUrlChanged: loadMediaContent(model.url, model.mimeType)
+        onMediaMimeTypeChanged: loadMediaContent(model.url, model.mimeType)
 
         Component.onCompleted: {
             // workaround for lack of PathView.currentItem in QtQuick1

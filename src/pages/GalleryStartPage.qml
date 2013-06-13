@@ -1,8 +1,9 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Silica.theme 1.0
 import Sailfish.Silica.private 1.0
 import com.jolla.gallery 1.0
-import QtMobility.gallery 1.1
+import QtDocGallery 5.0
 
 Page {
     id: startPage
@@ -33,20 +34,20 @@ Page {
                 objectName: "countLabel"
                 anchors {
                     right: thumbnail.left
-                    rightMargin: theme.paddingLarge
+                    rightMargin: Theme.paddingLarge
                     verticalCenter: parent.verticalCenter
                 }
                 opacity: 0.4
                 text: media.count
-                color: delegateItem.down ? theme.highlightColor : theme.primaryColor
-                font.pixelSize: theme.fontSizeLarge
+                color: delegateItem.down ? Theme.highlightColor : Theme.primaryColor
+                font.pixelSize: Theme.fontSizeLarge
             }
 
             // Load icon from a plugin
             Loader {
                 id: thumbnail
-                x: theme.itemSizeExtraLarge
-                width: theme.itemSizeExtraLarge
+                x: Theme.itemSizeExtraLarge
+                width: Theme.itemSizeExtraLarge
                 height: width
                 source: media.icon != "" ? media.icon : "PhotoIcon.qml"
                 opacity: delegateItem.down ? 0.5 : 1
@@ -56,13 +57,13 @@ Page {
                 id: titleLabel
                 objectName: "titleLabel"
                 elide: Text.ElideRight
-                font.pixelSize: theme.fontSizeLarge
+                font.pixelSize: Theme.fontSizeLarge
                 text: media.title
-                color: delegateItem.down ? theme.highlightColor : theme.primaryColor
+                color: delegateItem.down ? Theme.highlightColor : Theme.primaryColor
                 anchors {
                     left: thumbnail.right
                     right: parent.right
-                    leftMargin: theme.paddingLarge
+                    leftMargin: Theme.paddingLarge
                     verticalCenter: parent.verticalCenter
                 }
             }

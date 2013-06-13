@@ -6,30 +6,35 @@ Group:      Applications/Multimedia
 License:    TBD
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
-BuildRequires:  pkgconfig(QtCore) >= 4.8.0
-BuildRequires:  pkgconfig(QtDeclarative)
-BuildRequires:  pkgconfig(QtGui)
-BuildRequires:  pkgconfig(QtOpenGL)
-BuildRequires:  pkgconfig(QtNetwork)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Qml)
+BuildRequires:  pkgconfig(Qt5Quick)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5OpenGL)
+BuildRequires:  pkgconfig(Qt5Network)
+BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(Qt5Concurrent)
 BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig(mlite)
-BuildRequires:  pkgconfig(QtGallery)
-BuildRequires:  pkgconfig(qdeclarative-boostable)
-BuildRequires:  pkgconfig(libjollasignonuiservice)
+BuildRequires:  pkgconfig(mlite5)
+BuildRequires:  pkgconfig(Qt5DocGallery)
+BuildRequires:  pkgconfig(qdeclarative5-boostable)
+BuildRequires:  qt5-qttools
+BuildRequires:  qt5-qttools-linguist
+#BuildRequires:  pkgconfig(libjollasignonuiservice)
 
 Requires:  ambient-icons-closed
-Requires:  sailfishsilica >= 0.8.40
-Requires:  libdeclarative-gallery
-Requires:  mapplauncherd-booster-jolla
-Requires:  libdeclarative-multimedia
-Requires:  declarative-transferengine => 0.0.12
-Requires:  nemo-qml-plugins-accounts
-Requires:  nemo-qml-plugins-gstvideo-thumbnailer
-Requires:  nemo-qml-plugins-thumbnailer
-Requires:  jolla-gallery-facebook
-Requires:  sailfish-components-accounts
-Requires:  sailfish-components-media
-Requires:  sailfish-components-gallery >= 0.0.6
+Requires:  sailfishsilica-qt5
+Requires:  qt5-qtdocgallery
+Requires:  mapplauncherd-booster-silica-qt5
+Requires:  qt5-qtdeclarative-import-multimedia
+Requires:  declarative-transferengine-qt5
+Requires:  nemo-qml-plugin-accounts-qt5
+Requires:  nemo-qml-plugin-thumbnailer-qt5-video
+Requires:  nemo-qml-plugin-thumbnailer-qt5
+#Requires:  jolla-gallery-facebook
+Requires:  sailfish-components-accounts-qt5
+Requires:  sailfish-components-media-qt5
+Requires:  sailfish-components-gallery-qt5
 
 %description
 The Jolla Gallery application.
@@ -45,10 +50,10 @@ Translation source for Jolla Gallery
 %package tests
 Summary:    Unit tests for Jolla Gallery
 Group:      Applications/Multimedia
-BuildRequires:  pkgconfig(QtTest)
-BuildRequires:  pkgconfig(QtGallery)
+BuildRequires:  pkgconfig(Qt5Test)
+BuildRequires:  pkgconfig(Qt5DocGallery)
 Requires:   %{name} = %{version}-%{release}
-Requires:   qtest-qml
+Requires:   qt5-qtdeclarative-import-qttest
 
 %description tests
 This package contains QML unit tests for Jolla Gallery application
@@ -58,13 +63,13 @@ This package contains QML unit tests for Jolla Gallery application
 
 %build
 
-%qmake
+%qmake5
 
 make %{?jobs:-j%jobs}
 
 %install
 rm -rf %{buildroot}
-%qmake_install
+%qmake5_install
 chmod +x %{buildroot}/opt/tests/jolla-gallery/auto/run-tests.sh
 
 desktop-file-install --delete-original       \
@@ -78,8 +83,8 @@ desktop-file-install --delete-original       \
 %{_bindir}/jolla-gallery
 %{_datadir}/translations/gallery_eng_en.qm
 %{_datadir}/dbus-1/services/com.jolla.gallery.service
-%{_libdir}/qt4/imports/com/jolla/gallery/*.qml
-%{_libdir}/qt4/imports/com/jolla/gallery/qmldir
+%{_libdir}/qt5/qml/com/jolla/gallery/*.qml
+%{_libdir}/qt5/qml/com/jolla/gallery/qmldir
 
 
 %files ts-devel

@@ -3,18 +3,18 @@
 #include <QDirIterator>
 #include <QList>
 #include <QtDebug>
-#include <QDeclarativeContext>
-#include <QDeclarativeComponent>
-#include <QDeclarativeEngine>
+#include <QQmlContext>
+#include <QQmlComponent>
+#include <QQmlEngine>
 #include <QDocumentGallery>
 #include <QGalleryQueryRequest>
 #include <QGalleryResultSet>
 
 #define SOURCES_PATH "/usr/share/jolla-gallery/mediasources"
 
-QTM_USE_NAMESPACE
+using namespace QDocGallery;
 
-class AlbumContentData : public QDeclarativeContext
+class AlbumContentData : public QQmlContext
 {
     Q_OBJECT
     Q_PROPERTY(QVariant albumId READ albumId CONSTANT)
@@ -22,12 +22,12 @@ class AlbumContentData : public QDeclarativeContext
     Q_PROPERTY(int albumCount READ albumCount NOTIFY albumCountChanged)
 public:
     AlbumContentData(
-                QDeclarativeContext *parentContext,
+                QQmlContext *parentContext,
                 int index,
                 QGalleryResultSet *resultSet,
                 int titleKey,
                 int countKey)
-        : QDeclarativeContext(parentContext)
+        : QQmlContext(parentContext)
         , source(0)
         , m_resultSet(resultSet)
         , m_index(index)
@@ -77,7 +77,7 @@ public:
 
     void queryAlbums();
 
-    static void source_append(QDeclarativeListProperty<DeclarativeMediaSource> *property, DeclarativeMediaSource *source)
+    static void source_append(QQmlListProperty<DeclarativeMediaSource> *property, DeclarativeMediaSource *source)
     {
         DeclarativeMediaModelPrivate *d = static_cast<DeclarativeMediaModelPrivate *>(property->data);
         DeclarativeMediaModel *q = static_cast<DeclarativeMediaModel *>(property->object);
@@ -87,20 +87,28 @@ public:
             q->updateActiveSources();
     }
 
-    static int source_count(QDeclarativeListProperty<DeclarativeMediaSource> *property)
+    static int source_count(QQmlListProperty<DeclarativeMediaSource> *property)
     {
         DeclarativeMediaModelPrivate *d = static_cast<DeclarativeMediaModelPrivate *>(property->data);
         return d->m_activeSources.count();
     }
 
-    static DeclarativeMediaSource *source_at(QDeclarativeListProperty<DeclarativeMediaSource> *property, int index)
+    static DeclarativeMediaSource *source_at(QQmlListProperty<DeclarativeMediaSource> *property, int index)
     {
         DeclarativeMediaModelPrivate *d = static_cast<DeclarativeMediaModelPrivate *>(property->data);
         return d->m_activeSources.at(index);
     }
 
+    static void source_clear(QQmlListProperty<DeclarativeMediaSource> *property)
+    {
+        DeclarativeMediaModelPrivate *d = static_cast<DeclarativeMediaModelPrivate *>(property->data);
+        DeclarativeMediaModel *q = static_cast<DeclarativeMediaModel *>(property->object);
+        d->m_staticSources.clear();
+        q->updateActiveSources();
+    }
+
     DeclarativeMediaModel *q_ptr;
-    QDeclarativeComponent *m_albumDelegate;
+    QQmlComponent *m_albumDelegate;
     QList<DeclarativeMediaSource *> m_staticSources;
     QList<AlbumContentData *> m_albumSources;
     QList<DeclarativeMediaSource *> m_pluginSources;
@@ -137,10 +145,6 @@ DeclarativeMediaModel::DeclarativeMediaModel(QObject *parent) :
     QAbstractListModel(parent),
     d_ptr(new DeclarativeMediaModelPrivate(this))
 {
-    QHash<int, QByteArray> roles;
-    roles[MediaRole] = "media";
-    setRoleNames(roles);
-
     d_ptr->m_sourcesPath = QLatin1String(SOURCES_PATH);
 }
 
@@ -149,10 +153,6 @@ DeclarativeMediaModel::DeclarativeMediaModel(const QString &sourcesPath, QObject
     : QAbstractListModel(parent)
     , d_ptr(new DeclarativeMediaModelPrivate(this))
 {
-    QHash<int, QByteArray> roles;
-    roles[MediaRole] = "media";
-    setRoleNames(roles);
-
     d_ptr->m_sourcesPath = sourcesPath;
 }
 
@@ -160,6 +160,13 @@ DeclarativeMediaModel::~DeclarativeMediaModel()
 {
     delete d_ptr;
     d_ptr = 0;
+}
+
+QHash<int, QByteArray> DeclarativeMediaModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles[MediaRole] = "media";
+    return roles;
 }
 
 void DeclarativeMediaModel::classBegin()
@@ -173,7 +180,7 @@ void DeclarativeMediaModel::componentComplete()
         return;
     d->m_componentComplete = true;
 
-    QDeclarativeContext *context = qmlContext(this);
+    QQmlContext *context = qmlContext(this);
 
     QDirIterator dir(d->m_sourcesPath);
 
@@ -182,7 +189,7 @@ void DeclarativeMediaModel::componentComplete()
         if (!fileName.endsWith(QLatin1String(".qml")))
             continue;
 
-        QDeclarativeComponent component(context->engine(), fileName);
+        QQmlComponent component(context->engine(), fileName);
         if (component.isReady()) {
             QObject *object = component.create();   // Create in the root context.
             if (DeclarativeMediaSource *mediaSource = qobject_cast<DeclarativeMediaSource *>(object)) {
@@ -194,7 +201,7 @@ void DeclarativeMediaModel::componentComplete()
             }
         }
         if (component.isError()) {
-            Q_FOREACH(QDeclarativeError error, component.errors()) {
+            Q_FOREACH(QQmlError error, component.errors()) {
                 qWarning() << error.toString();
             }
         }
@@ -216,24 +223,25 @@ void DeclarativeMediaModel::componentComplete()
 }
 
 
-QDeclarativeListProperty<DeclarativeMediaSource> DeclarativeMediaModel::sources()
+QQmlListProperty<DeclarativeMediaSource> DeclarativeMediaModel::sources()
 {
     Q_D(DeclarativeMediaModel);
-    return QDeclarativeListProperty<DeclarativeMediaSource>(
+    return QQmlListProperty<DeclarativeMediaSource>(
                 this,
                 d,
                 DeclarativeMediaModelPrivate::source_append,
                 DeclarativeMediaModelPrivate::source_count,
-                DeclarativeMediaModelPrivate::source_at);
+                DeclarativeMediaModelPrivate::source_at,
+                DeclarativeMediaModelPrivate::source_clear);
 }
 
-QDeclarativeComponent *DeclarativeMediaModel::albumDelegate() const
+QQmlComponent *DeclarativeMediaModel::albumDelegate() const
 {
     Q_D(const DeclarativeMediaModel);
     return d->m_albumDelegate;
 }
 
-void DeclarativeMediaModel::setAlbumDelegate(QDeclarativeComponent *delegate)
+void DeclarativeMediaModel::setAlbumDelegate(QQmlComponent *delegate)
 {
     Q_D(DeclarativeMediaModel);
     if (d->m_albumDelegate != delegate) {
@@ -361,7 +369,7 @@ void DeclarativeMediaModel::albumsInserted(int index, int count)
     const int titleKey = resultSet->propertyKey(QDocumentGallery::title);
     const int countKey = resultSet->propertyKey(QDocumentGallery::count);
 
-    QDeclarativeContext *context = d->m_albumDelegate->creationContext();
+    QQmlContext *context = d->m_albumDelegate->creationContext();
     if (!context)
         context = qmlContext(this);
 

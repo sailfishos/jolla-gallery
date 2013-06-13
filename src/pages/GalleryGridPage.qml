@@ -1,6 +1,7 @@
-import QtQuick 1.1
+import QtQuick 2.0
 import Sailfish.Silica 1.0
-import QtMobility.gallery 1.1
+import Sailfish.Silica.theme 1.0
+import QtDocGallery 5.0
 import com.jolla.gallery 1.0
 import Sailfish.Gallery 1.0
 import "scripts/AlbumManager.js" as AlbumManager
@@ -166,7 +167,7 @@ MediaSourcePage {
             y: parent.size
             x: -parent.x
             width: grid.width
-            height: theme.itemSizeSmall
+            height: Theme.itemSizeSmall
 
             SequentialAnimation {
                 id: destroyAnim

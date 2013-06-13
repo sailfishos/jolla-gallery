@@ -2,23 +2,23 @@
 #define DECLARATIVEMEDIAMODEL_H
 
 #include <QAbstractListModel>
-#include <QDeclarativeListProperty>
-#include <QDeclarativeParserStatus>
+#include <QQmlListProperty>
+#include <QQmlParserStatus>
 
 QT_BEGIN_NAMESPACE
-class QDeclarativeComponent;
+class QQmlComponent;
 QT_END_NAMESPACE
 
 class DeclarativeMediaSource;
 
 class DeclarativeMediaModelPrivate;
-class DeclarativeMediaModel : public QAbstractListModel, public QDeclarativeParserStatus
+class DeclarativeMediaModel : public QAbstractListModel, public QQmlParserStatus
 {
     Q_OBJECT
-    Q_PROPERTY(QDeclarativeListProperty<DeclarativeMediaSource> sources READ sources)
+    Q_PROPERTY(QQmlListProperty<DeclarativeMediaSource> sources READ sources)
     Q_PROPERTY(int count READ rowCount NOTIFY sourcesChanged)
-    Q_PROPERTY(QDeclarativeComponent *albumDelegate READ albumDelegate WRITE setAlbumDelegate NOTIFY albumDelegateChanged)
-    Q_INTERFACES(QDeclarativeParserStatus)
+    Q_PROPERTY(QQmlComponent *albumDelegate READ albumDelegate WRITE setAlbumDelegate NOTIFY albumDelegateChanged)
+    Q_INTERFACES(QQmlParserStatus)
     Q_CLASSINFO("DefaultProperty", "sources")
 public:
     enum MediaModelRoles {
@@ -33,10 +33,10 @@ public:
     void classBegin();
     void componentComplete();
 
-    QDeclarativeListProperty<DeclarativeMediaSource> sources();
+    QQmlListProperty<DeclarativeMediaSource> sources();
 
-    QDeclarativeComponent *albumDelegate() const;
-    void setAlbumDelegate(QDeclarativeComponent *albumDelegate);
+    QQmlComponent *albumDelegate() const;
+    void setAlbumDelegate(QQmlComponent *albumDelegate);
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
     int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
@@ -47,6 +47,9 @@ public:
 Q_SIGNALS:
     void sourcesChanged();
     void albumDelegateChanged();
+
+protected:
+    virtual QHash<int, QByteArray> roleNames() const;
 
 private slots:
     void updateActiveSources();

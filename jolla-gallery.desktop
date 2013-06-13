@@ -3,6 +3,6 @@ Type=Application
 Name=Gallery
 Name[zh_CN]=照片库
 Icon=icon-launcher-gallery
-Exec=invoker --type=j -s /usr/bin/jolla-gallery
+Exec=invoker -s --type=silica-qt5 /usr/bin/jolla-gallery
 Comment=Jolla Gallery
 
