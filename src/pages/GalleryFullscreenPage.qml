@@ -132,7 +132,9 @@ SplitViewPage {
             }
 
             onClicked: {
-                jolla_signon_ui_service.inProcessParent = fullscreenPage
+                if (typeof jolla_signon_ui_service !== "undefined") {
+                    jolla_signon_ui_service.inProcessParent = fullscreenPage
+                }
                 pageStack.push(accountsPage)
             }
         }
