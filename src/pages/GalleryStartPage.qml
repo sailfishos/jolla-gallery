@@ -2,6 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Silica.theme 1.0
 import Sailfish.Silica.private 1.0
+import Sailfish.AlbumGallery 1.0
 import com.jolla.gallery 1.0
 import QtDocGallery 5.0
 
@@ -99,19 +100,6 @@ Page {
                 filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Videos/" }
             }
 
-            albumDelegate: MediaSource {
-                model: DocumentGalleryModel {
-                    id: albumModel
-                    properties: [ "url", "mimeType", "title", "dateTaken" ]
-                    sortProperties: ["-dateTaken"]
-                    autoUpdate: true
-                    rootType: DocumentGallery.Image
-                    rootItem: albumId
-                }
-                title: albumTitle
-                count: albumModel.count
-                ready: true
-            }
         }
     }
 

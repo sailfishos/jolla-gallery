@@ -4,6 +4,7 @@ import Sailfish.Silica.theme 1.0
 import Sailfish.Gallery 1.0
 import Sailfish.TransferEngine 1.0
 import Sailfish.Accounts 1.0
+import Sailfish.AlbumGallery 1.0
 import com.jolla.gallery 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
@@ -41,9 +42,15 @@ SplitViewPage {
         source: model.get(currentIndex).url
     }
 
+    /*
     Wallpaper {
         id: wallpaper
         onSourceChanged: AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", source)
+    }
+    */
+
+    AmbienceManager {
+        id: am
     }
 
     SailfishTransferMethodsModel {
@@ -94,7 +101,7 @@ SplitViewPage {
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
 
-                onClicked: wallpaper.source = imageList.currentItemUrl()
+                onClicked: {am.source = model.get(currentIndex).url; am.setAmbience()}//wallpaper.source = imageList.currentItemUrl()
                 visible:  imageList.currentItemIsImage
             }
         }
