@@ -4,7 +4,7 @@ import Sailfish.Silica.theme 1.0
 import Sailfish.Gallery 1.0
 import Sailfish.TransferEngine 1.0
 import Sailfish.Accounts 1.0
-import Sailfish.AlbumGallery 1.0
+import Sailfish.Ambience 1.0
 import com.jolla.gallery 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
@@ -41,13 +41,6 @@ SplitViewPage {
         id: fileInfo
         source: model.get(currentIndex).url
     }
-
-    /*
-    Wallpaper {
-        id: wallpaper
-        onSourceChanged: AlbumManager.addToAlbum("<urn:jolla-gallery:albums:wallpapers>", source)
-    }
-    */
 
     AmbienceManager {
         id: am
