@@ -51,6 +51,11 @@ Page {
                 height: width
                 source: media.icon != "" ? media.icon : "PhotoIcon.qml"
                 opacity: delegateItem.down ? 0.5 : 1
+                onStatusChanged: {
+                    if (status == Loader.Ready) {
+                        item.model = media.model
+                    }
+                }
             }
 
             Label {
