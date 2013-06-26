@@ -42,10 +42,6 @@ SplitViewPage {
         source: model.get(currentIndex).url
     }
 
-    AmbienceManager {
-        id: am
-    }
-
     SailfishTransferMethodsModel {
         id: transferMethodsModel
         filter: fileInfo.localFile ? fullscreenPage.model.get(fullscreenPage.currentIndex).mimeType : ""
@@ -94,7 +90,7 @@ SplitViewPage {
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
 
-                onClicked: {am.source = model.get(currentIndex).url; am.setAmbience()}//wallpaper.source = imageList.currentItemUrl()
+                onClicked: { Ambience.source = model.get(currentIndex).url }//wallpaper.source = imageList.currentItemUrl()
                 visible:  imageList.currentItemIsImage
             }
         }
