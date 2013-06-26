@@ -9,7 +9,7 @@
 #include <QLocale>
 
 #include <QtDBus/QDBusConnection>
-//#include <libjollasignonuiservice/signonuiservice.h>
+#include <signonuiservice.h>
 
 #include "declarativewallpaper.h"
 #include "declarativemediamodel.h"
@@ -60,7 +60,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qApp->installTranslator(&translator);
 
     // We want to have SignonUI in process, if user wants to create account from Gallery
-    /*XXX Qt5 Port
     SignonUiService *ssoui = new SignonUiService(0, true); // in process
     ssoui->setInProcessServiceName(QLatin1String("com.jolla.gallery"));
     ssoui->setInProcessObjectPath(QLatin1String("/JollaGallerySignonUi"));
@@ -77,7 +76,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     }
 
     view->rootContext()->setContextProperty("jolla_signon_ui_service", ssoui);
-    */
 
     qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
@@ -94,12 +92,11 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     int retn = app->exec();
 
-/*
     if (registeredService)
         sessionBus.unregisterService(QLatin1String("com.jolla.gallery"));
     if (registeredObject)
         sessionBus.unregisterObject(QLatin1String("/JollaGallerySignonUi"));
     delete ssoui;
-*/
+
     return retn;
 }
