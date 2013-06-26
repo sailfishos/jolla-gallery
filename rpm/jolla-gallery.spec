@@ -20,7 +20,7 @@ BuildRequires:  pkgconfig(Qt5DocGallery)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
 BuildRequires:  qt5-qttools
 BuildRequires:  qt5-qttools-linguist
-#BuildRequires:  pkgconfig(libjollasignonuiservice)
+BuildRequires:  pkgconfig(libjollasignonuiservice-qt5)
 
 Requires:  ambient-icons-closed
 Requires:  sailfishsilica-qt5
@@ -31,7 +31,7 @@ Requires:  declarative-transferengine-qt5
 Requires:  nemo-qml-plugin-accounts-qt5
 Requires:  nemo-qml-plugin-thumbnailer-qt5-video
 Requires:  nemo-qml-plugin-thumbnailer-qt5
-#Requires:  jolla-gallery-facebook
+Requires:  jolla-gallery-facebook
 Requires:  sailfish-components-accounts-qt5
 Requires:  sailfish-components-media-qt5
 Requires:  sailfish-components-gallery-qt5
