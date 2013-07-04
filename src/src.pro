@@ -33,7 +33,6 @@ component.path = $$[QT_INSTALL_QML]/$$MODULENAME
 
 
 HEADERS += \
-    declarativewallpaper.h \
     declarativemediamodel.h \
     declarativemediasource.h \
     declarativedbusinterface.h \
@@ -41,7 +40,6 @@ HEADERS += \
     declarativethreadedfileremover.h
 
 SOURCES += gallery.cpp \
-    declarativewallpaper.cpp \
     declarativemediamodel.cpp \
     declarativemediasource.cpp \
     declarativedbusinterface.cpp \

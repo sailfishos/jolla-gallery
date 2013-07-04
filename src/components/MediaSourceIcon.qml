@@ -4,6 +4,7 @@ import QtQuick 2.0
 Item {
     property bool timerEnabled: false
     property int timerInterval: 10000
+    property variant model
 
     signal timerTriggered
 

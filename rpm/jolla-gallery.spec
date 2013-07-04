@@ -35,6 +35,7 @@ Requires:  jolla-gallery-facebook
 Requires:  sailfish-components-accounts-qt5
 Requires:  sailfish-components-media-qt5
 Requires:  sailfish-components-gallery-qt5
+Requires:  ambienced
 
 %description
 The Jolla Gallery application.

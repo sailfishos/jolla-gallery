@@ -51,6 +51,11 @@ Page {
                 height: width
                 source: media.icon != "" ? media.icon : "PhotoIcon.qml"
                 opacity: delegateItem.down ? 0.5 : 1
+                onStatusChanged: {
+                    if (status == Loader.Ready) {
+                        item.model = media.model
+                    }
+                }
             }
 
             Label {
@@ -99,19 +104,6 @@ Page {
                 filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Videos/" }
             }
 
-            albumDelegate: MediaSource {
-                model: DocumentGalleryModel {
-                    id: albumModel
-                    properties: [ "url", "mimeType", "title", "dateTaken" ]
-                    sortProperties: ["-dateTaken"]
-                    autoUpdate: true
-                    rootType: DocumentGallery.Image
-                    rootItem: albumId
-                }
-                title: albumTitle
-                count: albumModel.count
-                ready: true
-            }
         }
     }
 
