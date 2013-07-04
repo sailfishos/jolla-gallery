@@ -11,7 +11,6 @@
 #include <QtDBus/QDBusConnection>
 //#include <libjollasignonuiservice/signonuiservice.h>
 
-#include "declarativewallpaper.h"
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
 #include "declarativedbusinterface.h"
@@ -83,7 +82,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
     qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
-    qmlRegisterType<DeclarativeWallpaper>("com.jolla.gallery", 1, 0, "Wallpaper");
     qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
 
     QString path = QString(DEPLOYMENT_PATH);
