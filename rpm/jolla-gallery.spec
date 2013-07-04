@@ -31,11 +31,12 @@ Requires:  declarative-transferengine-qt5
 Requires:  nemo-qml-plugin-accounts-qt5
 Requires:  nemo-qml-plugin-thumbnailer-qt5-video
 Requires:  nemo-qml-plugin-thumbnailer-qt5
-Requires:  jolla-gallery-facebook
 Requires:  sailfish-components-accounts-qt5
 Requires:  sailfish-components-media-qt5
 Requires:  sailfish-components-gallery-qt5
 Requires:  ambienced
+Requires:  jolla-gallery-ambience
+Requires:  jolla-gallery-facebook
 
 %description
 The Jolla Gallery application.
