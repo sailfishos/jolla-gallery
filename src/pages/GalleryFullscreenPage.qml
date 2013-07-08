@@ -1,11 +1,10 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import Sailfish.Silica.theme 1.0
 import Sailfish.Gallery 1.0
 import Sailfish.TransferEngine 1.0
-import Sailfish.Accounts 1.0
 import Sailfish.Ambience 1.0
 import com.jolla.gallery 1.0
+import com.jolla.settings.accounts 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
 /**
