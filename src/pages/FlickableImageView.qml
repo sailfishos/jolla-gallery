@@ -4,7 +4,6 @@ import Sailfish.Silica 1.0
 SlideshowView {
     id: view
 
-    //property Item currentItem
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem !== null && currentItem.x === 0
     property bool isPortrait
