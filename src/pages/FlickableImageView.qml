@@ -4,7 +4,7 @@ import Sailfish.Silica 1.0
 SlideshowView {
     id: view
 
-    property Item currentItem
+    //property Item currentItem
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool enableZoom: currentItem !== null && currentItem.x === 0
     property bool isPortrait
@@ -19,10 +19,6 @@ SlideshowView {
     anchors.fill: parent
     interactive: !itemScaled && count > 1
     flickDeceleration: 300
-
-    // workaround lack of PathView.positionViewAtIndex() in QtQuick1
-    highlightMoveDuration: 1
-    Component.onCompleted: highlightMoveDuration = 300
 
     delegate: MediaItemContainer {
         id: container
@@ -42,19 +38,6 @@ SlideshowView {
         onClicked: view.clicked()
 
         onMediaUrlChanged: loadMediaContent(model.url, model.mimeType)
-        onMediaMimeTypeChanged: loadMediaContent(model.url, model.mimeType)
-
-        Component.onCompleted: {
-            // workaround for lack of PathView.currentItem in QtQuick1
-            if (container.PathView.isCurrentItem) {
-                view.currentItem = container
-            }
-        }
-        // workaround for lack of PathView.currentItem in QtQuick1
-        PathView.onIsCurrentItemChanged: {
-            if (container.PathView.isCurrentItem) {
-                view.currentItem = container
-            }
-        }
-    }
+        onMediaMimeTypeChanged: loadMediaContent(model.url, model.mimeType)       
+    }   
 }
