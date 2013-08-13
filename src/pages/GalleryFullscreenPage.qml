@@ -152,9 +152,11 @@ SplitViewPage {
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
         menuOpen: fullscreenPage.opened
-        currentIndex: -1
 
         onClicked: {
+            // For some reason, PathView::currentItem == null, when currentIndex == 0. Binding it
+            // to any property doesn't seem to work until the currentIndex changes. Therefore
+            // currentItemIsImage is assigned here.
             if (currentItem) {
                 currentItemIsImage = currentItem.imageItem
             }
