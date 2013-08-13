@@ -8,7 +8,7 @@ Item {
     property string mimeType
     property bool itemScaled: mediaItem !== null && mediaItem.itemScaled
     property bool enableZoom
-    property bool imageItem: mimeType.substring(0,5) !== "video"
+    property bool imageItem
     property bool isCurrentItem
     property bool isPortrait
     property bool menuOpen
@@ -16,6 +16,9 @@ Item {
 
     signal clicked
     clip: true
+
+    // Set mediaType only after the mimeType has really set
+    onMimeTypeChanged: imageItem = mimeType.substring(0,5) == "image"
 
     Component {
         id: imageComponent

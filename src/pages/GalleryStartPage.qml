@@ -11,11 +11,8 @@ Page {
     allowedOrientations: window.allowedOrientations
 
     function showMedia(media, transition) {
-        var page = media.page != ""
-                ? Qt.resolvedUrl(media.page)
-                : Qt.resolvedUrl("GalleryGridPage.qml")
         window.pageStack.push(
-                    page,
+                    Qt.resolvedUrl(media.page),
                     { title: media.title, model: media.model },
                     transition !== undefined ? transition : PageStackAction.Animated)
     }
@@ -49,7 +46,7 @@ Page {
                 x: Theme.itemSizeExtraLarge
                 width: Theme.itemSizeExtraLarge
                 height: width
-                source: media.icon != "" ? media.icon : "PhotoIcon.qml"
+                source: media.icon
                 opacity: delegateItem.down ? 0.5 : 1
                 onStatusChanged: {
                     if (status == Loader.Ready) {
@@ -94,6 +91,8 @@ Page {
                 properties: ["url", "mimeType", "title", "dateTaken"]
                 sortProperties: ["-dateTaken"]
                 filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Pictures/" }
+                icon: "PhotoIcon.qml"
+                page: "GalleryGridPage.qml"
             }
 
             DocumentGallerySource {
@@ -102,6 +101,8 @@ Page {
                 title: qsTrId("gallery-bt-videos")
                 type: DocumentGallery.Video
                 filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Videos/" }
+                icon: "VideoIcon.qml"
+                page: "GalleryGridPage.qml"
             }
 
         }

@@ -18,7 +18,7 @@ SplitViewPage {
     id: fullscreenPage
 
     property alias model: imageList.model
-    property int currentIndex
+    property alias currentIndex: imageList.currentIndex
 
     signal deleteMedia(int index)
 
@@ -148,16 +148,19 @@ SplitViewPage {
         // XXX Qt5 Port - workaround PathView bug
         pathItemCount: 3
 
-        property bool currentItemIsImage: currentItem && currentItem.imageItem
-
+        property bool currentItemIsImage: true
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
         menuOpen: fullscreenPage.opened
+        currentIndex: -1
 
-        // can't just alias fullscreenPage.currentIndex to this currentIndex due to PathView bug
-        currentIndex: fullscreenPage.currentIndex
-        onCurrentIndexChanged: fullscreenPage.currentIndex = currentIndex
-        onClicked: fullscreenPage.open = !fullscreenPage.open
+        onClicked: {
+            if (currentItem) {
+                currentItemIsImage = currentItem.imageItem
+            }
+
+            fullscreenPage.open = !fullscreenPage.open
+        }
     }
 
     Component {
