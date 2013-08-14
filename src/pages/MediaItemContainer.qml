@@ -8,7 +8,7 @@ Item {
     property string mimeType
     property bool itemScaled: mediaItem !== null && mediaItem.itemScaled
     property bool enableZoom
-    property bool imageItem: mimeType.substring(0,5) !== "video"
+    property bool imageItem: mimeType !== null && mimeType.substring(0,5) == "image"
     property bool isCurrentItem
     property bool isPortrait
     property bool menuOpen

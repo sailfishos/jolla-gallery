@@ -102,7 +102,6 @@ MediaSourcePage {
 
             source: mediaUrl
             size: grid.cellSize
-            //thumbnailSource: thumbnailDelegate
             height: isItemExpanded ? grid.contextMenu.height + grid.cellSize : grid.cellSize
             contentYOffset: index >= grid.minOffsetIndex ? grid.expandHeight : 0.0
             z: isItemExpanded ? 1000 : 1

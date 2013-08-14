@@ -3,13 +3,13 @@ import org.nemomobile.thumbnailer 1.0
 import com.jolla.gallery 1.0
 
 MediaSourceIcon {
-    id: photoIcon
+    id: videoIcon
 
     property int galleryCount: model ? model.count : 0
 
-    onTimerTriggered: slideShow.currentIndex = (slideShow.currentIndex + 1) % galleryCount
     timerEnabled: galleryCount > 1
-    timerInterval: 8000
+    timerInterval: 12000
+    onTimerTriggered: slideShow.currentIndex = (slideShow.currentIndex + 1) % galleryCount
 
     ListView {
         id: slideShow
@@ -20,7 +20,7 @@ MediaSourceIcon {
         cacheBuffer: width * 2
         anchors.fill: parent
 
-        model: photoIcon.model
+        model: videoIcon.model
 
         delegate: Thumbnail {
             source: url
