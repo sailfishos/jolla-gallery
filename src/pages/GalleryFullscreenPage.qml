@@ -158,7 +158,7 @@ SplitViewPage {
             // to any property doesn't seem to work until the currentIndex changes. Therefore
             // currentItemIsImage is assigned here.
             if (currentItem) {
-                currentItemIsImage = currentItem.imageItem
+                currentItemIsImage = currentItem.isImage
             }
 
             fullscreenPage.open = !fullscreenPage.open

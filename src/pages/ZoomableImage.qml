@@ -6,10 +6,10 @@ SilicaFlickable {
 
     property bool itemScaled: false
     property bool menuOpen
-    property bool enableZoom: parent.enableZoom
+    property bool enableZoom
     property alias source: photo.source
-    property real minimumDimension: Math.min(window.width, window.height)
-    property real maximumDimension: Math.max(window.width, window.height)
+    property real minimumDimension: Screen.width
+    property real maximumDimension: Screen.height
     property bool isPortrait
 
     signal clicked
