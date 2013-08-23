@@ -11,6 +11,7 @@ MediaSourcePage {
     property alias currentIndex: grid.currentIndex
     property int _animationDuration: 150
     property variant _selectedItems: null
+    property int fullscreenOrientations: allowedOrientations
 
     objectName: "gridPage"
     allowedOrientations: window.allowedOrientations
@@ -126,7 +127,7 @@ MediaSourcePage {
                     return
                 }
 
-                pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
+                pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model, allowedOrientations: gridPage.fullscreenOrientations} )
                 pageStack.currentPage.deleteMedia.connect(gridPage.deleteItem)
             }
 

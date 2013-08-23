@@ -102,7 +102,7 @@ Page {
                 type: DocumentGallery.Video
                 filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Videos/" }
                 icon: "VideoIcon.qml"
-                page: "GalleryGridPage.qml"
+                page: "VideoGridPage.qml"
             }
 
         }
