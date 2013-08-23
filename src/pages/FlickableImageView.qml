@@ -1,5 +1,8 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Media 1.0
+import Sailfish.Gallery 1.0 as Gallery
+import QtMultimedia 5.0
 
 SlideshowView {
     id: view
@@ -8,6 +11,8 @@ SlideshowView {
     property bool enableZoom: currentItem !== null && currentItem.x === 0
     property bool isPortrait
     property bool menuOpen
+    property Item _activeItem
+    property bool _applicationActive: window.applicationActive
 
     signal clicked
 
@@ -19,24 +24,111 @@ SlideshowView {
     interactive: !itemScaled && count > 1
     flickDeceleration: 300
 
-    delegate: MediaItemContainer {
-        id: container
+    Component.onCompleted: {
+        if (!view._activeItem && currentItem) {
+            view._activeItem = currentItem
+            view._activeItem.active = true
+        }
+    }
 
-        property url mediaUrl: model.url
-        property string mediaMimeType: model.mimeType
+    onCurrentItemChanged: {
+        if (!view._activeItem && currentItem) {
+            view._activeItem = currentItem
+            view._activeItem.active = true
+        }
+    }
 
-        anchors { top: view.top; bottom: view.bottom }
+    onMovingChanged: {
+        if (!moving && view._activeItem != currentItem) {
+            if (view._activeItem) {
+                view._activeItem.active = false
+            }
+            mediaPlayer.stop()
+            mediaPlayer.source = ""
+            view._activeItem = currentItem
+            if (view._activeItem) {
+                view._activeItem.active = true
+            }
+        }
+    }
+
+    on_ApplicationActiveChanged: {
+        if (!_applicationActive && mediaPlayer.playbackState == MediaPlayer.PlayingState) {
+            mediaPlayer.pause()
+        }
+    }
+
+    delegate: Item {
+        id: mediaItem
+
+        property QtObject modelData: model
+        property bool isImage: model.mimeType.indexOf("image/") == 0
+        property bool active
+        property bool itemScaled: loader.item && loader.item.itemScaled
+
         width: view.width
-        menuOpen: view.menuOpen
-        enableZoom: view.enableZoom
-        isCurrentItem: container == currentItem
-        isPortrait: view.isPortrait
-        // Adjust opacity based on item position
+        height: view.height
+        clip: true
+
         opacity: Math.abs(x) <= view.width ? 1.0 -  (Math.abs(x) / view.width) : 0
 
-        onClicked: view.clicked()
+        Component {
+            id: imageComponent
 
-        onMediaUrlChanged: loadMediaContent(model.url, model.mimeType)
-        onMediaMimeTypeChanged: loadMediaContent(model.url, model.mimeType)       
+            ZoomableImage {
+                source: model.url
+                menuOpen: view.menuOpen
+                isPortrait: view.isPortrait
+                enableZoom: view.enableZoom
+
+                onClicked: view.clicked()
+            }
+        }
+
+        Component {
+            id: videoComponent
+
+            Gallery.VideoPoster {
+                property bool itemScaled
+
+                player: mediaPlayer
+
+                source: model.url
+                mimeType: model.mimeType
+                active: mediaItem.active
+
+                onClicked: {
+                   if (mediaPlayer.playbackState == MediaPlayer.PlayingState) {
+                       mediaPlayer.pause()
+                   } else {
+                       view.clicked()
+                   }
+               }
+            }
+        }
+
+        Loader {
+            id: loader
+
+            width: view.width
+            height: view.height
+
+            sourceComponent: mediaItem.isImage ? imageComponent: videoComponent
+        }
     }   
+
+    children: [
+        GStreamerVideoOutput {
+            id: video
+
+            source: MediaPlayer {
+                id: mediaPlayer
+            }
+
+            visible: mediaPlayer.playbackState != MediaPlayer.StoppedState
+            width: view.width
+            height: view.height
+            anchors.centerIn: view._activeItem
+        }
+    ]
 }
