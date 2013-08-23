@@ -12,6 +12,7 @@ SlideshowView {
     property bool isPortrait
     property bool menuOpen
     property Item _activeItem
+    property bool _applicationActive: window.applicationActive
 
     signal clicked
 
@@ -48,6 +49,12 @@ SlideshowView {
             if (view._activeItem) {
                 view._activeItem.active = true
             }
+        }
+    }
+
+    on_ApplicationActiveChanged: {
+        if (!_applicationActive && mediaPlayer.playbackState == MediaPlayer.PlayingState) {
+            mediaPlayer.pause()
         }
     }
 
