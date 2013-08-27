@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=Gallery
-Name[zh_CN]=照片库
+X-MeeGo-Logical-Id=gallery-ap-name
+X-MeeGo-Translation-Catalog=gallery
 Icon=icon-launcher-gallery
 Exec=invoker -s --type=silica-qt5 /usr/bin/jolla-gallery
 Comment=Jolla Gallery
