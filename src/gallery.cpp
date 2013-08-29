@@ -33,6 +33,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QQuickView> view(new QQuickView);
 #endif
 
+    //% "Gallery"
+    QT_TRID_NOOP("gallery-ap-name");
+
     QString translationPath("/usr/share/translations/");
 
     // First try to load translation files for gallery extensions
