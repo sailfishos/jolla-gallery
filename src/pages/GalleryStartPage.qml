@@ -106,10 +106,7 @@ Page {
                 // We need to use filters because this model fetches Files, not Videos.
                 // Tracker doesn't index the videos captured by the device as Videos yet.
                 // See JB#6559
-                filter: GalleryFilterUnion {
-                    GalleryWildcardFilter { property: "filePath"; value: StandardPaths.videos + "/*.*" }
-                    GalleryWildcardFilter { property: "filePath"; value: StandardPaths +"/Camera/*.mp4" }
-                }
+                filter: GalleryWildcardFilter { property: "filePath"; value: StandardPaths.videos + "/*.*" }
                 icon: "VideoIcon.qml"
                 page: "VideoGridPage.qml"
             }
