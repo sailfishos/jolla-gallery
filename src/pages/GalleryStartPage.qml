@@ -90,7 +90,7 @@ Page {
                 type: DocumentGallery.Image
                 properties: ["url", "mimeType", "title", "dateTaken"]
                 sortProperties: ["-dateTaken"]
-                filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Pictures/" }
+                filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.pictures }
                 icon: "PhotoIcon.qml"
                 page: "GalleryGridPage.qml"
             }
@@ -99,8 +99,14 @@ Page {
                 id: videoSource
                 //% "Videos"
                 title: qsTrId("gallery-bt-videos")
-                type: DocumentGallery.Video
-                filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Videos/" }
+                type: DocumentGallery.File
+                properties: ["url", "mimeType", "title", "dateTaken"]
+                sortProperties: ["-dateTaken"]
+
+                // We need to use filters because this model fetches Files, not Videos.
+                // Tracker doesn't index the videos captured by the device as Videos yet.
+                // See JB#6559
+                filter: GalleryWildcardFilter { property: "filePath"; value: StandardPaths.videos + "/*.*" }
                 icon: "VideoIcon.qml"
                 page: "VideoGridPage.qml"
             }
