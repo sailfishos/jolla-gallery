@@ -10,7 +10,7 @@ MediaSource {
 
     model: DocumentGalleryModel {
         id: galleryModel
-        properties: [ "url", "mimeType", "title"]
+        properties: [ "url", "mimeType", "title" ]
         autoUpdate: true
     }
     count: galleryModel.count

@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Media 1.0
-import Sailfish.Gallery 1.0 as Gallery
+import Sailfish.Gallery 1.0
 import QtMultimedia 5.0
 
 SlideshowView {
@@ -64,7 +64,7 @@ SlideshowView {
         property QtObject modelData: model
         property bool isImage: model.mimeType.indexOf("image/") == 0
         property bool active
-        property bool itemScaled: loader.item && loader.item.itemScaled
+        readonly property bool itemScaled: loader.item.scaled != undefined && loader.item.scaled
 
         width: view.width
         height: view.height
@@ -75,11 +75,12 @@ SlideshowView {
         Component {
             id: imageComponent
 
-            ZoomableImage {
+            ImageViewer {
                 source: model.url
                 menuOpen: view.menuOpen
-                isPortrait: view.isPortrait
+                fit: view.isPortrait ? Fit.Width : Fit.Height
                 enableZoom: view.enableZoom
+                orientation: model.orientation
 
                 onClicked: view.clicked()
             }
@@ -88,8 +89,8 @@ SlideshowView {
         Component {
             id: videoComponent
 
-            Gallery.VideoPoster {
-                property bool itemScaled
+            VideoPoster {
+                property bool scaled
 
                 player: mediaPlayer
 
