@@ -88,7 +88,7 @@ Page {
                 //% "Photos"
                 title: qsTrId("gallery-bt-photos")
                 type: DocumentGallery.Image
-                properties: ["url", "mimeType", "title", "dateTaken"]
+                properties: ["url", "mimeType", "title", "dateTaken", "orientation" ]
                 sortProperties: ["-dateTaken"]
                 filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.pictures }
                 icon: "PhotoIcon.qml"
@@ -100,7 +100,7 @@ Page {
                 //% "Videos"
                 title: qsTrId("gallery-bt-videos")
                 type: DocumentGallery.File
-                properties: ["url", "mimeType", "title", "dateTaken"]
+                properties: ["url", "mimeType", "title", "dateTaken", "orientation"]
                 sortProperties: ["-dateTaken"]
 
                 // We need to use filters because this model fetches Files, not Videos.
