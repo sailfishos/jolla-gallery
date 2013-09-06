@@ -12,6 +12,7 @@ MediaSourcePage {
     property int _animationDuration: 150
     property variant _selectedItems: null
     property int fullscreenOrientations: allowedOrientations
+    property int _requestedIndex: -1
 
     objectName: "gridPage"
     allowedOrientations: window.allowedOrientations
@@ -38,6 +39,24 @@ MediaSourcePage {
             }
             fileRemover.deleteFiles(_selectedItems)
         })
+    }
+
+    function requestIndex(index) {
+        _requestedIndex = index
+    }
+
+    function jumpToIndex(index) {
+        if (index < grid.columnCount)
+            grid.positionViewAtBeginning()
+        else
+            grid.positionViewAtIndex(index, GridView.Visible)
+        grid.currentIndex = index
+    }
+
+    onStatusChanged: {
+        if (status == PageStatus.Activating && _requestedIndex != -1) {
+            jumpToIndex(_requestedIndex)
+        }
     }
 
     // File remover is a threaded object which can be used for file deletion in the background.
@@ -129,6 +148,8 @@ MediaSourcePage {
 
                 pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model, allowedOrientations: gridPage.fullscreenOrientations} )
                 pageStack.currentPage.deleteMedia.connect(gridPage.deleteItem)
+                _requestedIndex = -1
+                pageStack.currentPage.requestIndex.connect(gridPage.requestIndex)
             }
 
             onPressAndHold: {

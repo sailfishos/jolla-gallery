@@ -21,6 +21,7 @@ SplitViewPage {
     property alias currentIndex: imageList.currentIndex
 
     signal deleteMedia(int index)
+    signal requestIndex(int index)
 
     objectName: "fullscreenPage"
     allowedOrientations: window.allowedOrientations
@@ -29,11 +30,7 @@ SplitViewPage {
         if (status !== PageStatus.Active) {
             return
         }
-
-        var grid = pageStack.previousPage()
-        if (grid !== null) {
-            grid.currentIndex = currentIndex
-        }
+        requestIndex(currentIndex)
     }
 
     FileInfo {
