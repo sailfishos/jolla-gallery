@@ -99,14 +99,11 @@ Page {
                 id: videoSource
                 //% "Videos"
                 title: qsTrId("gallery-bt-videos")
-                type: DocumentGallery.File
+                type: DocumentGallery.Video
                 properties: ["url", "mimeType", "title", "dateTaken", "orientation"]
                 sortProperties: ["-dateTaken"]
 
-                // We need to use filters because this model fetches Files, not Videos.
-                // Tracker doesn't index the videos captured by the device as Videos yet.
-                // See JB#6559
-                filter: GalleryWildcardFilter { property: "filePath"; value: StandardPaths.videos + "/*.*" }
+                filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.videos }
                 icon: "VideoIcon.qml"
                 page: "VideoGridPage.qml"
             }
