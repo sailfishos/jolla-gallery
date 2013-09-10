@@ -8,7 +8,6 @@ SlideshowView {
     id: view
 
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
-    property bool enableZoom: currentItem !== null && currentItem.x === 0
     property bool isPortrait
     property bool menuOpen
     property Item _activeItem
@@ -79,7 +78,6 @@ SlideshowView {
                 source: model.url
                 menuOpen: view.menuOpen
                 fit: view.isPortrait ? Fit.Width : Fit.Height
-                enableZoom: view.enableZoom
                 orientation: model.orientation
 
                 onClicked: view.clicked()
