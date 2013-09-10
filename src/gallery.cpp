@@ -16,7 +16,7 @@
 #include "declarativedbusinterface.h"
 #include "declarativefileinfo.h"
 #include "declarativethreadedfileremover.h"
-
+#include "declarativecameralauncher.h"
 
 
 #ifdef HAS_BOOSTER
@@ -84,7 +84,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
     qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
     qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
-
+    qmlRegisterSingletonType<DeclarativeCameraLauncher>("com.jolla.gallery", 1, 0, "CameraLauncher", camera_launcher_provider);
     QString path = QString(DEPLOYMENT_PATH);
 
     view->setSource(path + QLatin1String("gallery.qml"));
