@@ -78,7 +78,7 @@ SplitViewPage {
                 //% "Edit"
                 text: qsTrId("gallery-me-edit")
 
-                onClicked: pageStack.push(imageEditPage, {source: imageList.currentItemUrl()})
+                onClicked: pageStack.push(imageEditPage, {source: imageList.currentItemUrl(), orientation: model.get(currentIndex).orientation})
                 visible:  imageList.currentItemIsImage
             }
 
