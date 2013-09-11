@@ -31,7 +31,11 @@ SlideshowView {
     }
 
     onCurrentItemChanged: {
-        if (!view._activeItem && currentItem) {
+        if (!moving && currentItem) {
+            if (view._activeItem) {
+                view._activeItem.active = false
+            }
+
             view._activeItem = currentItem
             view._activeItem.active = true
         }
