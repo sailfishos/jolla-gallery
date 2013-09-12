@@ -132,6 +132,11 @@ SlideshowView {
             width: view.width
             height: view.height
             anchors.centerIn: view._activeItem
+
+            ScreenBlank {
+                suspend: mediaPlayer.playbackState == MediaPlayer.PlayingState
+            }
         }
     ]
+
 }
