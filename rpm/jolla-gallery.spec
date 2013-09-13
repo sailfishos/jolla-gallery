@@ -68,7 +68,7 @@ This package contains QML unit tests for Jolla Gallery application
 
 %qmake5
 
-make %{?jobs:-j%jobs}
+make %{_smp_mflags}
 
 %install
 rm -rf %{buildroot}
