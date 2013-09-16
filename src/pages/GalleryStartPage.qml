@@ -100,7 +100,7 @@ Page {
                 //% "Videos"
                 title: qsTrId("gallery-bt-videos")
                 type: DocumentGallery.Video
-                properties: ["url", "mimeType", "title", "dateTaken", "orientation"]
+                properties: ["url", "mimeType", "title", "dateTaken", "orientation", "duration"]
                 sortProperties: ["-dateTaken"]
 
                 filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.videos }

@@ -73,6 +73,8 @@ SlideshowView {
         height: view.height
         clip: true
 
+        visible: view.moving || active
+
         opacity: Math.abs(x) <= view.width ? 1.0 -  (Math.abs(x) / view.width) : 0
 
         Component {
@@ -99,6 +101,7 @@ SlideshowView {
                 source: model.url
                 mimeType: model.mimeType
                 active: mediaItem.active
+                duration: model.duration
 
                 onClicked: {
                    if (mediaPlayer.playbackState == MediaPlayer.PlayingState) {
