@@ -89,7 +89,6 @@ MediaSourcePage {
         forceUnfocusHighlight: expandHeight > 0
         header: PageHeader { title: gridPage.title }
         model: gridPage.model
-        footer: Item { height: 0 }
 
         PullDownMenu {
             MenuItem {
