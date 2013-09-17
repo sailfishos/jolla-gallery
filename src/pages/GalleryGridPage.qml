@@ -127,7 +127,7 @@ MediaSourcePage {
 
                 //: Deleting image in 5 seconds
                 //% "Deleting"
-                remorse.execute(thumbnail,
+                remorse.execute(remorseContainerComponent.createObject(thumbnail),
                                 qsTrId("gallery-la-deleting"),
                                 function() {
                                     AlbumManager.deleteMedia(thumbnail.mediaUrl)
@@ -169,6 +169,18 @@ MediaSourcePage {
                 text: qsTrId("gallery-me-delete")
                 onClicked: grid.expandItem.remove()
             }
+        }
+    }
+
+    // This container is used for making RemorseItem to follow
+    // offset changes if there are multiple deletions ongoing
+    // at the same time.
+    Component {
+        id: remorseContainerComponent
+        Item {
+            y: parent.contentYOffset
+            width: parent.width
+            height: parent.height
         }
     }
 
