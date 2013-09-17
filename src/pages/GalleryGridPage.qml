@@ -60,7 +60,6 @@ MediaSourcePage {
     }
 
     // File remover is a threaded object which can be used for file deletion in the background.
-    // TODO: The same approach could be used for editing when those are put in place.
     // TODO: Not sure how we should deal with the error cases e.g. file couldn't be deleted and
     //       we don't even have a design for that yet.
     FileRemover {
@@ -78,12 +77,12 @@ MediaSourcePage {
         id: grid
 
         property alias contextMenu: contextMenuItem
-        property Item remorseItem
         property Item expandItem
-        property real expandHeight: remorseItem != null ? remorseItem.height : contextMenu.height
+        property real expandHeight: contextMenu.height
         property int minOffsetIndex: expandItem != null
                                      ? expandItem.modelIndex + columnCount - (expandItem.modelIndex % columnCount)
                                      : 0
+
         objectName: "gridView"
         anchors.fill: parent
         unfocusHighlightEnabled: true
@@ -106,13 +105,6 @@ MediaSourcePage {
             }
         }
 
-        // Handle the closing the menu at the end of the grid
-        onContentYChanged: {
-            if (remorseItem) {
-                contentY = Math.max(remorseItem.mapToItem(contentItem, 0, remorseItem.height).y - height, contentY)
-            }
-        }
-
         delegate: ThumbnailImage {
             id: thumbnail
 
@@ -126,18 +118,20 @@ MediaSourcePage {
             contentYOffset: index >= grid.minOffsetIndex ? grid.expandHeight : 0.0
             z: isItemExpanded ? 1000 : 1
             enabled: isItemExpanded || !grid.contextMenu.active
-            GridView.onAdd: AddAnimation { target: thumbnail; duration: _animationDuration }
 
-            function remove() {
-                grid.expandItem = thumbnail
-                grid.remorseItem = removalComponent.createObject(thumbnail)
+            function remove() {                
+                var remorse = removalComponent.createObject(null)
+                remorse.z = thumbnail.z + 1
+                remorse.wrapMode = Text.Wrap
+                remorse.horizontalAlignment = Text.AlignHCenter
+
                 //: Deleting image in 5 seconds
                 //% "Deleting"
-                grid.remorseItem.remorse.execute(grid.remorseItem, qsTrId("gallery-la-deleting"),
-                                                 function() {
-                                                     removeAnimationComponent.createObject(thumbnail, { "target": thumbnail })
-                                                     AlbumManager.deleteMedia(thumbnail.mediaUrl)
-                                                 })
+                remorse.execute(remorseContainerComponent.createObject(thumbnail),
+                                qsTrId("gallery-la-deleting"),
+                                function() {
+                                    AlbumManager.deleteMedia(thumbnail.mediaUrl)
+                                })
             }
 
 
@@ -156,6 +150,13 @@ MediaSourcePage {
                 grid.expandItem = thumbnail
                 grid.contextMenu.show(thumbnail)
             }
+
+            GridView.onAdd: AddAnimation { target: thumbnail; duration: _animationDuration }
+            GridView.onRemove: SequentialAnimation {
+                PropertyAction { target: thumbnail; property: "GridView.delayRemove"; value: true }
+                NumberAnimation { target: thumbnail; properties: "opacity,scale"; to: 0; duration: 250; easing.type: Easing.InOutQuad }
+                PropertyAction { target: thumbnail; property: "GridView.delayRemove"; value: false }
+            }
         }
 
         ContextMenu {
@@ -171,45 +172,20 @@ MediaSourcePage {
         }
     }
 
+    // This container is used for making RemorseItem to follow
+    // offset changes if there are multiple deletions ongoing
+    // at the same time.
     Component {
-        id: removeAnimationComponent
-
-        RemoveAnimation {
-            running: true
-            duration: 1600
+        id: remorseContainerComponent
+        Item {
+            y: parent.contentYOffset
+            width: parent.width
+            height: parent.height
         }
     }
 
     Component {
         id: removalComponent
-        Item {
-            id: remorseContainer
-            property alias remorse: remorseItem
-            y: parent.size
-            x: -parent.x
-            width: grid.width
-            height: Theme.itemSizeSmall
-
-            SequentialAnimation {
-                id: destroyAnim
-                NumberAnimation { target: remorseContainer; property: "height"; to: 0; duration: 200 }
-                ScriptAction {
-                    script: {
-                        grid.remorseItem = null
-                        remorseContainer.destroy()
-                        grid.returnToBounds()
-                    }
-                }
-            }
-            RemorseItem {
-                id: remorseItem
-                onTriggered: destroyAnim.start()
-                onCanceled: destroyAnim.start()
-            }
-            InverseMouseArea {
-                anchors.fill: parent
-                stealPress: true
-            }
-        }
+        RemorseItem { }
     }
 }
