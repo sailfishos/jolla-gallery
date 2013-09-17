@@ -24,7 +24,7 @@ BuildRequires:  pkgconfig(libjollasignonuiservice-qt5)
 BuildRequires:  pkgconfig(contentaction5)
 
 Requires:  ambient-icons-closed
-Requires:  sailfishsilica-qt5
+Requires:  sailfishsilica-qt5 >= 0.9.18
 Requires:  qt5-qtdocgallery
 Requires:  mapplauncherd-booster-silica-qt5
 Requires:  qt5-qtdeclarative-import-multimedia
