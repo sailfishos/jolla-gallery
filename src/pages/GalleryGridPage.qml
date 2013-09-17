@@ -123,7 +123,8 @@ MediaSourcePage {
             function remove() {                
                 var remorse = removalComponent.createObject(null)
                 remorse.z = thumbnail.z + 1
-                remorse.wrapText = true
+                remorse.wrapMode = Text.Wrap
+                remorse.horizontalAlignment = Text.AlignHCenter
 
                 //: Deleting image in 5 seconds
                 //% "Deleting"
