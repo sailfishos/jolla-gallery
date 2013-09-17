@@ -1,6 +1,5 @@
 TEMPLATE = subdirs
 SUBDIRS = src translations tests
-CONFIG += ordered
 
 OTHER_FILES += \
     com.jolla.gallery.service \
