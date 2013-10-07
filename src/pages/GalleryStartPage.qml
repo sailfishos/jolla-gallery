@@ -105,7 +105,7 @@ Page {
 
                 filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.videos }
                 icon: "VideoIcon.qml"
-                page: "VideoGridPage.qml"
+                page: "GalleryGridPage.qml"
             }
 
         }

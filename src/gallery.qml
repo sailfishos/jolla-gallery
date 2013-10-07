@@ -9,14 +9,8 @@ ApplicationWindow {
 
     property bool isPortrait: orientation === Orientation.Portrait || orientation === Orientation.PortraitInverted
 
-    // All pages support portrait and landscape orientations
-    allowedOrientations: Orientation.All
-
-    // Ensure the Wallpapers album exists and has the correct translated name.
-    Component.onCompleted: {
-        //% "Ambience"
-        AlbumManager.createAlbum("<urn:jolla-gallery:albums:wallpapers>", qsTrId("gallery-bt-ambience"))
-    }
+    // Support only Landscape and Portrait, but not Inverted orientations
+    allowedOrientations: Orientation.Portrait | Orientation.Landscape
 
     FileInfo { id: thumbnailHelper }
 
