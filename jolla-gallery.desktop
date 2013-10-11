@@ -4,6 +4,9 @@ Name=Gallery
 X-MeeGo-Logical-Id=gallery-ap-name
 X-MeeGo-Translation-Catalog=gallery
 Icon=icon-launcher-gallery
-Exec=invoker -s --type=silica-qt5 /usr/bin/jolla-gallery
+Exec=invoker --type=silica-qt5 -s /usr/bin/jolla-gallery %U
 Comment=Jolla Gallery
-
+MimeType=image/jpeg;image/png;
+X-Maemo-Service=com.jolla.gallery
+X-Maemo-Object-Path=/com/jolla/gallery/ui
+X-Maemo-Method=com.jolla.gallery.ui.showImages

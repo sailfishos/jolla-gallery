@@ -19,6 +19,7 @@ SplitViewPage {
 
     property alias model: imageList.model
     property alias currentIndex: imageList.currentIndex
+    property bool imageViewerMode: false
 
     signal deleteMedia(int index)
     signal requestIndex(int index)
@@ -62,7 +63,7 @@ SplitViewPage {
             MenuItem {
                 //% "Details"
                 text: qsTrId("gallery-me-details")
-                visible: fileInfo.localFile
+                visible: fileInfo.localFile && !fullscreenPage.imageViewerMode
                 onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryDetailsPage.qml"), {modelItem: model.get(currentIndex).itemId} )
             }
 
@@ -79,7 +80,7 @@ SplitViewPage {
                 text: qsTrId("gallery-me-edit")
 
                 onClicked: pageStack.push(imageEditPage, {source: imageList.currentItemUrl(), orientation: model.get(currentIndex).orientation})
-                visible:  imageList.currentItemIsImage
+                visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
             }
 
             MenuItem {
