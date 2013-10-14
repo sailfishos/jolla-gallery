@@ -114,7 +114,7 @@ Page {
     SilicaListView {
         id: view
         objectName: "albumsView"
-
+        visible: _showOnStartup
         anchors.fill: parent
         delegate: delegate
         model: MediaSourceModel {
@@ -148,8 +148,7 @@ Page {
         }
     }
 
-    Connections {
-        target: galleryService
+    GalleryService {
 
         onOpenImages:{
             if (urls.length > 0) {

@@ -7,8 +7,6 @@
 #include <QDir>
 #include <QTranslator>
 #include <QLocale>
-#include <QDBusMessage>
-#include <QDBusPendingCall>
 #include <QtDebug>
 
 #include <QtDBus/QDBusConnection>
@@ -36,8 +34,12 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QQuickView> view(new QQuickView);
 #endif
 
-    DeclarativeGalleryService *galleryService = new DeclarativeGalleryService(app.data());
-
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    bool registeredService = connection.registerService("com.jolla.gallery");
+    if (!registeredService) {
+        qWarning() << Q_FUNC_INFO
+                   << "Failed to register com.jolla.gallery service";
+    }
     //% "Gallery"
     QT_TRID_NOOP("gallery-ap-name");
 
@@ -71,7 +73,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     ssoui->setInProcessServiceName(QLatin1String("com.jolla.gallery"));
     ssoui->setInProcessObjectPath(QLatin1String("/JollaGallerySignonUi"));
 
-
     QDBusConnection sessionBus = QDBusConnection::sessionBus();
     bool registeredObject = sessionBus.registerObject(QLatin1String("/JollaGallerySignonUi"), ssoui,
             QDBusConnection::ExportAllContents);
@@ -82,7 +83,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
                    << QLatin1String("/JollaGallerySignonUi");
     }
 
-    view->rootContext()->setContextProperty("galleryService", galleryService);
     view->rootContext()->setContextProperty("jolla_signon_ui_service", ssoui);
 
     qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
@@ -90,6 +90,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
     qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
     qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
+    qmlRegisterType<DeclarativeGalleryService>("com.jolla.gallery", 1, 0, "GalleryService");
     qmlRegisterSingletonType<DeclarativeCameraLauncher>("com.jolla.gallery", 1, 0, "CameraLauncher", camera_launcher_provider);
     QString path = QString(DEPLOYMENT_PATH);
 
@@ -99,10 +100,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     int retn = app->exec();
 
-    if (registeredObject)
+    if (registeredObject) {
         sessionBus.unregisterObject(QLatin1String("/JollaGallerySignonUi"));
+    }
     delete ssoui;
-    delete galleryService;
+    if (registeredService) {
+        sessionBus.unregisterService(QLatin1String("com.jolla.gallery"));
+    }
 
     return retn;
 }
