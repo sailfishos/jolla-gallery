@@ -218,7 +218,7 @@ Page {
             icon.source: "image://theme/icon-m-delete"
             anchors.centerIn: parent
             //: Remorse popup for multiple image deletion
-            //% "Deleting
+            //% "Deleting"
             onClicked: root.deleteClicked()
         }
     }

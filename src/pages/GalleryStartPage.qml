@@ -10,12 +10,49 @@ Page {
 
     allowedOrientations: window.allowedOrientations
 
-    function showMedia(media, transition) {
+    property Page imageViewerPage: undefined
+
+    function showMedia(media, transition, index) {
         window.pageStack.push(
                     Qt.resolvedUrl(media.page),
                     { title: media.title, model: media.model },
                     transition !== undefined ? transition : PageStackAction.Animated)
     }
+
+    function showImage(urls)
+    {
+        var createPage = true
+        if (imageViewerPage && pageStack.currentPage === imageViewerPage) {
+            createPage = false
+        } else {
+            viewerModel.clear()
+        }
+
+        for (var i=0; i < urls.length; ++i) {
+            var file = urls[i]
+            var fileType =  file.substr(file.lastIndexOf(".") + 1, file.length - 1)
+            if (fileType === "jpg") {
+                fileType = "jpeg"
+            }
+
+            viewerModel.set(viewerModel.count, {url: file, mimeType: "image/"+fileType })
+        }
+
+        if (createPage) {
+            imageViewerPage = window.pageStack.push(
+                            Qt.resolvedUrl("GalleryFullscreenPage.qml"),
+                            { title: "Photo viewer",
+                              model: viewerModel,
+                              currentIndex: viewerModel.count - urls.length,
+                              imageViewerMode: true
+                            },
+                            PageStackAction.Immediate)
+        } else {
+            imageViewerPage.currentIndex = viewerModel.count - 1
+        }
+    }
+
+    ListModel { id: viewerModel }
 
     Component {
         id: delegate
@@ -77,7 +114,7 @@ Page {
     SilicaListView {
         id: view
         objectName: "albumsView"
-
+        visible: _showOnStartup
         anchors.fill: parent
         delegate: delegate
         model: MediaSourceModel {
@@ -111,24 +148,26 @@ Page {
         }
     }
 
-    DBusAdaptor {
-        service: "com.jolla.gallery"
-        path: "/com/jolla/gallery/ui"
-        iface: "com.jolla.gallery.ui"
+    GalleryService {
 
-        signal showPhotos
-        signal showVideos
+        onOpenImages:{
+            if (urls.length > 0) {
+                showImage(urls)
+            }
+            activate()
+        }
 
-        onShowPhotos: {
+        onShowAllPhotos: {
             window.pageStack.pop(startPage, PageStackAction.Immediate)
             showMedia(photoSource, PageStackAction.Immediate)
             activate()
         }
 
-        onShowVideos: {
+        onShowAllVideos: {
             window.pageStack.pop(startPage, PageStackAction.Immediate)
             showMedia(videoSource, PageStackAction.Immediate)
             activate()
         }
     }
+
 }
