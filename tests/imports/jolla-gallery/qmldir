@@ -1,10 +1,10 @@
 plugin jollagalleryplugin
-FlickableImageView 1.0 /usr/share/jolla-gallery/pages/FlickableImageView.qml
-GalleryDetailsPage 1.0 /usr/share/jolla-gallery/pages/GalleryDetailsPage.qml
-GalleryFullscreenPage 1.0 /usr/share/jolla-gallery/pages/GalleryFullscreenPage.qml
-GalleryGridPage 1.0 /usr/share/jolla-gallery/pages/GalleryGridPage.qml
-GalleryStartPage 1.0 /usr/share/jolla-gallery/pages/GalleryStartPage.qml
-VideoPlayer 1.0 /usr/share/jolla-gallery/pages/VideoPlayer.qml
-ZoomableImage 1.0 /usr/share/jolla-gallery/pages/ZoomableImage.qml
-MediaSourcePage 1.0 /usr/lib/qt4/imports/com/jolla/gallery/MediaSourcePage.qml
-MediaSourceIcon 1.0 /usr/lib/qt4/imports/com/jolla/gallery/MediaSourceIcon.qml
+FlickableImageView 1.0 ../../../../../../../usr/share/jolla-gallery/pages/FlickableImageView.qml
+GalleryDetailsPage 1.0 ../../../../../../../usr/share/jolla-gallery/pages/GalleryDetailsPage.qml
+GalleryFullscreenPage 1.0 ../../../../../../../usr/share/jolla-gallery/pages/GalleryFullscreenPage.qml
+GalleryGridPage 1.0 ../../../../../../../usr/share/jolla-gallery/pages/GalleryGridPage.qml
+GalleryStartPage 1.0 ../../../../../../../usr/share/jolla-gallery/pages/GalleryStartPage.qml
+VideoPlayer 1.0 ../../../../../../../usr/share/jolla-gallery/pages/VideoPlayer.qml
+ZoomableImage 1.0 ../../../../../../../usr/share/jolla-gallery/pages/ZoomableImage.qml
+MediaSourcePage 1.0 ../../../../../../../usr/lib/qt5/qml/com/jolla/gallery/MediaSourcePage.qml
+MediaSourceIcon 1.0 ../../../../../../../usr/lib/qt5/qml/com/jolla/gallery/MediaSourceIcon.qml

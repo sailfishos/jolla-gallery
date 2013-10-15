@@ -2,9 +2,9 @@
 
 # Create a temporary DBus session to isolate us from the normal environment.
 export `dbus-launch`
-export QML_IMPORT_PATH=$PWD/../imports
+export QML2_IMPORT_PATH=/opt/tests/jolla-gallery/imports
 
-qmltestrunner $@
+/usr/lib/qt5/bin/qmltestrunner $@
 exit_code=$?
 
 kill $DBUS_SESSION_BUS_PID
