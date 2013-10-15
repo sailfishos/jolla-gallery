@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.1.18
+Version:    0.1.19
 Release:    1
 Group:      Applications/Multimedia
 License:    TBD
@@ -86,6 +86,7 @@ desktop-file-install --delete-original       \
 %{_bindir}/jolla-gallery
 %{_datadir}/translations/gallery_eng_en.qm
 %{_datadir}/dbus-1/services/com.jolla.gallery.service
+%{_datadir}/dbus-1/interfaces/com.jolla.gallery.xml
 %{_libdir}/qt5/qml/com/jolla/gallery/*.qml
 %{_libdir}/qt5/qml/com/jolla/gallery/qmldir
 
@@ -100,7 +101,11 @@ desktop-file-install --delete-original       \
 /opt/tests/jolla-gallery/*
 # << files tests
 
-%post -n jolla-gallery -p /sbin/ldconfig
-%postun -n jolla-gallery -p /sbin/ldconfig
+%post -n jolla-gallery
+/sbin/ldconfig
+/usr/bin/update-desktop-database -q
+
+%postun -n jolla-gallery
+/sbin/ldconfig
 
 

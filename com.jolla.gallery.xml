@@ -1,0 +1,17 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+ "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<node name="/com/jolla/gallery/ui">
+    <interface name="com.jolla.gallery.ui">
+
+        <method name="showImages">
+            <arg direction="in" type="as" name="urls"/>
+        </method>
+
+        <method name="showPhotos" />
+
+        <method name="showVideos" />
+
+   </interface>
+</node>
+

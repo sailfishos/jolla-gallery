@@ -3,6 +3,7 @@ SUBDIRS = src translations tests
 
 OTHER_FILES += \
     com.jolla.gallery.service \
+    com.jolla.gallery.xml \
     jolla-gallery.desktop \
     rpm/jolla-gallery.spec \
     sources
