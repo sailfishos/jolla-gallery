@@ -19,6 +19,7 @@
 #include "declarativethreadedfileremover.h"
 #include "declarativecameralauncher.h"
 #include "declarativegalleryservice.h"
+#include "declarativetextcodec.h"
 
 #ifdef HAS_BOOSTER
 #include <MDeclarativeCache>
@@ -59,6 +60,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         qApp->installTranslator(extTranslator);
     }
 
+
     // Second load the gallery translation files
     QTranslator engineeringEnglish;
     engineeringEnglish.load("gallery_eng_en", translationPath);
@@ -91,6 +93,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
     qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
     qmlRegisterType<DeclarativeGalleryService>("com.jolla.gallery", 1, 0, "GalleryService");
+    qmlRegisterType<DeclarativeTextCodec>("com.jolla.gallery", 1, 0, "TextCodec");
+
     qmlRegisterSingletonType<DeclarativeCameraLauncher>("com.jolla.gallery", 1, 0, "CameraLauncher", camera_launcher_provider);
     QString path = QString(DEPLOYMENT_PATH);
 
