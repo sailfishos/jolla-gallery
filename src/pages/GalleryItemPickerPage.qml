@@ -12,8 +12,6 @@ Page {
     property string title
     signal itemsSelected(variant items)
 
-    allowedOrientations: window.allowedOrientations
-
     function deleteClicked()
     {
         // Store selected items to the array
