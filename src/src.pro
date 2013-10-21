@@ -39,10 +39,12 @@ interface.path  = /usr/share/dbus-1/interfaces/
 
 HEADERS += \
     galleryadaptor.h \
-    declarativegalleryservice.h
+    declarativegalleryservice.h \
+    declarativetextcodec.h
 SOURCES += \
     galleryadaptor.cpp \
-    declarativegalleryservice.cpp
+    declarativegalleryservice.cpp \
+    declarativetextcodec.cpp
 
 HEADERS += \
     declarativemediamodel.h \

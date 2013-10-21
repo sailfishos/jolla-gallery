@@ -7,12 +7,13 @@ import "pages/scripts/AlbumManager.js" as AlbumManager
 ApplicationWindow {
     id: window
 
-    property bool isPortrait: orientation === Orientation.Portrait || orientation === Orientation.PortraitInverted
-
-    // Support only Landscape and Portrait, but not Inverted orientations
-    allowedOrientations: Orientation.Portrait | Orientation.Landscape
-
     FileInfo { id: thumbnailHelper }
+
+    // For some reason if the gallery is launched via invoker, it sets codecForLocale to
+    // be ISO8859-1 instead of UTF-8 which causes the loading failure of the images using
+    // Chinese characters. This can be used as a workaround for a bug: JB#11179.
+    // NOTE: Setting codec in main.cpp doesn't seem to have any effect at all
+    TextCodec { codecForLocale: "UTF-8" }
 
     cover: GalleryCover {}
     initialPage: Component { GalleryStartPage {} }

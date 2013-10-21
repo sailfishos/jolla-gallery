@@ -8,8 +8,6 @@ import QtDocGallery 5.0
 Page {
     id: startPage
 
-    allowedOrientations: window.allowedOrientations
-
     property Page imageViewerPage: undefined
 
     function showMedia(media, transition, index) {
