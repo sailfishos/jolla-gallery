@@ -7,11 +7,6 @@ import "pages/scripts/AlbumManager.js" as AlbumManager
 ApplicationWindow {
     id: window
 
-    property bool isPortrait: orientation === Orientation.Portrait || orientation === Orientation.PortraitInverted
-
-    // Support only Landscape and Portrait, but not Inverted orientations
-    allowedOrientations: Orientation.Portrait | Orientation.Landscape
-
     FileInfo { id: thumbnailHelper }
 
     cover: GalleryCover {}

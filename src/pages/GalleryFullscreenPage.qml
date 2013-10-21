@@ -25,7 +25,7 @@ SplitViewPage {
     signal requestIndex(int index)
 
     objectName: "fullscreenPage"
-    allowedOrientations: window.allowedOrientations
+    allowedOrientations: open ? Orientation.Portrait : (Orientation.Portrait | Orientation.Landscape)
 
     onCurrentIndexChanged: {
         if (status !== PageStatus.Active) {
@@ -167,7 +167,6 @@ SplitViewPage {
         id: imageEditPage
 
         ImageEditPage {
-            allowedOrientations: window.allowedOrientations
             splitOpen: true
         }
     }

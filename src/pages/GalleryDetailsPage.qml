@@ -6,8 +6,6 @@ Page {
     id: detailsPage
     property alias modelItem: galleryItem.item
 
-    allowedOrientations: window.allowedOrientations
-
     DocumentGalleryItem {
         id: galleryItem
         autoUpdate: false
