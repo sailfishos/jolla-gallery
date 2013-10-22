@@ -1,11 +1,4 @@
 Name:       jolla-gallery
-
-
-%{!?qtc_qmake:%define qtc_qmake %qmake}
-%{!?qtc_qmake5:%define qtc_qmake5 %qmake5}
-%{!?qtc_make:%define qtc_make make}
-%{?qtc_builddir:%define _builddir %qtc_builddir}
-
 Summary:    Jolla Gallery application
 Version:    0.1.21
 Release:    1
