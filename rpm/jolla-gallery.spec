@@ -57,6 +57,7 @@ BuildRequires:  pkgconfig(Qt5Test)
 BuildRequires:  pkgconfig(Qt5DocGallery)
 Requires:   %{name} = %{version}-%{release}
 Requires:   qt5-qtdeclarative-import-qttest
+Requires:   qt5-qtdeclarative-devel-tools
 
 %description tests
 This package contains QML unit tests for Jolla Gallery application
