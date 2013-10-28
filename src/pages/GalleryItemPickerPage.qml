@@ -91,7 +91,7 @@ Page {
             // First time initialization
             if (model.count == 0) {
                 for(var i=0; i < docModel.count; i++) {
-                    model.insert(i, {"url": docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
+                    model.insert(i, {"url": "" + docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
 
                     // Just make the model ready when there are enough pics to show
                     if (i > 20) {
@@ -140,9 +140,9 @@ Page {
                     // New item, let's add it to the model
                     if (!found) {
                         if (i < model.count) {
-                            model.insert(i, {"url": docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
+                            model.insert(i, {"url": "" + docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
                         } else {
-                            model.append({"url": docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
+                            model.append({"url": "" + docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
                         }
                     }
 
