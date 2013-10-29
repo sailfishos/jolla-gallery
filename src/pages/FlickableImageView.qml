@@ -69,12 +69,12 @@ SlideshowView {
         property bool active
         readonly property bool itemScaled: loader.item.scaled != undefined && loader.item.scaled
 
-        // Delegate size needs to set right from the beginning or otherwise
+        // Delegate width needs to set right from the beginning or otherwise
         // the size is initially 0 and then scaled to the right size, but this
         // causes that most of the delegates will be created in the beginning
-        // causing a huge memory consumption.
+        // causing a huge memory consumption and maybe a crash.
         width: view.isPortrait ? Screen.width : Screen.height
-        height: view.isPortrait ? Screen.height : Screen.width
+        height: view.height
         clip: true
 
         visible: view.moving || active
