@@ -122,8 +122,8 @@ Page {
                 //% "Photos"
                 title: qsTrId("gallery-bt-photos")
                 type: DocumentGallery.Image
-                properties: ["url", "mimeType", "title", "dateTaken", "orientation" ]
-                sortProperties: ["-dateTaken"]
+                properties: ["url", "mimeType", "title", "orientation", "lastModified" ]
+                sortProperties: ["-lastModified"]
                 filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.pictures }
                 icon: "PhotoIcon.qml"
                 page: "GalleryGridPage.qml"

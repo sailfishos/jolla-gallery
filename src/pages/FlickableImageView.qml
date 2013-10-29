@@ -66,6 +66,7 @@ SlideshowView {
 
         property QtObject modelData: model
         property bool isImage: model.mimeType.indexOf("image/") == 0
+        property bool isJpeg: (""+ model.url).indexOf("jpeg") > 0 || ("" + model.url).indexOf("jpg") > 0
         property bool active
         readonly property bool itemScaled: loader.item.scaled != undefined && loader.item.scaled
 

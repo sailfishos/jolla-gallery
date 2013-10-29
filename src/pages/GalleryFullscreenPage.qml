@@ -81,6 +81,7 @@ SplitViewPage {
 
                 onClicked: pageStack.push(imageEditPage, {source: imageList.currentItemUrl(), orientation: model.get(currentIndex).orientation})
                 visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
+                enabled: imageList.currentItemIsJpeg
             }
 
             MenuItem {
@@ -147,6 +148,7 @@ SplitViewPage {
         pathItemCount: 3
 
         property bool currentItemIsImage: true
+        property bool currentItemIsJpeg: false
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
         menuOpen: fullscreenPage.opened
@@ -157,6 +159,7 @@ SplitViewPage {
             // currentItemIsImage is assigned here.
             if (currentItem) {
                 currentItemIsImage = currentItem.isImage
+                currentItemIsJpeg  = currentItem.isJpeg
             }
 
             fullscreenPage.open = !fullscreenPage.open
