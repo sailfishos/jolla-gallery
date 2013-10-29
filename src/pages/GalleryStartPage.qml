@@ -8,7 +8,7 @@ import QtDocGallery 5.0
 Page {
     id: startPage
 
-    property Page imageViewerPage: undefined
+    property Page imageViewerPage: null
 
     function showMedia(media, transition, index) {
         window.pageStack.push(
@@ -112,7 +112,6 @@ Page {
     SilicaListView {
         id: view
         objectName: "albumsView"
-        visible: _showOnStartup
         anchors.fill: parent
         delegate: delegate
         model: MediaSourceModel {
