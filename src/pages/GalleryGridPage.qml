@@ -192,7 +192,7 @@ MediaSourcePage {
         RemorseItem {
             //: RemorseItem cancel help text
             //% "Cancel"
-            helpText: qsTrId("gallery-la-cancel-deletion")
+            cancelText: qsTrId("gallery-la-cancel-deletion")
         }
     }
 }
