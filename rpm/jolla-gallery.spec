@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.1.23
+Version:    0.1.24
 Release:    1
 Group:      Applications/Multimedia
 License:    TBD
@@ -34,7 +34,7 @@ Requires:  nemo-qml-plugin-thumbnailer-qt5-video
 Requires:  nemo-qml-plugin-thumbnailer-qt5
 Requires:  sailfish-components-accounts-qt5
 Requires:  sailfish-components-media-qt5
-Requires:  sailfish-components-gallery-qt5 >= 0.0.15
+Requires:  sailfish-components-gallery-qt5 >= 0.0.23
 Requires:  ambienced
 Requires:  jolla-gallery-ambience
 Requires:  jolla-gallery-facebook
