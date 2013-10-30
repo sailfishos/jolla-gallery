@@ -11,9 +11,22 @@ Page {
     property Page imageViewerPage: null
 
     function showMedia(media, transition, index) {
+        var mediaType = null
+        if (media.type !== undefined) {
+            if (media.type === DocumentGallery.Image) {
+                mediaType = "photos"
+            } else
+            if (media.type === DocumentGallery.Video) {
+                mediaType = "videos"
+            }
+        }
+
         window.pageStack.push(
                     Qt.resolvedUrl(media.page),
-                    { title: media.title, model: media.model },
+                    { title: media.title,
+                      model: media.model,
+                      userData: mediaType
+                    },
                     transition !== undefined ? transition : PageStackAction.Animated)
     }
 
@@ -33,7 +46,7 @@ Page {
                 fileType = "jpeg"
             }
 
-            viewerModel.set(viewerModel.count, {url: file, mimeType: "image/"+fileType })
+            viewerModel.set(viewerModel.count, {url: file, mimeType: "image/"+fileType, title: "" })
         }
 
         if (createPage) {
@@ -124,7 +137,6 @@ Page {
                 type: DocumentGallery.Image
                 properties: ["url", "mimeType", "title", "orientation", "lastModified" ]
                 sortProperties: ["-lastModified"]
-                filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.pictures }
                 icon: "PhotoIcon.qml"
                 page: "GalleryGridPage.qml"
             }
@@ -136,8 +148,6 @@ Page {
                 type: DocumentGallery.Video
                 properties: ["url", "mimeType", "title", "dateTaken", "orientation", "duration"]
                 sortProperties: ["-dateTaken"]
-
-                filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.videos }
                 icon: "VideoIcon.qml"
                 page: "GalleryGridPage.qml"
             }
