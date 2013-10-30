@@ -90,9 +90,14 @@ MediaSourcePage {
 
         PullDownMenu {
             MenuItem {
-                //: Select multiple items for different operations
-                //% "Select "
-                text: qsTrId("gallery-me-select-prefix ") + gridPage.title
+                //: Select multiple videos for different operations
+                //% "Select videos"
+                property string selectVideosText: qsTrId("gallery-me-select-videos")
+                //: Select multiple images for different operations
+                //% "Select photos"
+                property string selectPhotosText: qsTrId("gallery-me-select-photos")
+
+                text: gridPage.userData === "photos" ? selectPhotosText : selectVideosText
                 onClicked: {
                     pageStack.push(Qt.resolvedUrl("GalleryItemPickerPage.qml"),{
                                        model: grid.model,
@@ -184,6 +189,10 @@ MediaSourcePage {
 
     Component {
         id: removalComponent
-        RemorseItem { }
+        RemorseItem {
+            //: RemorseItem cancel help text
+            //% "Cancel"
+            helpText: qsTrId("gallery-la-cancel-deletion")
+        }
     }
 }
