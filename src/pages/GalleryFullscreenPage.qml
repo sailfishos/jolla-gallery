@@ -5,6 +5,7 @@ import Sailfish.TransferEngine 1.0
 import Sailfish.Ambience 1.0
 import com.jolla.gallery 1.0
 import com.jolla.settings.accounts 1.0
+import com.jolla.signonuiservice 1.0
 import "scripts/AlbumManager.js" as AlbumManager
 
 /**
@@ -126,16 +127,21 @@ SplitViewPage {
             }
 
             onClicked: {
-                if (typeof jolla_signon_ui_service !== "undefined") {
-                    jolla_signon_ui_service.inProcessParent = fullscreenPage
-                }
-                pageStack.push(accountsPage)
+                jolla_signon_ui_service.inProcessParent = fullscreenPage
+                accountCreator.startAccountCreation()
             }
         }
 
-        Component {
-            id: accountsPage
-            AccountsPage { }
+        SignonUiService {
+            id: jolla_signon_ui_service
+            inProcessServiceName: "com.jolla.gallery"
+            inProcessObjectPath: "/JollaGallerySignonUi"
+        }
+
+        AccountCreationManager {
+            id: accountCreator
+            endDestination: fullscreenPage
+            endDestinationAction: PageStackAction.Pop
         }
     }
 
