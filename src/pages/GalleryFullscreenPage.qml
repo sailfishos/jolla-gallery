@@ -81,6 +81,7 @@ SplitViewPage {
 
                 onClicked: pageStack.push(imageEditPage, {source: imageList.currentItemUrl(), orientation: model.get(currentIndex).orientation})
                 visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
+                enabled: imageList.currentItemIsJpeg
             }
 
             MenuItem {
@@ -146,19 +147,13 @@ SplitViewPage {
         // XXX Qt5 Port - workaround PathView bug
         pathItemCount: 3
 
-        property bool currentItemIsImage: true
+        property bool currentItemIsImage: model.get(fullscreenPage.currentIndex).mimeType.indexOf("image/") == 0
+        property bool currentItemIsJpeg: model.get(fullscreenPage.currentIndex).mimeType === "image/jpeg"
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
         menuOpen: fullscreenPage.opened
 
         onClicked: {
-            // For some reason, PathView::currentItem == null, when currentIndex == 0. Binding it
-            // to any property doesn't seem to work until the currentIndex changes. Therefore
-            // currentItemIsImage is assigned here.
-            if (currentItem) {
-                currentItemIsImage = currentItem.isImage
-            }
-
             fullscreenPage.open = !fullscreenPage.open
         }
     }
