@@ -89,8 +89,9 @@ SlideshowView {
                 menuOpen: view.menuOpen
                 fit: view.isPortrait ? Fit.Width : Fit.Height
                 orientation: model.orientation
-                active: mediaItem.active
+                enableZoom: view.enableZoom
 
+                active: mediaItem.active
                 maximumWidth: model.width
                 maximumHeight: model.height
 
