@@ -2,6 +2,8 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Silica.theme 1.0
 import Sailfish.Silica.private 1.0
+import Sailfish.Gallery 1.0
+import Sailfish.Gallery.private 1.0
 import com.jolla.gallery 1.0
 import QtDocGallery 5.0
 
@@ -45,8 +47,13 @@ Page {
             if (fileType === "jpg") {
                 fileType = "jpeg"
             }
-
-            viewerModel.set(viewerModel.count, {url: file, mimeType: "image/"+fileType, title: "" })
+            metadata.source = file
+            viewerModel.set(viewerModel.count, {url: file,
+                                                mimeType: "image/"+fileType,
+                                                title: "",
+                                                orientation: metadata.orientation,
+                                                width: metadata.width,
+                                                height: metadata.height })
         }
 
         if (createPage) {
@@ -64,6 +71,7 @@ Page {
     }
 
     ListModel { id: viewerModel }
+    ImageMetadata { id: metadata }
 
     Component {
         id: delegate

@@ -90,7 +90,7 @@ SplitViewPage {
                 text: qsTrId("gallery-me-create_ambience")
 
                 onClicked: Ambience.source = model.get(currentIndex).url
-                visible:  imageList.currentItemIsImage
+                visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
             }
         }
 
