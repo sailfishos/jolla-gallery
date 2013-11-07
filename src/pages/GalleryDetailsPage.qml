@@ -14,36 +14,15 @@ Page {
         onStatusChanged: {
             if (status == DocumentGalleryItem.Finished) {
                 nameItem.value = galleryItem.metaData.fileName
-                sizeItem.value = sizeDescription(galleryItem.metaData.fileSize)
+                sizeItem.value = Format.formatFileSize(galleryItem.metaData.fileSize)
                 typeItem.value = galleryItem.metaData.mimeType
                 widthItem.value = galleryItem.metaData.width
                 heightItem.value = galleryItem.metaData.height
 
                 if (itemType == DocumentGallery.Video) {
-                    durationItem.value = durationDescription(galleryItem.metaData.duration)
+                    durationItem.value = Format.formatDuration(galleryItem.metaData.duration, Formatter.DurationLong)
                 }
             }
-        }
-
-        function sizeDescription(size) {
-            // FIXME: in french these should be mega/kilo octets
-            var bytes = parseInt(size)
-            if (bytes > (1024 * 1024)) {
-                return Math.floor(bytes / (1024 * 1024)) + 'MB'
-            }
-            if (bytes > 1024) {
-                return Math.floor(bytes / 1024) + 'KB'
-            }
-            return size + 'B'
-        }
-
-        function durationDescription(duration) {
-            var seconds = parseInt(duration)
-            var minutes = Math.floor(seconds / 60) % 60
-            var hours = Math.floor(seconds / 3600)
-            seconds %= 60
-
-            return ((hours < 10) ? '0' : '') + hours + ':' + ((minutes < 10) ? '0' : '') + minutes + ':' + ((seconds < 10) ? '0' : '') + seconds
         }
     }
 
