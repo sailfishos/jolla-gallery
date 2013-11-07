@@ -147,6 +147,7 @@ Page {
                 sortProperties: ["-lastModified"]
                 icon: "PhotoIcon.qml"
                 page: "GalleryGridPage.qml"
+                filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
             }
 
             DocumentGallerySource {
