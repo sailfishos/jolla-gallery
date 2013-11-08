@@ -19,9 +19,9 @@ SlideshowView {
         return model.get(currentIndex).url
     }
 
-    anchors.fill: parent
     interactive: !itemScaled && count > 1
     flickDeceleration: 300
+
 
     Component.onCompleted: {
         if (!view._activeItem && currentItem) {
@@ -75,7 +75,6 @@ SlideshowView {
         // causing a huge memory consumption and maybe a crash.
         width: view.isPortrait ? Screen.width : Screen.height
         height: view.height
-        clip: true
 
         visible: view.moving || active
 
@@ -125,8 +124,8 @@ SlideshowView {
         Loader {
             id: loader
 
-            width: view.width
-            height: view.height
+            width: mediaItem.width
+            height: mediaItem.height
 
             sourceComponent: mediaItem.isImage ? imageComponent: videoComponent
         }

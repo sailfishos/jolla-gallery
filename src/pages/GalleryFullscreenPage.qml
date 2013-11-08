@@ -26,7 +26,7 @@ SplitViewPage {
     signal requestIndex(int index)
 
     objectName: "fullscreenPage"
-    allowedOrientations: open ? Orientation.Portrait : (Orientation.Portrait | Orientation.Landscape)
+    allowedOrientations: (Orientation.Portrait | Orientation.Landscape)
 
     onCurrentIndexChanged: {
         if (status !== PageStatus.Active) {
@@ -155,6 +155,11 @@ SplitViewPage {
 
         property bool currentItemIsImage: model.get(fullscreenPage.currentIndex).mimeType.indexOf("image/") == 0
         property bool currentItemIsJpeg: model.get(fullscreenPage.currentIndex).mimeType === "image/jpeg"
+
+        x: -parent.x / 2
+        y: -parent.y / 2
+        width: fullscreenPage.width
+        height: fullscreenPage.height
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
         menuOpen: fullscreenPage.opened
