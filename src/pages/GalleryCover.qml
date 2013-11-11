@@ -7,6 +7,7 @@ import com.jolla.gallery 1.0
 CoverBackground {
 
     property bool contentAvailable: galleryModel && galleryModel.count > 0
+    property DocumentGalleryModel galleryModel: photosModel
 
     GridView{
         id: grid
@@ -15,15 +16,7 @@ CoverBackground {
         cellWidth: Math.floor(width / 2.0)
         cellHeight: Math.ceil(height / 3.0)
 
-        model: DocumentGalleryModel {
-            id: galleryModel
-            rootType: DocumentGallery.Image
-            properties: [ "url", "mimeType", "dateTaken" ]
-            filter: GalleryStartsWithFilter { property: "filePath"; value: "/home/nemo/Pictures/" }
-            limit: 6
-            sortProperties: ["-dateTaken"]
-            autoUpdate: true
-        }
+        model: galleryModel
 
         delegate: GalleryThumbnail {
             source: url
