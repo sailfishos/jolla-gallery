@@ -10,8 +10,8 @@ ApplicationWindow {
 
     FileInfo { id: thumbnailHelper }
 
-    property DocumentGalleryModel photosModel: photosModelComponent.createObject(window)
-    property DocumentGalleryModel videosModel: videosModelComponent.createObject(window)
+    property variant photosModel: photosModelComponent.createObject(window)
+    property variant videosModel: videosModelComponent.createObject(window)
 
     Component {
         id: photosModelComponent

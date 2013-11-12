@@ -7,7 +7,7 @@ import com.jolla.gallery 1.0
 CoverBackground {
 
     property bool contentAvailable: galleryModel && galleryModel.count > 0
-    property DocumentGalleryModel galleryModel: photosModel
+    property variant galleryModel: photosModel
 
     GridView{
         id: grid
