@@ -137,30 +137,28 @@ Page {
         delegate: delegate
         model: MediaSourceModel {
             id: mediaSourceModel
-            DocumentGallerySource {
+            MediaSource {
                 id: photoSource
                 //: Main screen
                 //% "Photos"
                 title: qsTrId("gallery-bt-photos")
-                type: DocumentGallery.Image
-                properties: ["url", "mimeType", "title", "orientation", "lastModified", "width", "height" ]
-                sortProperties: ["-lastModified"]
                 icon: "PhotoIcon.qml"
                 page: "GalleryGridPage.qml"
-                filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
+                model: photosModel
+                ready: true
+                count: model ? model.count : 0
             }
 
-            DocumentGallerySource {
+            MediaSource {
                 id: videoSource
                 //% "Videos"
                 title: qsTrId("gallery-bt-videos")
-                type: DocumentGallery.Video
-                properties: ["url", "mimeType", "title", "dateTaken", "orientation", "duration"]
-                sortProperties: ["-dateTaken"]
                 icon: "VideoIcon.qml"
                 page: "GalleryGridPage.qml"
+                model: videosModel
+                ready: true
+                count: model ? model.count : 0
             }
-
         }
     }
 
