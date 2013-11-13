@@ -4,7 +4,7 @@
 DeclarativeMediaSource::DeclarativeMediaSource()
     : m_count(0)
     , m_ready(false)
-
+    , m_type(DeclarativeMediaSource::Undefined)
 {
 }
 
@@ -89,3 +89,17 @@ void DeclarativeMediaSource::setReady(bool ready)
         emit readyChanged();
     }
 }
+
+DeclarativeMediaSource::Type DeclarativeMediaSource::type() const
+{
+    return m_type;
+}
+
+void DeclarativeMediaSource::setType(DeclarativeMediaSource::Type type)
+{
+    if (type != m_type) {
+        m_type = type;
+        emit typeChanged();
+    }
+}
+

@@ -14,13 +14,13 @@ Page {
 
     function showMedia(media, transition, index) {
         var mediaType = null
-        if (media.type !== undefined) {
-            if (media.type === DocumentGallery.Image) {
-                mediaType = "photos"
-            } else
-            if (media.type === DocumentGallery.Video) {
-                mediaType = "videos"
-            }
+        switch(media.type)
+        {
+        case MediaSource.Photos:
+            mediaType = "photos"
+            break;
+        case MediaSource.Videos:
+            mediaType = "videos"
         }
 
         window.pageStack.push(
@@ -147,6 +147,7 @@ Page {
                 model: photosModel
                 ready: true
                 count: model ? model.count : 0
+                type: MediaSource.Photos
             }
 
             MediaSource {
@@ -158,6 +159,7 @@ Page {
                 model: videosModel
                 ready: true
                 count: model ? model.count : 0
+                type: MediaSource.Videos
             }
         }
     }
