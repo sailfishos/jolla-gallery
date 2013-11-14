@@ -35,8 +35,15 @@ class DeclarativeMediaSource : public QObject
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QObject *model READ model WRITE setModel NOTIFY modelChanged)
     Q_PROPERTY(bool ready READ isReady WRITE setReady NOTIFY readyChanged)
-
+    Q_PROPERTY(Type type READ type WRITE setType NOTIFY typeChanged)
+    Q_ENUMS(Type)
 public:
+    enum Type {
+        Undefined,
+        Photos,
+        Videos
+    };
+
     DeclarativeMediaSource();
     ~DeclarativeMediaSource();
 
@@ -58,6 +65,9 @@ public:
     bool isReady() const;
     void setReady(bool ready);
 
+    Type type() const;
+    void setType(Type type);
+
 signals:
     void countChanged();
     void iconChanged();
@@ -66,6 +76,7 @@ signals:
     void titleChanged();
     void modelChanged();
     void readyChanged();
+    void typeChanged();
 
 private:
     QPointer<QObject> m_model;
@@ -75,6 +86,7 @@ private:
     QString m_title;
     int m_count;
     bool m_ready;
+    Type m_type;
 };
 
 #endif

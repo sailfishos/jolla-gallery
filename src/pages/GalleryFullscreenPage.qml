@@ -162,7 +162,7 @@ SplitViewPage {
         height: fullscreenPage.height
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
-        menuOpen: fullscreenPage.opened
+        menuOpen: fullscreenPage.open
 
         onClicked: {
             fullscreenPage.open = !fullscreenPage.open
