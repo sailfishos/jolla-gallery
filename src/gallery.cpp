@@ -40,8 +40,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         qWarning() << Q_FUNC_INFO
                    << "Failed to register com.jolla.gallery service";
     }
-    //% "Gallery"
-    QT_TRID_NOOP("gallery-ap-name");
 
     QString translationPath("/usr/share/translations/");
 
@@ -80,7 +78,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterSingletonType<DeclarativeCameraLauncher>("com.jolla.gallery", 1, 0, "CameraLauncher", camera_launcher_provider);
     QString path = QString(DEPLOYMENT_PATH);
 
-
+    //: Gallery application name
+    //% "Gallery"
+    view->setTitle(qtTrId("gallery-ap-name"));
     view->setSource(path + QLatin1String("gallery.qml"));
     view->showFullScreen();
 
