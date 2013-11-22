@@ -40,8 +40,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         qWarning() << Q_FUNC_INFO
                    << "Failed to register com.jolla.gallery service";
     }
-    //% "Gallery"
-    QT_TRID_NOOP("gallery-ap-name");
 
     QString translationPath("/usr/share/translations/");
 
