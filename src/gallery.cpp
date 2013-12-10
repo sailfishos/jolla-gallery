@@ -26,6 +26,7 @@
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
+    QQuickWindow::setDefaultAlphaBuffer(true);
 #ifdef HAS_BOOSTER
     QScopedPointer<QGuiApplication> app(MDeclarativeCache::qApplication(argc, argv));
     QScopedPointer<QQuickView> view(MDeclarativeCache::qQuickView());

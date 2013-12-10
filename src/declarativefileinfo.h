@@ -14,8 +14,12 @@ class DeclarativeFileInfo : public QObject
     Q_OBJECT
     Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(bool localFile READ localFile NOTIFY localFileChanged)
+    Q_PROPERTY(QString type READ type NOTIFY typeChanged)
+    Q_PROPERTY(QString mimeType READ mimeType NOTIFY mimeTypeChanged)
+    Q_PROPERTY(QString fileName READ fileName NOTIFY fileNameChanged)
 
 public:
+
     explicit DeclarativeFileInfo(QObject *parent = 0);
     ~DeclarativeFileInfo();
 
@@ -24,12 +28,19 @@ public:
 
     bool localFile() const;
 
+    QString type() const;
+    QString mimeType() const;
+    QString fileName() const;
+
     Q_INVOKABLE QUrl fromPercentEncoding(const QUrl &url) const;
 
 
 Q_SIGNALS:
     void sourceChanged();
     void localFileChanged();
+    void typeChanged();
+    void mimeTypeChanged();
+    void fileNameChanged();
 
 private:
     DeclarativeFileInfoPrivate *d_ptr;

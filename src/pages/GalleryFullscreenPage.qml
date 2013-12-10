@@ -42,7 +42,7 @@ SplitViewPage {
 
     SailfishTransferMethodsModel {
         id: transferMethodsModel
-        filter: fileInfo.localFile ? fullscreenPage.model.get(fullscreenPage.currentIndex).mimeType : ""
+        filter: fileInfo.localFile ? fileInfo.mimeType : ""
     }
 
     // This is the share method list, but it also

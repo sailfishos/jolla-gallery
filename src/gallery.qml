@@ -8,8 +8,6 @@ import "pages/scripts/AlbumManager.js" as AlbumManager
 ApplicationWindow {
     id: window
 
-    FileInfo { id: thumbnailHelper }
-
     property variant photosModel: photosModelComponent.createObject(window)
     property variant videosModel: videosModelComponent.createObject(window)
 

@@ -6,7 +6,7 @@ import org.nemomobile.thumbnailer 1.0
   * NOTE: At the moment it only supports photothumbnails.
   */
 
-GalleryThumbnail {
+Thumbnail {
     id: thumbnail
 
 
