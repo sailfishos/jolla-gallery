@@ -140,6 +140,7 @@ SplitViewPage {
 
         AccountCreationManager {
             id: accountCreator
+            serviceFilter: ["sharing"]
             endDestination: fullscreenPage
             endDestinationAction: PageStackAction.Pop
         }
