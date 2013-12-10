@@ -4,6 +4,7 @@
 #include "declarativedbusinterface.h"
 #include "declarativefileinfo.h"
 #include "declarativethreadedfileremover.h"
+#include "declarativegalleryservice.h"
 
 #include <QQmlExtensionPlugin>
 #include <qqml.h>
@@ -177,6 +178,13 @@ public:
     {
         Q_ASSERT(QLatin1String(uri) == QLatin1String("com.jolla.gallery"));
 
+        QDBusConnection connection = QDBusConnection::sessionBus();
+        bool registeredService = connection.registerService("com.jolla.gallery");
+        if (!registeredService) {
+            qWarning() << Q_FUNC_INFO
+                       << "Failed to register com.jolla.gallery service";
+        }
+
         qDBusRegisterMetaType<QVector<QStringList> >();
         qDBusRegisterMetaType<TrackerChange>();
         qDBusRegisterMetaType<QVector<TrackerChange> >();
@@ -186,7 +194,7 @@ public:
         qmlRegisterType<TestMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
         qmlRegisterType<TestDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");        
         qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
-
+        qmlRegisterType<DeclarativeGalleryService>("com.jolla.gallery", 1, 0, "GalleryService");
         qmlRegisterType<TestDBusService>("com.jolla.gallery.test", 1, 0, "TestDBusService");
 
     }

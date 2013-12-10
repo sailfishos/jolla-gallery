@@ -5,6 +5,8 @@ include (../imports.pri)
 
 GALLERY_SOURCE_PATH = $$PWD/../../../src
 
+system(qdbusxml2cpp -c GalleryAdaptor -a galleryadaptor.h:galleryadaptor.cpp  ../../../com.jolla.gallery.xml)
+
 QT += dbus qml quick docgallery multimedia concurrent
 CONFIG += mobility link_pkgconfig
 MOBILITY += gallery
@@ -14,11 +16,18 @@ PKGCONFIG += mlite5
 INCLUDEPATH += $$GALLERY_SOURCE_PATH
 
 HEADERS += \
+    galleryadaptor.h \
+
+SOURCES += \
+    galleryadaptor.cpp \
+
+HEADERS += \
         $$GALLERY_SOURCE_PATH/declarativedbusinterface.h \
         $$GALLERY_SOURCE_PATH/declarativemediamodel.h \
         $$GALLERY_SOURCE_PATH/declarativemediasource.h \
         $$GALLERY_SOURCE_PATH/declarativefileinfo.h \
-        $$GALLERY_SOURCE_PATH/declarativethreadedfileremover.h
+        $$GALLERY_SOURCE_PATH/declarativethreadedfileremover.h \
+        $$GALLERY_SOURCE_PATH/declarativegalleryservice.h
 
 SOURCES += \
         main.cpp \
@@ -26,7 +35,8 @@ SOURCES += \
         $$GALLERY_SOURCE_PATH/declarativemediamodel.cpp \
         $$GALLERY_SOURCE_PATH/declarativemediasource.cpp \
         $$GALLERY_SOURCE_PATH/declarativefileinfo.cpp \
-        $$GALLERY_SOURCE_PATH/declarativethreadedfileremover.cpp
+        $$GALLERY_SOURCE_PATH/declarativethreadedfileremover.cpp \
+        $$GALLERY_SOURCE_PATH/declarativegalleryservice.cpp
 
 
 import.files = qmldir

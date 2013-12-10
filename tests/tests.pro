@@ -10,4 +10,7 @@ auto.path = /opt/tests/jolla-gallery/auto
 definition.files = test-definition/tests.xml
 definition.path = /opt/tests/jolla-gallery/test-definition
 
-INSTALLS += auto definition
+images.files = images/*.jpg
+images.path = /opt/tests/jolla-gallery/auto/images
+
+INSTALLS += auto definition images
