@@ -38,6 +38,7 @@ Requires:  sailfish-components-gallery-qt5 >= 0.0.30
 Requires:  ambienced
 Requires:  jolla-gallery-ambience
 Requires:  jolla-gallery-facebook
+Requires:  jolla-settings-accounts >= 0.1.31
 
 %description
 The Jolla Gallery application.
