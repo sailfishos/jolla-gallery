@@ -3,6 +3,7 @@ import QtDocGallery 5.0
 import Sailfish.Silica 1.0
 import Sailfish.Silica.theme 1.0
 import com.jolla.gallery 1.0
+import org.nemomobile.thumbnailer 1.0
 
 CoverBackground {
 
@@ -18,7 +19,7 @@ CoverBackground {
 
         model: galleryModel
 
-        delegate: GalleryThumbnail {
+        delegate: Thumbnail {
             source: url
             mimeType: model.mimeType
             width: grid.cellWidth

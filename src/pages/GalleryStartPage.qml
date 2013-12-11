@@ -34,44 +34,52 @@ Page {
 
     function showImage(urls)
     {
-        var createPage = true
+        // To avoid mixed content e.g. videos and photos in the same model, just
+        // clear everything each time when function is called.
         if (imageViewerPage && pageStack.currentPage === imageViewerPage) {
-            createPage = false
-        } else {
-            viewerModel.clear()
+            imageViewerPage = null
+            pageStack.pop(null, PageStackAction.Immediate)
         }
+
+        viewerModel.clear()
 
         for (var i=0; i < urls.length; ++i) {
+            var props = {}
             var file = urls[i]
-            var fileType =  file.substr(file.lastIndexOf(".") + 1, file.length - 1)
-            if (fileType === "jpg") {
-                fileType = "jpeg"
+            fileInfo.source = file
+
+            if (fileInfo.type == "image") {
+                metadata.source = file
+                props = { url: file,
+                          mimeType: fileInfo.mimeType,
+                          title: fileInfo.fileName,
+                          orientation: metadata.orientation,
+                          width: metadata.width,
+                          height: metadata.height }
+            } else
+            if (fileInfo.type == "video"){
+                props = { url: file,
+                          mimeType: fileInfo.mimeType,
+                          title: fileInfo.fileName,
+                          orientation: 0 }
             }
-            metadata.source = file
-            viewerModel.set(viewerModel.count, {url: file,
-                                                mimeType: "image/"+fileType,
-                                                title: "",
-                                                orientation: metadata.orientation,
-                                                width: metadata.width,
-                                                height: metadata.height })
+
+            viewerModel.set(viewerModel.count, props)
         }
 
-        if (createPage) {
-            imageViewerPage = window.pageStack.push(
-                            Qt.resolvedUrl("GalleryFullscreenPage.qml"),
-                            { title: "Photo viewer",
-                              model: viewerModel,
-                              currentIndex: viewerModel.count - urls.length,
-                              imageViewerMode: true
-                            },
-                            PageStackAction.Immediate)
-        } else {
-            imageViewerPage.currentIndex = viewerModel.count - 1
-        }
+        imageViewerPage = window.pageStack.push(
+                        Qt.resolvedUrl("GalleryFullscreenPage.qml"),
+                        { title: "",
+                          model: viewerModel,
+                          currentIndex: viewerModel.count - urls.length,
+                          imageViewerMode: true
+                        },
+                        PageStackAction.Immediate)
     }
 
     ListModel { id: viewerModel }
     ImageMetadata { id: metadata }
+    FileInfo { id: fileInfo }
 
     Component {
         id: delegate
