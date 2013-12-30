@@ -2,7 +2,7 @@ import QtTest 1.0
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import com.jolla.gallery 1.0
-import com.jolla.gallery.test 1.0
+//import com.jolla.gallery.test 1.0
 import "scripts/Util.js" as Util
 
 ApplicationWindow {
@@ -30,6 +30,8 @@ ApplicationWindow {
 
     Component.onCompleted: fullscreenPage = pageStack.push(fullscreenPageComponent)
 
+    TestEvent { id: testEvent }
+
     TestCase {
         name: "FullscreenPage"
         when: windowShown
@@ -50,17 +52,13 @@ ApplicationWindow {
             compare(imageTitle.text, "Photo 0")
 
             imageView.currentIndex = 1
-            wait(1000)
-            compare(imageTitle.text, "Photo 1")
+            tryCompare(imageTitle, 'text', "Photo 1")
 
             imageView.currentIndex = 2
-            wait(1000)
-            compare(imageTitle.text, "Photo 2")
+            tryCompare(imageTitle, 'text', "Photo 2")
 
             imageView.currentIndex = 3
-            wait(1000)
-            compare(imageTitle.text, "Photo 3")
-
+            tryCompare(imageTitle, 'text', "Photo 3")
         }
 
         function test_accented_file_name_loading()
@@ -75,29 +73,23 @@ ApplicationWindow {
 
             wait(500)
             // First we have a photo with "" as url which should give a NULL status
-            compare(zoomableImage.status, Image.Null)
+            tryCompare(zoomableImage, 'status', Image.Null)
             // Next test loading of "non-standard" filenames
 
             accentedFileNameModel.setProperty(0, "url", "file:///opt/tests/jolla-gallery/auto/images/photo_ä_ö_å_é.jpg")
             imageView.currentIndex = 0
-            wait(700)
-            compare(zoomableImage.status, Image.Ready)
+            tryCompare(zoomableImage, 'status', Image.Ready)
 
             // QImage can't handle percent encoded values, but oth we should never even get these from the QtDocGalleryModel
             accentedFileNameModel.setProperty(0, "url", "file:///opt/tests/jolla-gallery/auto/images/photo_%101%_%E4jpg")
-            wait(700)
-            compare(zoomableImage.status, Image.Error)
+            tryCompare(zoomableImage, 'status', Image.Error)
 
             accentedFileNameModel.setProperty(0, "url", "file:///opt/tests/jolla-gallery/auto/images/photo_йггруузхц_%1.jpg")
-            wait(700)
-            compare(zoomableImage.status, Image.Ready)
+            tryCompare(zoomableImage, 'status', Image.Ready)
 
             accentedFileNameModel.setProperty(0, "url", "file:///opt/tests/jolla-gallery/auto/images/photo_我_有_你_.jpg")
-            wait(700)
-            compare(zoomableImage.status, Image.Ready)
-
+            tryCompare(zoomableImage, 'status', Image.Ready)
         }
-    }
 
     ListModel {
         id: albumModel
@@ -112,4 +104,9 @@ ApplicationWindow {
         ListElement { itemId: "photo4"; mimeType: "image/jpeg"; title: "Photo 4"; width: 453; height: 708; orientation: 0; url: "" }
     }
 
+    ListModel {
+        id: singleImageModel
+        ListElement { itemId: "photo0"; mimeType: "image/jpeg"; title: "Photo 0"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_0.jpg" }
+    }
+}
 }

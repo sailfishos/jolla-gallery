@@ -2,7 +2,7 @@ import QtTest 1.0
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import com.jolla.gallery 1.0
-import com.jolla.gallery.test 1.0
+//import com.jolla.gallery.test 1.0
 import "scripts/Util.js" as Util
 import "/usr/share/jolla-gallery/pages/scripts/AlbumManager.js" as AlbumManager
 
@@ -62,7 +62,7 @@ ApplicationWindow {
             gridPage.orientation = Orientation.Portrait
             gridView.contextMenu.hide()
 
-            testService.trackerInfoDeleted = false
+            //testService.trackerInfoDeleted = false
         }
 
         function cleanup()
@@ -183,7 +183,7 @@ ApplicationWindow {
         }
 
 
-        function test_delete_1() {
+        function test_delete() {
             verify(gridPage !== null)
             verify(gridView !== null)
             verify(gridView.contextMenu, "active", false)
@@ -203,17 +203,12 @@ ApplicationWindow {
             verify(deleteMenu !== null)
 
             deleteMenu.clicked(null)
+            var remorseItem = Util.findItemByName(item, "remorseItem")
+            compare(remorseItem.state, "active")
             wait(6000)
-
-            // For some reason these will be updated fater these checks are done.
-            // The result is checked in test_delete_2
+            compare(remorseItem.state, "activePending")
         }
 
-        function test_delete_2()
-        {
-            compare(AlbumManager.albumManager().removedFile, "file:///opt/tests/jolla-gallery/auto/images/photo_2.jpg")
-            tryCompare(testService, "trackerInfoDeleted", true)
-        }
 
         function test_delete_cancel() {
             verify(gridPage !== null)
@@ -243,9 +238,8 @@ ApplicationWindow {
             // Let timer run and cancel it after 1s
             wait(1000)
             remorseItem.clicked(null)
-            tryCompare(testService, "trackerInfoDeleted", false)
+            compare(remorseItem.state, "")
         }
-
     }
 
     ListModel {
@@ -260,32 +254,5 @@ ApplicationWindow {
         ListElement { itemId: "photo7"; mimeType: "image/jpeg"; title: "Photo 7"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_7.jpg"; lastModified: "2010-11-05T08:15:37-05:0" }
         ListElement { itemId: "photo8"; mimeType: "image/jpeg"; title: "Photo 8"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_8.jpg"; lastModified: "2010-11-05T08:15:38-05:0" }
         ListElement { itemId: "photo9"; mimeType: "image/jpeg"; title: "Photo 9"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_9.jpg"; lastModified: "2010-11-05T08:15:39-05:0" }
-    }
-
-    TestDBusService {
-        id: testService
-
-        property bool trackerInfoDeleted: false
-        property string removeQuery:
-"DELETE {
-   ?y nfo:hasMediaFileListEntry ?x
-   ?x a nfo:MediaFileListEntry
-} WHERE {
-   {?y nfo:hasMediaFileListEntry ?x}
-   {?x nfo:entryUrl 'file:///opt/tests/jolla-gallery/auto/images/photo_2.jpg'}
-} DELETE {
-   ?x a nfo:Media
-} WHERE {
-   {?x nie:url 'file:///opt/tests/jolla-gallery/auto/images/photo_2.jpg'}
-}"
-
-        onUpdate: {
-            if (argument == removeQuery) {
-                trackerInfoDeleted = true
-            } else {
-                console.log("unhandled update  query")
-                console.log(argument)
-            }
-        }
     }
 }
