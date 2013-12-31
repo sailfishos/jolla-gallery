@@ -2,7 +2,6 @@ import QtTest 1.0
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import com.jolla.gallery 1.0
-import com.jolla.gallery.test 1.0
 import "scripts/Util.js" as Util
 
 ApplicationWindow {
@@ -10,15 +9,13 @@ ApplicationWindow {
     property string currentPageName: pageStack.currentPage != null
             ? pageStack.currentPage.objectName
             : ""
-
+    property MediaSourceModel model: null
     FileInfo {
         id: thumbnailHelper
     }
 
     initialPage: GalleryStartPage {
         id: startPage
-        width: 480
-        height: 854
         objectName: "startPage"
         allowedOrientations: Orientation.Portrait
         orientation: Orientation.Portrait
@@ -28,20 +25,29 @@ ApplicationWindow {
         name: "StartPage"
         when: windowShown
 
+        function initTestCase()
+        {
+            var albumView = Util.findItemByName(startPage, "albumsView")
+            verify(albumView !== undefined)
+            model = albumView.model
+        }
 
         function cleanup() {
-            // Clear all items.
-            albumsModel.clear()
-            testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
-
             // Return to the start page
             window.pageStack.pop(null, PageStackAction.Immediate)
+
+            // Init to default model
+            var albumView = Util.findItemByName(startPage, "albumsView")
+            verify(albumView !== undefined)
+             albumView.model = model
         }
+
 
         function test_staticAlbums() {
             var albumView = Util.findItemByName(startPage, "albumsView")
+
             verify(albumView !== undefined)
-            tryCompare(albumView, "count", 2)
+            tryCompare(albumView, "count", 3)
 
             var delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == qsTrId("gallery-bt-photos")
@@ -59,58 +65,66 @@ ApplicationWindow {
             verify(delegate !== undefined)
             countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "text", "1")
-
         }
 
-        function test_dynamicAlbums() {
+
+        function test_customAlbums() {
             var albumView = Util.findItemByName(startPage, "albumsView")
             verify(albumView !== undefined)
-            compare(albumView.count, 2)
+            albumView.model = albumsModel
 
-            albumsModel.append({ "identifier": "album1", "title": "Album 1", "count": "3" })
-            albumsModel.append({ "identifier": "album2", "title": "Album 2", "count": "4" })
-
-            testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
-            tryCompare(albumView, "count", 4)
+            tryCompare(albumView, "count", 6)
+            tryCompare(albumsModel, "count", 6)
 
             var delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "Album 1"
+            }).parent
+            verify(delegate !== null)
+            var countLabel = Util.findItemByName(delegate, "countLabel")
+            tryCompare(countLabel, "text", "3")
+
+            var delegate = Util.findItem(albumView, function(item) {
+                return item.objectName == "titleLabel" && item.text == "Album 2"
+            }).parent
+            verify(delegate !== null)
+            var countLabel = Util.findItemByName(delegate, "countLabel")
+            tryCompare(countLabel, "text", "40")
+
+            var delegate = Util.findItem(albumView, function(item) {
+                return item.objectName == "titleLabel" && item.text == "Album 3"
+            }).parent
+            verify(delegate !== null)
+            var countLabel = Util.findItemByName(delegate, "countLabel")
+            tryCompare(countLabel, "text", "200")
+
+            var delegate = Util.findItem(albumView, function(item) {
+                return item.objectName == "titleLabel" && item.text == "Album 4"
+            }).parent
+            verify(delegate !== null)
+            var countLabel = Util.findItemByName(delegate, "countLabel")
+            tryCompare(countLabel, "text", "3000")
+
+            delegate = Util.findItem(albumView, function(item) {
+                return item.objectName == "titleLabel" && item.text == "Album 5"
+            }).parent
+            verify(delegate !== null)
+            countLabel = Util.findItemByName(delegate, "countLabel")
+            tryCompare(countLabel, "text", "50000")
+        }
+
+        function test_dynamicAlbum() {
+            var albumView = Util.findItemByName(startPage, "albumsView")
+
+            verify(albumView !== undefined)
+            tryCompare(albumView, "count", 3)
+
+            var delegate = Util.findItem(albumView, function(item) {
+                return item.objectName == "titleLabel" && item.text == "dynamic-gallery-album"
             }).parent
             verify(delegate !== undefined)
 
             var countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "text", "3")
-
-            delegate = Util.findItem(albumView, function(item) {
-                return item.objectName == "titleLabel" && item.text == "Album 2"
-            }).parent
-            verify(delegate !== undefined)
-            countLabel = Util.findItemByName(delegate, "countLabel")
-            tryCompare(countLabel, "text", "4")
-
-            // Remove an item.
-            albumsModel.remove(0)
-            testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
-            tryCompare(albumView, "count", 3)
-
-            delegate = Util.findItem(albumView, function(item) {
-                return item.objectName == "titleLabel" && item.text == "Album 1"
-            })
-            verify(delegate === undefined)
-
-            delegate = Util.findItem(albumView, function(item) {
-                return item.objectName == "titleLabel" && item.text == "Album 2"
-            }).parent
-            verify(delegate !== undefined)
-
-            // Restore an item
-            albumsModel.append({ "identifier": "album1", "title": "Album 1", "count": "3" })
-            testService.updateGraph("http://www.tracker-project.org/temp/nmm#ImageList")
-            tryCompare(albumView, "count", 4)
-            delegate = Util.findItem(albumView, function(item) {
-                return item.objectName == "titleLabel" && item.text == "Album 1"
-            }).parent
-            verify(delegate !== undefined)
         }
 
         function test_openAlbum() {
@@ -151,18 +165,23 @@ ApplicationWindow {
         }
     }
 
-    ListModel {
+    MediaSourceModel {
         id: albumsModel
+        MediaSource { title: "Album 1"; icon: ""; page: ""; ready: true; count: 3; type: MediaSource.Photos}
+        MediaSource { title: "Album 2"; icon: ""; page: ""; ready: true; count: 40; type: MediaSource.Photos}
+        MediaSource { title: "Album 3"; icon: ""; page: ""; ready: true; count: 200; type: MediaSource.Photos}
+        MediaSource { title: "Album 4"; icon: ""; page: ""; ready: true; count: 3000; type: MediaSource.Photos}
+        MediaSource { title: "Album 5"; icon: ""; page: ""; ready: true; count: 50000; type: MediaSource.Photos}
     }
 
     ListModel {
-        id: photoModel
+        id: photosModel
         ListElement { identifier: "photo1"; url: "/home/nemo/Pictures/photo1.jpg"; mimeType: "image/jpeg"; title: "Photo 1"; dateTaken: "2010-11-05T08:15:30-05:0" }
         ListElement { identifier: "photo2"; url: "/home/nemo/Pictures/photo2.jpg"; mimeType: "image/jpeg"; title: "Photo 2"; dateTaken: "2010-10-05T08:15:30-05:0" }
     }
 
     ListModel {
-        id: videoModel
+        id: videosModel
         ListElement { identifier: "video1"; url: "/home/nemo/Videos1.ogv"; mimeType: "video/ogg"; title: "Video 1"}
     }
 
@@ -182,40 +201,6 @@ ApplicationWindow {
         ListElement { identifier: "photo3"; url: "file:///home/nemo/Pictures/photo3.jpg"; mimeType: "image/jpeg"; title: "Photo 3"; dateTaken: "2010-09-05T08:15:30-05:0" }
         ListElement { identifier: "photo4"; url: "file:///home/nemo/Pictures/photo4.jpg"; mimeType: "image/jpeg"; title: "Photo 4"; dateTaken: "2010-08-05T08:15:30-05:0" }
     }
-
-    TestDBusService {
-        id: testService
-
-        onQuery: {
-            var model
-            var printRow
-            var printPhotoRow = function(row) { returnRow([row.identifier, "http://www.tracker-project.org/temp/nmm#Photo", row.url, row.mimeType, row.title, row.dateTaken]) }
-
-            if (argument == "SELECT ?x nie:title(?x) nfo:entryCounter(?x) WHERE {{?x rdf:type nmm:ImageList}} GROUP BY ?x ORDER BY ASC(nie:title(?x))") {
-                model = albumsModel
-                printRow  = function(row) { returnRow([row.identifier, row.title, row.count]) }
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) nie:contentCreated(?x) WHERE {{?x rdf:type nmm:Photo}FILTER(fn:starts-with(nie:url(?x),'file:///home/nemo/Pictures/'))} GROUP BY ?x ORDER BY DESC(nie:contentCreated(?x))") {
-                model = photoModel
-                printRow  = printPhotoRow
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) WHERE {{?x rdf:type nfo:Video}FILTER(fn:starts-with(nie:url(?x),'file:///home/nemo/Videos/'))} GROUP BY ?x") {
-                model = videoModel
-                printRow  = function(row) { returnRow([row.identifier, "http://www.tracker-project.org/temp/nfo#Video", row.url, row.mimeType, row.title]) }
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) nie:contentCreated(?x) WHERE {{?x rdf:type nmm:Photo}{<album1> nfo:hasMediaFileListEntry ?entry}FILTER(nie:url(?x) = nfo:entryUrl(?entry))} GROUP BY ?x ORDER BY DESC(nie:contentCreated(?x))") {
-                model = albumModel1
-                printRow  = printPhotoRow
-            } else if (argument == "SELECT ?x nie:url(?x) rdf:type(?x) nie:url(?x) nie:mimeType(?x) nie:title(?x) nie:contentCreated(?x) WHERE {{?x rdf:type nmm:Photo}{<album2> nfo:hasMediaFileListEntry ?entry}FILTER(nie:url(?x) = nfo:entryUrl(?entry))} GROUP BY ?x ORDER BY DESC(nie:contentCreated(?x))") {
-                model = albumModel2
-                printRow  = printPhotoRow
-            } else {
-                console.log("unhandled query", argument)
-                return
-            }
-
-            for (var i = 0; i < model.count; ++i)
-                printRow(model.get(i))
-        }
-    }
-
 
     DBusInterface {
         id: galleryService

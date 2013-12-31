@@ -4,6 +4,7 @@
 #include "declarativedbusinterface.h"
 #include "declarativefileinfo.h"
 #include "declarativethreadedfileremover.h"
+#include "declarativegalleryservice.h"
 
 #include <QQmlExtensionPlugin>
 #include <qqml.h>
@@ -18,153 +19,13 @@
 
 class TestDBusService;
 
-Q_DECLARE_METATYPE(QVector<QStringList>)
-
-struct TrackerChange
-{
-    int graph;
-    int subject;
-    int predicate;
-    int object;
-};
-
-QDBusArgument &operator <<(QDBusArgument &argument, const TrackerChange &change)
-{
-    argument.beginStructure();
-    argument << change.graph << change.subject << change.predicate << change.object;
-    argument.endStructure();
-    return argument;
-}
-
-const QDBusArgument &operator >>(const QDBusArgument &argument, TrackerChange &change)
-{
-    argument.beginStructure();
-    argument >> change.graph >> change.subject >> change.predicate >> change.object;
-    argument.endStructure();
-    return argument;
-}
-
-Q_DECLARE_METATYPE(TrackerChange)
-Q_DECLARE_METATYPE(QVector<TrackerChange>)
-
-class TestResourcesAdaptor : public QDBusAbstractAdaptor
-{
-    Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.freedesktop.Tracker1.Resources")
-public:
-    TestResourcesAdaptor(TestDBusService *service);
-    QVector<QStringList> returnValues;
-
-public slots:
-    QVector<QStringList> SparqlQuery(const QString &argument);
-
-    void SparqlUpdate(const QString &argument);
-
-signals:
-    void GraphUpdated(const QString &className, const QVector<TrackerChange> &deletes, const QVector<TrackerChange> &inserts);
-
-private:
-    friend class TestDBusService;
-    TestDBusService *m_service;
-};
-
-class TestDBusService : public QObject
-{
-    Q_OBJECT
-public:
-    TestDBusService(QObject *parent = 0)
-        : QObject(parent)
-        , m_resources(this)
-    {
-        if (!QDBusConnection::sessionBus().registerObject(
-                QLatin1String("/org/freedesktop/Tracker1/Resources"), this)) {
-            qWarning() << "Failed to register Resources object";
-            qWarning() << QDBusConnection::sessionBus().lastError().message();
-        } else if (!QDBusConnection::sessionBus().registerService(
-                QLatin1String("org.freedesktop.Tracker1"))) {
-            qWarning() << "Failed to register service";
-            qWarning() << QDBusConnection::sessionBus().lastError().message();
-        }
-    }
-
-    Q_INVOKABLE void updateGraph(const QString &className)
-    {
-        emit m_resources.GraphUpdated(className, QVector<TrackerChange>(), QVector<TrackerChange>());
-    }
-
-    Q_INVOKABLE void returnRow(const QStringList &row)
-    {
-        m_resources.returnValues.append(row);
-    }
-
-signals:
-    void query(const QString &argument);
-    void update(const QString &argument);
-
-private:
-    TestResourcesAdaptor m_resources;
-
-    friend class TestResourcesAdaptor;
-};
-
-TestResourcesAdaptor::TestResourcesAdaptor(TestDBusService *service)
-    : QDBusAbstractAdaptor(service)
-    , m_service(service)
-{
-}
-
-QVector<QStringList> TestResourcesAdaptor::SparqlQuery(const QString &argument)
-{
-    returnValues.clear();
-
-    emit m_service->query(argument);
-
-    return returnValues;
-}
-
-void TestResourcesAdaptor::SparqlUpdate(const QString &argument)
-{
-    emit m_service->update(argument);
-}
-
 class TestMediaModel : public DeclarativeMediaModel
 {
 public:
     TestMediaModel(QObject *parent = 0)
-        : DeclarativeMediaModel(QLatin1String("/opt/tests/jollagallery/mediasources"), parent)
+        : DeclarativeMediaModel(QLatin1String("/opt/tests/jolla-gallery/mediasources"), parent)
     {
     }
-};
-
-class TestDBusInterface : public DeclarativeDBusInterface
-{
-    Q_OBJECT
-    Q_PROPERTY(QUrl removedFile READ removedFile WRITE removeFile NOTIFY removedFileChanged)
-    Q_PROPERTY(bool allowRemove READ allowRemove WRITE setAllowRemove)
-public:
-    TestDBusInterface(QObject *parent = 0) : DeclarativeDBusInterface(parent), m_allowRemove(true) {}
-
-    QUrl removedFile() const { return m_removedFile; }
-
-    bool allowRemove() { return m_allowRemove; }
-    void setAllowRemove(bool allow) { m_allowRemove = allow; }
-
-    // Overwrite the function from DeclarativeDBusInterface.
-    Q_INVOKABLE bool removeFile(const QUrl &url)
-    {
-        if (m_allowRemove) {
-            m_removedFile = url;
-            emit removedFileChanged();
-        }
-        return m_allowRemove;
-    }
-
-signals:
-    void removedFileChanged();
-
-private:
-    QUrl m_removedFile;
-    bool m_allowRemove;
 };
 
 class JollaGalleryPlugin : public QQmlExtensionPlugin
@@ -177,18 +38,19 @@ public:
     {
         Q_ASSERT(QLatin1String(uri) == QLatin1String("com.jolla.gallery"));
 
-        qDBusRegisterMetaType<QVector<QStringList> >();
-        qDBusRegisterMetaType<TrackerChange>();
-        qDBusRegisterMetaType<QVector<TrackerChange> >();
+        QDBusConnection connection = QDBusConnection::sessionBus();
+        bool registeredService = connection.registerService("com.jolla.gallery");
+        if (!registeredService) {
+            qWarning() << Q_FUNC_INFO
+                       << "Failed to register com.jolla.gallery service";
+        }
 
         qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
         qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
         qmlRegisterType<TestMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
-        qmlRegisterType<TestDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");        
+        qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
         qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
-
-        qmlRegisterType<TestDBusService>("com.jolla.gallery.test", 1, 0, "TestDBusService");
-
+        qmlRegisterType<DeclarativeGalleryService>("com.jolla.gallery", 1, 0, "GalleryService");
     }
 };
 

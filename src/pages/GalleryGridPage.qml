@@ -73,6 +73,7 @@ MediaSourcePage {
 
     ImageGridView {
         id: grid
+        objectName: "gridView"
 
         property alias contextMenu: contextMenuItem
         property Item expandItem
@@ -81,7 +82,6 @@ MediaSourcePage {
                                      ? expandItem.modelIndex + columnCount - (expandItem.modelIndex % columnCount)
                                      : 0
 
-        objectName: "gridView"
         anchors.fill: parent
         unfocusHighlightEnabled: true
         forceUnfocusHighlight: expandHeight > 0
@@ -190,6 +190,7 @@ MediaSourcePage {
     Component {
         id: removalComponent
         RemorseItem {
+            objectName: "remorseItem"
             //: RemorseItem cancel help text
             //% "Cancel"
             cancelText: qsTrId("gallery-la-cancel-deletion")
