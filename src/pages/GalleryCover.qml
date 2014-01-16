@@ -8,8 +8,7 @@ import org.nemomobile.thumbnailer 1.0
 CoverBackground {
 
     property bool contentAvailable: galleryModel && galleryModel.count > 0
-    property variant galleryModel: photosModel
-    property variant activeObjectInfo: ({url: "", mimeType: ""})
+    property var galleryModel: photosModel
 
     GridView{
         id: grid
@@ -48,15 +47,15 @@ CoverBackground {
         // It might otherwise cause problems because changing url
         // first e.g. from image to video url without changing the
         // mimeType, makes the behavior a bit unpredictable
-        mimeType: activeObjectInfo.mimeType
-        source: activeObjectInfo.url
+        mimeType: window.activeObject.mimeType
+        source: window.activeObject.url
         priority: Thumbnail.HighPriority
         anchors.fill: parent
         smooth: true
         sourceSize.width: parent.width
         sourceSize.height: parent.height
-        opacity: activeObjectInfo.url === "" ? 0 : 1
-        Behavior on opacity { NumberAnimation { duration: 200 }}
+        opacity: window.activeObject && window.activeObject.url != "" ? 1 : 0
+        Behavior on opacity { FadeAnimation {}}
     }
 
     // We don't have a design for empty content so let's
