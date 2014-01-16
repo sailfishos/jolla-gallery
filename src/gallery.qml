@@ -10,6 +10,7 @@ ApplicationWindow {
 
     property variant photosModel: photosModelComponent.createObject(window)
     property variant videosModel: videosModelComponent.createObject(window)
+    property alias activeObject: galleryCover.activeObjectInfo
 
     Component {
         id: photosModelComponent
@@ -38,7 +39,10 @@ ApplicationWindow {
     // NOTE: Setting codec in main.cpp doesn't seem to have any effect at all
     TextCodec { codecForLocale: "UTF-8" }
 
-    cover: GalleryCover {}
+    cover: GalleryCover {
+        id: galleryCover
+    }
+
     initialPage: Component { GalleryStartPage {} }
 }
 
