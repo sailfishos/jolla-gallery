@@ -8,8 +8,9 @@ import "pages/scripts/AlbumManager.js" as AlbumManager
 ApplicationWindow {
     id: window
 
-    property variant photosModel: photosModelComponent.createObject(window)
-    property variant videosModel: videosModelComponent.createObject(window)
+    property var photosModel: photosModelComponent.createObject(window)
+    property var videosModel: videosModelComponent.createObject(window)
+    property var activeObject: ({url: "", mimeType: ""})
 
     Component {
         id: photosModelComponent
@@ -38,7 +39,8 @@ ApplicationWindow {
     // NOTE: Setting codec in main.cpp doesn't seem to have any effect at all
     TextCodec { codecForLocale: "UTF-8" }
 
-    cover: GalleryCover {}
+    cover: Qt.resolvedUrl("pages/GalleryCover.qml")
+
     initialPage: Component { GalleryStartPage {} }
 }
 

@@ -28,6 +28,15 @@ SplitViewPage {
     objectName: "fullscreenPage"
     allowedOrientations: (Orientation.Portrait | Orientation.Landscape)
 
+    // Update the Cover via window.activeObject property
+    Binding {
+        target: window
+        property: "activeObject"
+        value: fullscreenPage.status === PageStatus.Active
+               ? { url: fileInfo.source, mimeType: fileInfo.mimeType }
+               : { url: "", mimeType: ""}
+    }
+
     onCurrentIndexChanged: {
         if (status !== PageStatus.Active) {
             return

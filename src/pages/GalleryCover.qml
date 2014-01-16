@@ -8,7 +8,7 @@ import org.nemomobile.thumbnailer 1.0
 CoverBackground {
 
     property bool contentAvailable: galleryModel && galleryModel.count > 0
-    property variant galleryModel: photosModel
+    property var galleryModel: photosModel
 
     GridView{
         id: grid
@@ -39,6 +39,23 @@ CoverBackground {
         }
         opacity: 0.2
         visible: !contentAvailable
+    }
+
+    // Show the "Active object" e.g. fullscreen image or video
+    Thumbnail {
+        // NOTE: MimeType needs to be updated first if it's changed.
+        // It might otherwise cause problems because changing url
+        // first e.g. from image to video url without changing the
+        // mimeType, makes the behavior a bit unpredictable
+        mimeType: window.activeObject.mimeType
+        source: window.activeObject.url
+        priority: Thumbnail.HighPriority
+        anchors.fill: parent
+        smooth: true
+        sourceSize.width: parent.width
+        sourceSize.height: parent.height
+        opacity: window.activeObject && window.activeObject.url != "" ? 1 : 0
+        Behavior on opacity { FadeAnimation {}}
     }
 
     // We don't have a design for empty content so let's
