@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+NoDisplay=true
+Name=Gallery MimeHandler
+Icon=icon-launcher-dummy
+Exec=invoker --type=silica-qt5 /usr/bin/jolla-gallery %U
+Comment=Sailfish MimeType Handler for Gallery
+MimeType=image/jpeg;image/png;video/mp4
+X-Maemo-Service=com.jolla.gallery
+X-Maemo-Object-Path=/com/jolla/gallery/ui
+X-Maemo-Method=com.jolla.gallery.ui.showImages
