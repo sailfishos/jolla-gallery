@@ -8,7 +8,7 @@ OTHER_FILES += \
     rpm/jolla-gallery.spec \
     sources
 
-desktop.files = jolla-gallery.desktop
+desktop.files = jolla-gallery.desktop jolla-gallery-openfile.desktop
 desktop.path = /usr/share/applications
 
 mediasources.files = mediasources
