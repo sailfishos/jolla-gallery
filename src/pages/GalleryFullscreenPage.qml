@@ -71,10 +71,15 @@ SplitViewPage {
         PullDownMenu {
             id: pullDownMenu
             MenuItem {
+                Component {
+                    id: detailsComponent
+                    DetailsPage {}
+                }
+
                 //% "Details"
                 text: qsTrId("gallery-me-details")
                 visible: fileInfo.localFile && !fullscreenPage.imageViewerMode
-                onClicked: window.pageStack.push(Qt.resolvedUrl("GalleryDetailsPage.qml"), {modelItem: model.get(currentIndex).itemId} )
+                onClicked: window.pageStack.push(detailsComponent, {modelItem: model.get(currentIndex).itemId} )
             }
 
             MenuItem {
