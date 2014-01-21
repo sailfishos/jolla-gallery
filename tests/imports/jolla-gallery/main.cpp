@@ -5,6 +5,7 @@
 #include "declarativefileinfo.h"
 #include "declarativethreadedfileremover.h"
 #include "declarativegalleryservice.h"
+#include "declarativetextcodec.h"
 
 #include <QQmlExtensionPlugin>
 #include <qqml.h>
@@ -51,6 +52,7 @@ public:
         qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
         qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
         qmlRegisterType<DeclarativeGalleryService>("com.jolla.gallery", 1, 0, "GalleryService");
+        qmlRegisterType<DeclarativeTextCodec>("com.jolla.gallery", 1, 0, "TextCodec");
     }
 };
 

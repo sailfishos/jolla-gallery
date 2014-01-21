@@ -27,7 +27,8 @@ HEADERS += \
         $$GALLERY_SOURCE_PATH/declarativemediasource.h \
         $$GALLERY_SOURCE_PATH/declarativefileinfo.h \
         $$GALLERY_SOURCE_PATH/declarativethreadedfileremover.h \
-        $$GALLERY_SOURCE_PATH/declarativegalleryservice.h
+        $$GALLERY_SOURCE_PATH/declarativegalleryservice.h \
+        $$GALLERY_SOURCE_PATH/declarativetextcodec.h
 
 SOURCES += \
         main.cpp \
@@ -36,7 +37,8 @@ SOURCES += \
         $$GALLERY_SOURCE_PATH/declarativemediasource.cpp \
         $$GALLERY_SOURCE_PATH/declarativefileinfo.cpp \
         $$GALLERY_SOURCE_PATH/declarativethreadedfileremover.cpp \
-        $$GALLERY_SOURCE_PATH/declarativegalleryservice.cpp
+        $$GALLERY_SOURCE_PATH/declarativegalleryservice.cpp \
+        $$GALLERY_SOURCE_PATH/declarativetextcodec.cpp
 
 
 import.files = qmldir
