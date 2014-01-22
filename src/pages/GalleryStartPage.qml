@@ -12,6 +12,8 @@ Page {
 
     property Page imageViewerPage: null
 
+    allowedOrientations: window.allowedOrientations
+
     function showMedia(media, transition, index) {
         var mediaType = null
         switch(media.type)
@@ -170,6 +172,8 @@ Page {
                 type: MediaSource.Videos
             }
         }
+
+        VerticalScrollDecorator { }
     }
 
     GalleryService {
