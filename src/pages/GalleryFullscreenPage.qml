@@ -26,7 +26,7 @@ SplitViewPage {
     signal requestIndex(int index)
 
     objectName: "fullscreenPage"
-    allowedOrientations: window.allowedOrientations
+    allowedOrientations: Orientation.All
 
     // Update the Cover via window.activeObject property
     Binding {

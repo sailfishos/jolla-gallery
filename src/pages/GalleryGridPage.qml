@@ -13,7 +13,7 @@ MediaSourcePage {
     property variant _selectedItems: null
     property int _requestedIndex: -1
 
-    allowedOrientations: window.allowedOrientations
+    allowedOrientations: Orientation.All
 
     objectName: "gridPage"
 

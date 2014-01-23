@@ -12,7 +12,7 @@ Page {
 
     property Page imageViewerPage: null
 
-    allowedOrientations: window.allowedOrientations
+    allowedOrientations: Orientation.All
 
     function showMedia(media, transition, index) {
         var mediaType = null
