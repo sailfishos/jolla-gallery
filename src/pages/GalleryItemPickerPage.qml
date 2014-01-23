@@ -12,6 +12,8 @@ Page {
     property string title
     signal itemsSelected(variant items)
 
+    allowedOrientations: Orientation.All
+
     function deleteClicked()
     {
         // Store selected items to the array

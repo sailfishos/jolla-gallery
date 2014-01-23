@@ -12,6 +12,8 @@ ApplicationWindow {
     property var videosModel: videosModelComponent.createObject(window)
     property var activeObject: ({url: "", mimeType: ""})
 
+    allowedOrientations: Orientation.Portrait | Orientation.Landscape
+
     Component {
         id: photosModelComponent
         DocumentGalleryModel {

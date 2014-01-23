@@ -13,6 +13,8 @@ MediaSourcePage {
     property variant _selectedItems: null
     property int _requestedIndex: -1
 
+    allowedOrientations: Orientation.All
+
     objectName: "gridPage"
 
     function deleteItem(index) {
