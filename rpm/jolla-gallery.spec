@@ -22,7 +22,6 @@ BuildRequires:  qt5-qttools
 BuildRequires:  qt5-qttools-linguist
 BuildRequires:  pkgconfig(libjollasignonuiservice-qt5)
 BuildRequires:  pkgconfig(contentaction5)
-#BuildRequires:  -post-build-checks
 
 Requires:  ambient-icons-closed
 Requires:  sailfishsilica-qt5 >= 0.10.21
@@ -57,6 +56,7 @@ Summary:    Unit tests for Jolla Gallery
 Group:      Applications/Multimedia
 BuildRequires:  pkgconfig(Qt5Test)
 BuildRequires:  pkgconfig(Qt5DocGallery)
+#BuildRequires:  -post-build-checks
 Requires:   %{name} = %{version}-%{release}
 Requires:   qt5-qtdeclarative-import-qttest
 Requires:   qt5-qtdeclarative-devel-tools
