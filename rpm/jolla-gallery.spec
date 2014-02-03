@@ -22,6 +22,7 @@ BuildRequires:  qt5-qttools
 BuildRequires:  qt5-qttools-linguist
 BuildRequires:  pkgconfig(libjollasignonuiservice-qt5)
 BuildRequires:  pkgconfig(contentaction5)
+#BuildRequires:  -post-build-checks
 
 Requires:  ambient-icons-closed
 Requires:  sailfishsilica-qt5 >= 0.10.21
