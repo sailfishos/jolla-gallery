@@ -91,8 +91,9 @@ SlideshowView {
                 enableZoom: !view.moving
 
                 active: mediaItem.active
-                maximumWidth: model.width
-                maximumHeight: model.height
+                // TODO: Workaround for GIF indexing bug: JB#15504
+                maximumWidth: model.width > 0 ? model.width : Screen.width
+                maximumHeight: model.height > 0 ? model.height : Screen.height
 
                 onClicked: view.clicked()
             }
