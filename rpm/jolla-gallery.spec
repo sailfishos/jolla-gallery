@@ -6,6 +6,7 @@ Group:      Applications/Multimedia
 License:    TBD
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
+Source1:    rpmlintrc
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
@@ -56,7 +57,6 @@ Summary:    Unit tests for Jolla Gallery
 Group:      Applications/Multimedia
 BuildRequires:  pkgconfig(Qt5Test)
 BuildRequires:  pkgconfig(Qt5DocGallery)
-#BuildRequires:  -post-build-checks
 Requires:   %{name} = %{version}-%{release}
 Requires:   qt5-qtdeclarative-import-qttest
 Requires:   qt5-qtdeclarative-devel-tools
