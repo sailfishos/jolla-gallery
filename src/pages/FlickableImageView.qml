@@ -3,6 +3,7 @@ import Sailfish.Silica 1.0
 import Sailfish.Media 1.0
 import Sailfish.Gallery 1.0
 import QtMultimedia 5.0
+import org.nemomobile.policy 1.0
 
 SlideshowView {
     id: view
@@ -12,6 +13,7 @@ SlideshowView {
     property bool menuOpen
     property Item _activeItem
     property bool _applicationActive: window.applicationActive
+    property alias _videoActive: permissions.enabled
 
     signal clicked
 
@@ -61,6 +63,52 @@ SlideshowView {
         }
     }
 
+    function _play() {
+        if (_videoActive) {
+            mediaPlayer.source = view._activeItem.source
+            mediaPlayer.play()
+        }
+    }
+
+    function _togglePlay() {
+        if (mediaPlayer.playbackState == MediaPlayer.PlayingState) {
+            mediaPlayer.pause()
+        } else if (_videoActive) {
+            mediaPlayer.source = view._activeItem.source
+            mediaPlayer.play()
+        }
+    }
+
+    function _pause() {
+        if (_videoActive) {
+            mediaPlayer.source = view._activeItem.source
+            mediaPlayer.pause()
+        }
+    }
+
+    function _stop() {
+        mediaPlayer.stop()
+    }
+
+    MediaKey { enabled: keysResource.acquired; key: Qt.Key_MediaTogglePlayPause; onPressed: view._togglePlay() }
+    MediaKey { enabled: keysResource.acquired; key: Qt.Key_MediaPlay; onPressed: view._play() }
+    MediaKey { enabled: keysResource.acquired; key: Qt.Key_MediaPause; onPressed: view._pause() }
+    MediaKey { enabled: keysResource.acquired; key: Qt.Key_MediaStop; onPressed: view._stop() }
+    MediaKey { enabled: keysResource.acquired; key: Qt.Key_ToggleCallHangup; onPressed: view._togglePlay() }
+
+    Permissions {
+        id: permissions
+
+        enabled: window.applicationActive && view._activeItem && !view._activeItem.isImage
+        applicationClass: "player"
+
+        Resource {
+            id: keysResource
+            type: Resource.HeadsetButtons
+            optional: true
+        }
+    }
+
     delegate: Item {
         id: mediaItem
 
@@ -68,6 +116,7 @@ SlideshowView {
         property bool isImage: model.mimeType.indexOf("image/") == 0
         property bool active
         readonly property bool itemScaled: loader.item.scaled != undefined && loader.item.scaled
+        readonly property url source: model.url
 
         // Delegate width needs to set right from the beginning or otherwise
         // the size is initially 0 and then scaled to the right size, but this

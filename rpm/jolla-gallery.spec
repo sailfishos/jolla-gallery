@@ -40,6 +40,7 @@ Requires:  ambienced
 Requires:  jolla-gallery-ambience
 Requires:  jolla-gallery-facebook
 Requires:  jolla-settings-accounts >= 0.1.31
+Requires:  nemo-qml-plugin-policy-qt5
 
 %description
 The Jolla Gallery application.
