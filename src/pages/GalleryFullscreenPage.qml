@@ -11,9 +11,6 @@ import "scripts/AlbumManager.js" as AlbumManager
 /**
   * GalleryFullScreenPage is a QML Element for displaying Photos and Videos
   * fullscreen. User can flick photos and Videos by flicking them horizontally.
-  *
-  * NOTE: Current implementation will be replaced with a new one in the following
-  *       commits.
   */
 SplitViewPage {
     id: fullscreenPage
@@ -25,6 +22,7 @@ SplitViewPage {
     signal deleteMedia(int index)
     signal requestIndex(int index)
 
+    open: true
     objectName: "fullscreenPage"
     allowedOrientations: Orientation.All
 
