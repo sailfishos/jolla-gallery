@@ -140,7 +140,7 @@ MediaSourcePage {
             }
 
 
-            onReleased: {
+            onClicked: {
                 if (grid.contextMenu.active) {
                     return
                 }
