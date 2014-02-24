@@ -17,15 +17,11 @@ ApplicationWindow {
     Component {
         id: photosModelComponent
         DocumentGalleryModel {
-            rootType: DocumentGallery.File
+            rootType: DocumentGallery.Image
             properties: ["url", "mimeType", "title", "orientation", "lastModified", "width", "height" ]
             sortProperties: ["-lastModified"]
             autoUpdate: true
-            // TODO: Workaround for GIF indexing bug: JB#15504
-            filter: GalleryFilterIntersection {
-                GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
-                GalleryWildcardFilter { property: "mimeType"; value: "image/*" }
-            }
+            filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
         }
     }
 
