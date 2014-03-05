@@ -16,7 +16,6 @@ CoverBackground {
         interactive: false
         cellWidth: Math.floor(width / 2.0)
         cellHeight: Math.ceil(height / 3.0)
-
         model: galleryModel
 
         delegate: Thumbnail {
@@ -27,6 +26,7 @@ CoverBackground {
             smooth: true
             sourceSize.width: width
             sourceSize.height: height
+            clip: true
         }
     }
 
