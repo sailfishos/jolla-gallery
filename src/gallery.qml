@@ -14,7 +14,7 @@ ApplicationWindow {
     property var videosModel: videosModelComponent.createObject(window)
     property var ambienceModel: ambienceModelComponent.createObject(window)
     property var activeObject: ({url: "", mimeType: ""})
-    property int ambienceCount
+    property url ambienceUrl
 
     allowedOrientations: Orientation.Portrait | Orientation.Landscape
 
@@ -22,17 +22,14 @@ ApplicationWindow {
     {
         // Save current ambience count for checking later if there is a new
         // ambience created.
-        ambienceCount = ambienceModel.count
+        ambienceUrl = url
         Ambience.source = url
     }
 
     function showAmbienceDialog()
     {
-        if (ambienceModel.count > ambienceCount) {
-            ambienceCount = 0
-            // We have a new ambience created. Show the settings dialog
-            pageStack.push( ambienceSettings, { "ambienceModel": window.ambienceModel, "source":  Ambience.source })
-        }
+        // We have a new ambience created. Show the settings dialog
+        pageStack.push( ambienceSettings, { "ambienceModel": window.ambienceModel, "source":  Ambience.source })
     }
 
     Component {
@@ -65,9 +62,20 @@ ApplicationWindow {
         id: ambienceModelComponent
         AmbienceModel {
             filter: AmbienceModel.NoFilter
-            onCountChanged: {
-                if (ambienceCount > 0)
-                    window.showAmbienceDialog()
+            onRowsInserted: {
+                if (ambienceUrl == "") {
+                    return
+                }
+                var ok = false
+                for (var i = count - 1; i >= 0; --i) {
+                      var data = get(i)
+                      if (data.url == ambienceUrl) {
+                          ambienceUrl = ""
+                          ok = true
+                          break
+                      }
+                }
+                window.showAmbienceDialog()
             }
         }
     }
