@@ -1,7 +1,9 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import com.jolla.gallery 1.0
+import com.jolla.gallery.ambience 1.0
 import QtDocGallery 5.0
+import Sailfish.Ambience 1.0
 import "pages"
 import "pages/scripts/AlbumManager.js" as AlbumManager
 
@@ -10,9 +12,30 @@ ApplicationWindow {
 
     property var photosModel: photosModelComponent.createObject(window)
     property var videosModel: videosModelComponent.createObject(window)
+    property var ambienceModel: ambienceModelComponent.createObject(window)
     property var activeObject: ({url: "", mimeType: ""})
+    property url ambienceUrl
 
     allowedOrientations: Orientation.Portrait | Orientation.Landscape
+
+    function createAmbience(url)
+    {
+        // Save current ambience count for checking later if there is a new
+        // ambience created.
+        ambienceUrl = url
+        Ambience.source = url
+    }
+
+    function showAmbienceDialog()
+    {
+        // We have a new ambience created. Show the settings dialog
+        pageStack.push( ambienceSettings, { "ambienceModel": window.ambienceModel, "source":  Ambience.source })
+    }
+
+    Component {
+        id: ambienceSettings
+        AmbienceSettingsPage {}
+    }
 
     Component {
         id: photosModelComponent
@@ -32,6 +55,30 @@ ApplicationWindow {
             properties: ["url", "mimeType", "title", "lastModified", "orientation", "duration"]
             sortProperties: ["-lastModified"]
             autoUpdate: true
+        }
+    }
+
+    Component {
+        id: ambienceModelComponent
+        AmbienceModel {
+            filter: AmbienceModel.NoFilter
+            onRowsInserted: {
+                if (ambienceUrl == "") {
+                    return
+                }
+                var ok = false
+                for (var i = count - 1; i >= 0; --i) {
+                      var data = get(i)
+                      if (data.url == ambienceUrl) {
+                          ambienceUrl = ""
+                          ok = true
+                          break
+                      }
+                }
+                if (ok) {
+                    window.showAmbienceDialog()
+                }
+            }
         }
     }
 

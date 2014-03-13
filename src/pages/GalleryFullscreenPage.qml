@@ -4,6 +4,7 @@ import Sailfish.Gallery 1.0
 import Sailfish.TransferEngine 1.0
 import Sailfish.Ambience 1.0
 import com.jolla.gallery 1.0
+import com.jolla.gallery.ambience 1.0
 import com.jolla.settings.accounts 1.0
 import com.jolla.signonuiservice 1.0
 import "scripts/AlbumManager.js" as AlbumManager
@@ -57,7 +58,6 @@ SplitViewPage {
     background: ShareMethodList {
         id: menuList
 
-
         objectName: "menuList"
         model:  fileInfo.localFile ? transferMethodsModel : null
         source: fullscreenPage.model.get(fullscreenPage.currentIndex).url
@@ -91,18 +91,18 @@ SplitViewPage {
                 //: Gallery image edit, will lead to a page where user can perform edit operations.
                 //% "Edit"
                 text: qsTrId("gallery-me-edit")
-
-                onClicked: pageStack.push(imageEditPage, {source: imageList.currentItemUrl(), orientation: model.get(currentIndex).orientation})
                 visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
                 enabled: imageList.currentItemIsJpeg
+                onClicked: pageStack.push(imageEditPage, {source: imageList.currentItemUrl(), orientation: model.get(currentIndex).orientation})
             }
 
             MenuItem {
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
-
-                onClicked: Ambience.source = model.get(currentIndex).url
                 visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
+                onClicked: {
+                    window.createAmbience(model.get(currentIndex).url)
+                }
             }
         }
 
