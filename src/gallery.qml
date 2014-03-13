@@ -75,7 +75,9 @@ ApplicationWindow {
                           break
                       }
                 }
-                window.showAmbienceDialog()
+                if (ok) {
+                    window.showAmbienceDialog()
+                }
             }
         }
     }
