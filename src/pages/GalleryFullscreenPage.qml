@@ -93,7 +93,7 @@ SplitViewPage {
                 text: qsTrId("gallery-me-edit")
                 visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
                 enabled: imageList.currentItemIsJpeg
-                onClicked: pageStack.push(imageEditPage, {source: imageList.currentItemUrl(), orientation: model.get(currentIndex).orientation})
+                onClicked: pageStack.push(imageEditPage, { source: imageList.currentItemUrl() })
             }
 
             MenuItem {
@@ -185,8 +185,6 @@ SplitViewPage {
     Component {
         id: imageEditPage
 
-        ImageEditPage {
-            splitOpen: true
-        }
+        ImageEditPage { }
     }
 }
