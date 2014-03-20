@@ -17,7 +17,7 @@ mediasources.path = /usr/share/jolla-gallery
 service.files = com.jolla.gallery.service
 service.path  = /usr/share/dbus-1/services
 
-disablehints.files = disable-gallery-hints
-disablehints.path  = /usr/lib/oneshot.d
+enablehints.files = enable-gallery-hints
+enablehints.path  = /usr/lib/oneshot.d
 
-INSTALLS += desktop mediasources service disablehints
+INSTALLS += desktop mediasources service enablehints
