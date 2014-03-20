@@ -96,7 +96,7 @@ desktop-file-install --delete-original       \
 %{_datadir}/dbus-1/interfaces/com.jolla.gallery.xml
 %{_libdir}/qt5/qml/com/jolla/gallery/*.qml
 %{_libdir}/qt5/qml/com/jolla/gallery/qmldir
-%{_oneshotdir}/disable-gallery-hints
+%{_oneshotdir}/enable-gallery-hints
 
 %files ts-devel
 %defattr(-,root,root,-)
@@ -111,9 +111,8 @@ desktop-file-install --delete-original       \
 %post -n jolla-gallery
 /sbin/ldconfig
 /usr/bin/update-desktop-database -q
-if [ "$1" -gt 1 ]; then
-
-%{_bindir}/add-oneshot --user --now disable-gallery-hints
+if [ "$1" -eq 1 ]; then
+%{_bindir}/add-oneshot --user --now enable-gallery-hints
 fi
 
 %postun -n jolla-gallery
