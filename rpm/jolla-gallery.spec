@@ -23,9 +23,10 @@ BuildRequires:  qt5-qttools
 BuildRequires:  qt5-qttools-linguist
 BuildRequires:  pkgconfig(libjollasignonuiservice-qt5)
 BuildRequires:  pkgconfig(contentaction5)
+BuildRequires:  oneshot
 
 Requires:  ambient-icons-closed
-Requires:  sailfishsilica-qt5 >= 0.10.21
+Requires:  sailfishsilica-qt5 >= 0.11.55
 Requires:  qt5-qtdocgallery
 Requires:  mapplauncherd-booster-silica-qt5
 Requires:  qt5-qtdeclarative-import-multimedia
@@ -41,6 +42,7 @@ Requires:  jolla-gallery-ambience >= 0.0.17
 Requires:  jolla-gallery-facebook
 Requires:  jolla-settings-accounts >= 0.1.31
 Requires:  nemo-qml-plugin-policy-qt5
+%{_oneshot_requires_post}
 
 %description
 The Jolla Gallery application.
@@ -78,6 +80,7 @@ make %{_smp_mflags}
 rm -rf %{buildroot}
 %qmake5_install
 chmod +x %{buildroot}/opt/tests/jolla-gallery/auto/run-tests.sh
+chmod +x %{buildroot}/%{_oneshotdir}/*
 
 desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
@@ -93,7 +96,7 @@ desktop-file-install --delete-original       \
 %{_datadir}/dbus-1/interfaces/com.jolla.gallery.xml
 %{_libdir}/qt5/qml/com/jolla/gallery/*.qml
 %{_libdir}/qt5/qml/com/jolla/gallery/qmldir
-
+%{_oneshotdir}/disable-gallery-hints
 
 %files ts-devel
 %defattr(-,root,root,-)
@@ -108,6 +111,10 @@ desktop-file-install --delete-original       \
 %post -n jolla-gallery
 /sbin/ldconfig
 /usr/bin/update-desktop-database -q
+if [ "$1" -gt 1 ]; then
+
+%{_bindir}/add-oneshot --user --now disable-gallery-hints
+fi
 
 %postun -n jolla-gallery
 /sbin/ldconfig

@@ -156,6 +156,7 @@ SplitViewPage {
             endDestination: fullscreenPage
             endDestinationAction: PageStackAction.Pop
         }
+        SplitViewBackHint {}
     }
 
 
