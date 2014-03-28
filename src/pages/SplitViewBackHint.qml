@@ -35,7 +35,7 @@ Loader {
     FirstTimeUseCounter {
         id: counter
         limit: 3
-        defaultValue: 2 // display hint once for existing users
+        defaultValue: 1 // display hint twice for existing users
         key: "/sailfish/gallery/split_view_back_hint_count"
     }
 }
