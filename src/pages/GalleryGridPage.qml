@@ -85,8 +85,6 @@ MediaSourcePage {
                                      : 0
 
         anchors.fill: parent
-        unfocusHighlightEnabled: true
-        forceUnfocusHighlight: expandHeight > 0
         header: PageHeader { title: gridPage.title }
         model: gridPage.model
 
