@@ -1,4 +1,4 @@
 #!/bin/sh
 # reset hint counter on fresh installation
-/usr/bin/gconftool-2 -s -t int /sailfish/gallery/split_view_back_hint_count 0
+/usr/bin/dconf write /sailfish/gallery/split_view_back_hint_count 0
 
