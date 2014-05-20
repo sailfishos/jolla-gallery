@@ -78,9 +78,6 @@ SplitViewPage {
         source: fullscreenPage.model.get(fullscreenPage.currentIndex).url
         anchors.fill: parent
 
-        //% "Share"
-        listHeader: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
-
         PullDownMenu {
             id: pullDownMenu
             MenuItem {
@@ -123,24 +120,10 @@ SplitViewPage {
             }
         }
 
-        header: Item {
-            height: Theme.itemSizeLarge
-            width: menuList.width * 0.7 - Theme.paddingLarge
-            x: menuList.width * 0.3
-
-            Label {
-                text: fileInfo.localFile ? model.get(currentIndex).title : ""
-                width: parent.width
-                truncationMode: TruncationMode.Fade
-                color: Theme.highlightColor
-                anchors.verticalCenter: parent.verticalCenter
-                objectName: "imageTitle"
-                horizontalAlignment: Text.AlignRight
-                font {
-                    pixelSize: Theme.fontSizeLarge
-                    family: Theme.fontFamilyHeading
-                }
-            }
+        header: PageHeader {
+            title: fileInfo.localFile ? model.get(currentIndex).title : ""
+            //% "Share"
+            description: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
         }
 
         // Add "add account" to the footer. User must be able to
