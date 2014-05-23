@@ -77,6 +77,8 @@ Page {
                           imageViewerMode: true
                         },
                         PageStackAction.Immediate)
+        metadata.source = ""
+        fileInfo.source = ""
     }
 
     ListModel { id: viewerModel }

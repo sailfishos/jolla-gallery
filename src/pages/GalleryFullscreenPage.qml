@@ -23,9 +23,24 @@ SplitViewPage {
     signal deleteMedia(int index)
     signal requestIndex(int index)
 
+    function remove(index) {
+        //: Delete an image
+        //% "Deleting"
+        remorsePopup.execute( qsTrId("gallery-la-deleting"), function() {
+            var files = []
+            files.push(model.get(index).url)
+            fileRemover.deleteFiles(files)
+            pageStack.pop();
+        })
+    }
+
     open: true
     objectName: "fullscreenPage"
     allowedOrientations: Orientation.All
+
+    FileRemover {
+        id: fileRemover
+    }
 
     // Update the Cover via window.activeObject property
     Binding {
@@ -84,7 +99,9 @@ SplitViewPage {
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
                 visible: fileInfo.localFile
-                onClicked: fullscreenPage.deleteMedia(fullscreenPage.currentIndex)
+                onClicked: fullscreenPage.imageViewerMode
+                        ? fullscreenPage.remove(fullscreenPage.currentIndex)
+                        : deleteMedia(fullscreenPage.currentIndex)
             }
 
             MenuItem {
@@ -187,5 +204,9 @@ SplitViewPage {
         id: imageEditPage
 
         ImageEditPage { }
+    }
+
+    RemorsePopup {
+        id: remorsePopup
     }
 }
