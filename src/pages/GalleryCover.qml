@@ -9,7 +9,7 @@ CoverBackground {
 
     property bool contentAvailable: galleryModel && galleryModel.count > 0
     property var galleryModel: photosModel
-    transparent: false
+    transparent: grid.count < 6
 
     GridView{
         id: grid
