@@ -12,6 +12,9 @@
 
         <method name="showVideos" />
 
+        <method name="playVideoStream">
+            <arg direction="in" type="as" name="url"/>
+        </method>
    </interface>
 </node>
 
