@@ -81,6 +81,36 @@ Page {
         fileInfo.source = ""
     }
 
+    function playVideoStream(url) {
+        // To avoid mixed content e.g. videos and photos in the same model, just
+        // clear everything each time when function is called.
+        if (imageViewerPage && pageStack.currentPage === imageViewerPage) {
+            imageViewerPage = null
+            pageStack.pop(null, PageStackAction.Immediate)
+        }
+
+        fileInfo.source = url
+
+        viewerModel.clear()
+        viewerModel.set(0, {
+                               url: url,
+                               mimeType: fileInfo.mimeType,
+                               title: fileInfo.fileName,
+                               orientation: 0
+                            })
+
+        imageViewerPage = window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"),
+                                                {
+                                                    title: "",
+                                                    model: viewerModel,
+                                                    currentIndex: 0,
+                                                    imageViewerMode: true
+                                                 }, PageStackAction.Immediate)
+        activate()
+        metadata.source = ""
+        fileInfo.source = ""
+    }
+
     ListModel { id: viewerModel }
     ImageMetadata { id: metadata }
     FileInfo { id: fileInfo }
@@ -186,6 +216,8 @@ Page {
             }
             activate()
         }
+
+        onPlayStream: startPage.playVideoStream(url)
 
         onShowAllPhotos: {
             window.pageStack.pop(startPage, PageStackAction.Immediate)

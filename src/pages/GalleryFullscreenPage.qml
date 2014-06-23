@@ -65,7 +65,7 @@ SplitViewPage {
 
     SailfishTransferMethodsModel {
         id: transferMethodsModel
-        filter: fileInfo.localFile ? fileInfo.mimeType : ""
+        filter: fileInfo.localFile ? fileInfo.mimeType : "text/x-url"
     }
 
     // This is the share method list, but it also
@@ -73,14 +73,23 @@ SplitViewPage {
     background: ShareMethodList {
         id: menuList
 
+        property string url: fullscreenPage.model.get(fullscreenPage.currentIndex).url
+
         objectName: "menuList"
-        model:  fileInfo.localFile ? transferMethodsModel : null
-        source: fullscreenPage.model.get(fullscreenPage.currentIndex).url
+        model: transferMethodsModel
+        source: fileInfo.localFile ? url : ""
         anchors.fill: parent
+        content: fileInfo.localFile ? undefined : {
+                                                    "type": "text/x-url",
+                                                    "status": url
+                                                  }
 
         PullDownMenu {
             id: pullDownMenu
+
+            visible: detailsComponent.visible || deleteMenuItem.visible || editMenuItem.visible || createAmbienceMenuItem.visible
             MenuItem {
+                id: detailsMenuItem
                 Component {
                     id: detailsComponent
                     DetailsPage {}
@@ -93,6 +102,7 @@ SplitViewPage {
             }
 
             MenuItem {
+                id: deleteMenuItem
                 //% "Delete"
                 text: qsTrId("gallery-me-delete")
                 visible: fileInfo.localFile
@@ -102,6 +112,7 @@ SplitViewPage {
             }
 
             MenuItem {
+                id: editMenuItem
                 //: Gallery image edit, will lead to a page where user can perform edit operations.
                 //% "Edit"
                 text: qsTrId("gallery-me-edit")
@@ -111,6 +122,7 @@ SplitViewPage {
             }
 
             MenuItem {
+                id: createAmbienceMenuItem
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
                 visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
@@ -129,7 +141,10 @@ SplitViewPage {
         // Add "add account" to the footer. User must be able to
         // create accounts in a case there are none.
         footer: BackgroundItem {
+            // Disable mousearea
+            enabled: addAccountLabel.visible
             Label {
+                id: addAccountLabel
                 //% "Add account"
                 text: qsTrId("gallery-la-add_account")
                 x: Theme.paddingLarge
