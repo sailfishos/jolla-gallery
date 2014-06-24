@@ -114,13 +114,14 @@ Page {
                     var url = model.get(i).url
                     var found = false
                     for (var j=0; j < docModel.count; j++) {
-                        if (url === docModel.get(j).url) {
+                        if (url == docModel.get(j).url) {
                             found = true
                             break
                         }
                     }
 
-                    // Removed item, let's remove it from the model
+                    // Item is not in the DocumentGalleryModel anymore,
+                    // so let's remove it.
                     if (!found) {
                         model.remove(i)
                     }
@@ -133,7 +134,7 @@ Page {
                     var url = docModel.get(i).url
                     var found = false
                     for (var j=0; j < model.count; j++) {
-                        if (url === model.get(j).url) {
+                        if (url == model.get(j).url) {
                             found = true
                         }
                     }
