@@ -18,6 +18,7 @@ SplitViewPage {
 
     property alias model: imageList.model
     property alias currentIndex: imageList.currentIndex
+    property alias autoPlay: imageList.autoPlay
     property bool imageViewerMode: false
 
     signal deleteMedia(int index)
