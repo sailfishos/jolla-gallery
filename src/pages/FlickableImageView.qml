@@ -177,6 +177,14 @@ SlideshowView {
             }
         }
 
+        // TODO: Move BusyIndicator inside VideoPoster. See bug #20995
+        BusyIndicator {
+            id: busyIndicator
+            anchors.centerIn: parent
+            size: BusyIndicatorSize.Large
+            running: autoPlay && !mediaPlayer.hasVideo && mediaPlayer.error == MediaPlayer.NoError
+        }
+
         Loader {
             id: loader
 
