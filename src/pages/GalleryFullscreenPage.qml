@@ -134,7 +134,8 @@ SplitViewPage {
         }
 
         header: PageHeader {
-            title: fileInfo.localFile ? model.get(currentIndex).title : ""
+            title: fileInfo.localFile ? model.get(currentIndex).title : (imageList._videoActive ?
+                                                                             qsTrId("gallery-la-share") : "")
             //% "Share"
             description: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
         }
