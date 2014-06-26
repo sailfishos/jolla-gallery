@@ -18,6 +18,7 @@ SplitViewPage {
 
     property alias model: imageList.model
     property alias currentIndex: imageList.currentIndex
+    property alias autoPlay: imageList.autoPlay
     property bool imageViewerMode: false
 
     signal deleteMedia(int index)
@@ -133,7 +134,8 @@ SplitViewPage {
         }
 
         header: PageHeader {
-            title: fileInfo.localFile ? model.get(currentIndex).title : ""
+            title: fileInfo.localFile ? model.get(currentIndex).title : (imageList._videoActive ?
+                                                                             qsTrId("gallery-la-share") : "")
             //% "Share"
             description: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
         }

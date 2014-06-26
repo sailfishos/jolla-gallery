@@ -11,6 +11,7 @@ SlideshowView {
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool isPortrait
     property bool menuOpen
+    property alias autoPlay: mediaPlayer.autoPlay
     property Item _activeItem
     property bool _applicationActive: window.applicationActive
     property alias _videoActive: permissions.enabled
@@ -129,6 +130,12 @@ SlideshowView {
 
         opacity: Math.abs(x) <= view.width ? 1.0 -  (Math.abs(x) / view.width) : 0
 
+        onActiveChanged: {
+            if (active && autoPlay) {
+                mediaPlayer.source = source
+            }
+        }
+
         Component {
             id: imageComponent
 
@@ -170,13 +177,32 @@ SlideshowView {
             }
         }
 
+        // TODO: Move BusyIndicator inside VideoPoster. See bug #20995
+        BusyIndicator {
+            id: busyIndicator
+            anchors.centerIn: parent
+            size: BusyIndicatorSize.Large
+            running: autoPlay && !mediaPlayer.hasVideo && mediaPlayer.error == MediaPlayer.NoError
+        }
+
         Loader {
             id: loader
 
+            property int playbackState: mediaPlayer.playbackState
+
             width: mediaItem.width
             height: mediaItem.height
+            active: !autoPlay
 
             sourceComponent: mediaItem.isImage ? imageComponent: videoComponent
+
+            // Delay Poster creation until we're in playing state. Without this when auto playing
+            // poster will blink at the beginning.
+            onPlaybackStateChanged: {
+                if (!active && autoPlay && playbackState == MediaPlayer.PlayingState) {
+                    loader.active = true
+                }
+            }
         }
     }   
 
@@ -198,5 +224,4 @@ SlideshowView {
             }
         }
     ]
-
 }

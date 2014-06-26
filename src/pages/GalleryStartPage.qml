@@ -104,7 +104,8 @@ Page {
                                                     title: "",
                                                     model: viewerModel,
                                                     currentIndex: 0,
-                                                    imageViewerMode: true
+                                                    imageViewerMode: true,
+                                                    autoPlay: true
                                                  }, PageStackAction.Immediate)
         activate()
         metadata.source = ""
