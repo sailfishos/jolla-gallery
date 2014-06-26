@@ -1,6 +1,7 @@
 #include "declarativegalleryservice.h"
 #include "galleryadaptor.h"
 #include <QtDebug>
+#include <QUrl>
 
 DeclarativeGalleryService::DeclarativeGalleryService(QObject *parent)
     : QObject(parent)
@@ -33,4 +34,18 @@ void DeclarativeGalleryService::showPhotos()
 void DeclarativeGalleryService::showVideos()
 {
     emit showAllVideos();
+}
+
+void DeclarativeGalleryService::playVideoStream(const QStringList &urls)
+{
+    if (!urls.isEmpty()) {
+        QString cleanedUrl = QUrl(urls.at(0)).toDisplayString(QUrl::RemoveScheme |
+                                                              QUrl::RemoveUserInfo |
+                                                              QUrl::RemoveFragment |
+                                                              QUrl::StripTrailingSlash);
+        // Remove "//" between scheme and host.
+        if (!cleanedUrl.remove(0, 2).isEmpty()) {
+            emit playStream(urls.at(0));
+        }
+    }
 }

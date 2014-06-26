@@ -15,11 +15,13 @@ public slots:
     void showImages(const QStringList &urls);
     void showPhotos();
     void showVideos();
+    void playVideoStream(const QStringList &urls);
 
 signals:
     void openImages(const QStringList &urls);
     void showAllPhotos();
     void showAllVideos();
+    void playStream(const QString &url);
 };
 
 #endif
