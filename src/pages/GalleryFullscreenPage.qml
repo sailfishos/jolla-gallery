@@ -88,7 +88,8 @@ SplitViewPage {
         PullDownMenu {
             id: pullDownMenu
 
-            visible: detailsComponent.visible || deleteMenuItem.visible || editMenuItem.visible || createAmbienceMenuItem.visible
+            visible: (fileInfo.localFile || imageList.currentItemIsImage) && !fullscreenPage.imageViewerMode
+
             MenuItem {
                 id: detailsMenuItem
                 Component {
@@ -184,8 +185,8 @@ SplitViewPage {
         // XXX Qt5 Port - workaround PathView bug
         pathItemCount: 3
 
-        property bool currentItemIsImage: model.get(fullscreenPage.currentIndex).mimeType.indexOf("image/") == 0
-        property bool currentItemIsJpeg: model.get(fullscreenPage.currentIndex).mimeType === "image/jpeg"
+        property bool currentItemIsImage: model && model.get(fullscreenPage.currentIndex).mimeType.indexOf("image/") == 0
+        property bool currentItemIsJpeg: model && model.get(fullscreenPage.currentIndex).mimeType === "image/jpeg"
 
         x: -parent.x / 2
         y: -parent.y / 2
