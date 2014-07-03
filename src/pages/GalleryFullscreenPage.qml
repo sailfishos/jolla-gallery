@@ -21,6 +21,9 @@ SplitViewPage {
     property alias autoPlay: imageList.autoPlay
     property bool imageViewerMode: false
 
+    readonly property bool currentItemIsImage: model && model.get(fullscreenPage.currentIndex).mimeType.indexOf("image/") == 0
+    readonly property bool currentItemIsJpeg: model && model.get(fullscreenPage.currentIndex).mimeType === "image/jpeg"
+
     signal deleteMedia(int index)
     signal requestIndex(int index)
 
@@ -88,7 +91,7 @@ SplitViewPage {
         PullDownMenu {
             id: pullDownMenu
 
-            visible: (fileInfo.localFile || imageList.currentItemIsImage) && !fullscreenPage.imageViewerMode
+            visible: (fileInfo.localFile || fullscreenPage.currentItemIsImage) && !fullscreenPage.imageViewerMode
 
             MenuItem {
                 id: detailsMenuItem
@@ -118,8 +121,8 @@ SplitViewPage {
                 //: Gallery image edit, will lead to a page where user can perform edit operations.
                 //% "Edit"
                 text: qsTrId("gallery-me-edit")
-                visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
-                enabled: imageList.currentItemIsJpeg
+                visible:  fullscreenPage.currentItemIsImage && !fullscreenPage.imageViewerMode
+                enabled: fullscreenPage.currentItemIsJpeg
                 onClicked: pageStack.push(imageEditPage, { source: imageList.currentItemUrl() })
             }
 
@@ -127,7 +130,7 @@ SplitViewPage {
                 id: createAmbienceMenuItem
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
-                visible:  imageList.currentItemIsImage && !fullscreenPage.imageViewerMode
+                visible:  fullscreenPage.currentItemIsImage && !fullscreenPage.imageViewerMode
                 onClicked: {
                     window.createAmbience(model.get(currentIndex).url)
                 }
@@ -184,9 +187,6 @@ SplitViewPage {
 
         // XXX Qt5 Port - workaround PathView bug
         pathItemCount: 3
-
-        property bool currentItemIsImage: model && model.get(fullscreenPage.currentIndex).mimeType.indexOf("image/") == 0
-        property bool currentItemIsJpeg: model && model.get(fullscreenPage.currentIndex).mimeType === "image/jpeg"
 
         x: -parent.x / 2
         y: -parent.y / 2
