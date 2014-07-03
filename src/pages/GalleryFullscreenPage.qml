@@ -123,7 +123,7 @@ SplitViewPage {
                 text: qsTrId("gallery-me-edit")
                 visible:  fullscreenPage.currentItemIsImage && !fullscreenPage.imageViewerMode
                 enabled: fullscreenPage.currentItemIsJpeg
-                onClicked: pageStack.push(imageEditPage, { source: imageList.currentItemUrl() })
+                onClicked: pageStack.push("Sailfish.Gallery.ImageEditPage", { source: imageList.currentItemUrl() })
             }
 
             MenuItem {
@@ -199,12 +199,6 @@ SplitViewPage {
         onClicked: {
             fullscreenPage.open = !fullscreenPage.open
         }
-    }
-
-    Component {
-        id: imageEditPage
-
-        ImageEditPage { }
     }
 
     RemorsePopup {
