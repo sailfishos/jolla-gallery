@@ -16,6 +16,9 @@ SlideshowView {
     property bool _applicationActive: window.applicationActive
     property alias _videoActive: permissions.enabled
 
+    property real contentWidth: width
+    property real contentHeight: height
+
     signal clicked
 
     function currentItemUrl() {
@@ -119,11 +122,7 @@ SlideshowView {
         readonly property bool itemScaled: loader.item.scaled != undefined && loader.item.scaled
         readonly property url source: model.url
 
-        // Delegate width needs to set right from the beginning or otherwise
-        // the size is initially 0 and then scaled to the right size, but this
-        // causes that most of the delegates will be created in the beginning
-        // causing a huge memory consumption and maybe a crash.
-        width: view.isPortrait ? Screen.width : Screen.height
+        width: view.width
         height: view.height
 
         visible: view.moving || active
@@ -140,6 +139,9 @@ SlideshowView {
             id: imageComponent
 
             ImageViewer {
+                width: view.isPortrait ? Screen.width : Screen.height
+                height: view.contentHeight
+
                 source: model.url
                 menuOpen: view.menuOpen
                 fit: view.isPortrait ? Fit.Width : Fit.Height
@@ -167,6 +169,12 @@ SlideshowView {
                 active: mediaItem.active
                 duration: model.duration
 
+                width: mediaItem.width
+                height: mediaItem.height
+
+                contentWidth: view.contentWidth
+                contentHeight: view.contentHeight
+
                 onClicked: {
                    if (mediaPlayer.playbackState == MediaPlayer.PlayingState) {
                        mediaPlayer.pause()
@@ -190,9 +198,8 @@ SlideshowView {
 
             property int playbackState: mediaPlayer.playbackState
 
-            width: mediaItem.width
-            height: mediaItem.height
             active: !autoPlay
+            anchors.centerIn: mediaItem
 
             sourceComponent: mediaItem.isImage ? imageComponent: videoComponent
 
@@ -215,8 +222,8 @@ SlideshowView {
             }
 
             visible: mediaPlayer.playbackState != MediaPlayer.StoppedState
-            width: view.width
-            height: view.height
+            width: view.contentWidth
+            height: view.contentHeight
             anchors.centerIn: view._activeItem
 
             ScreenBlank {
