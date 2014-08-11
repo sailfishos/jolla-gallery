@@ -36,7 +36,7 @@ Requires:  nemo-qml-plugin-thumbnailer-qt5-video
 Requires:  nemo-qml-plugin-thumbnailer-qt5
 Requires:  sailfish-components-accounts-qt5
 Requires:  sailfish-components-media-qt5
-Requires:  sailfish-components-gallery-qt5 >= 0.0.42
+Requires:  sailfish-components-gallery-qt5 >= 0.0.48
 Requires:  ambienced
 Requires:  jolla-gallery-ambience >= 0.0.17
 Requires:  jolla-gallery-facebook

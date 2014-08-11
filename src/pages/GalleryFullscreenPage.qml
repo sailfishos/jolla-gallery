@@ -188,10 +188,11 @@ SplitViewPage {
         // XXX Qt5 Port - workaround PathView bug
         pathItemCount: 3
 
-        x: -parent.x / 2
-        y: -parent.y / 2
-        width: fullscreenPage.width
-        height: fullscreenPage.height
+        contentWidth: fullscreenPage.width
+        contentHeight: fullscreenPage.height
+
+        anchors.fill: parent
+
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
         menuOpen: fullscreenPage.open
