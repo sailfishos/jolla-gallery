@@ -25,6 +25,8 @@ MediaSourceIcon {
         delegate: Thumbnail {
             source: url
             mimeType: model.mimeType
+            width: slideShow.width
+            height: slideShow.height
             sourceSize.width: slideShow.width
             sourceSize.height: slideShow.width
         }
