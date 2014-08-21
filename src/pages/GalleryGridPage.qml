@@ -101,7 +101,7 @@ MediaSourcePage {
                 onClicked: {
                     pageStack.push(Qt.resolvedUrl("GalleryItemPickerPage.qml"),{
                                        model: grid.model,
-                                       title: gridPage.title
+                                       title: text
                                    })
                     pageStack.currentPage.itemsSelected.connect(gridPage.deleteMultipleItems)
                 }
