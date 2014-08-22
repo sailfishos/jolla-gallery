@@ -67,20 +67,14 @@ SplitViewPage {
         source: model.get(currentIndex).url
     }
 
-    SailfishTransferMethodsModel {
-        id: transferMethodsModel
-        filter: fileInfo.localFile ? fileInfo.mimeType : "text/x-url"
-    }
-
     // This is the share method list, but it also
     // includes the pulley menu
     background: ShareMethodList {
         id: menuList
 
         property string url: fullscreenPage.model.get(fullscreenPage.currentIndex).url
-
+        filter: fileInfo.localFile ? fileInfo.mimeType : "text/x-url"
         objectName: "menuList"
-        model: transferMethodsModel
         source: fileInfo.localFile ? url : ""
         anchors.fill: parent
         content: fileInfo.localFile ? undefined : {
