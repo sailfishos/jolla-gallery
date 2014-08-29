@@ -31,10 +31,8 @@ Requires:  qt5-qtdocgallery
 Requires:  mapplauncherd-booster-silica-qt5
 Requires:  qt5-qtdeclarative-import-multimedia
 Requires:  declarative-transferengine-qt5 >= 0.0.49
-Requires:  nemo-qml-plugin-accounts-qt5
 Requires:  nemo-qml-plugin-thumbnailer-qt5-video
 Requires:  nemo-qml-plugin-thumbnailer-qt5
-Requires:  sailfish-components-accounts-qt5
 Requires:  sailfish-components-media-qt5
 Requires:  sailfish-components-gallery-qt5 >= 0.0.48
 Requires:  ambienced
