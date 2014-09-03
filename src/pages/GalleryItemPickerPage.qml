@@ -158,9 +158,7 @@ Page {
         id: grid
 
         model: selectionModel.ready ? selectionModel.model : null
-        //: Prefix for selection title
-        //% "Select "
-        header: PageHeader { title: qsTrId("gallery-me-select-title-prefix ") + root.title }
+        header: PageHeader { title: root.title }
         highlightEnabled: false
         clip: true
 
