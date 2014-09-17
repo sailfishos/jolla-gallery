@@ -295,11 +295,25 @@ QVariant DeclarativeMediaModel::data ( const QModelIndex & index, int role) cons
 void DeclarativeMediaModel::updateActiveSources()
 {
     Q_D(DeclarativeMediaModel);
+
     if (!d->m_componentComplete)
         return;
 
     bool changed = false;
     int activeIndex = 0;
+
+    // clean away inactive sources
+    for (int i = 0; i < d->m_activeSources.count(); ++i) {
+        DeclarativeMediaSource *source = d->m_activeSources.at(i);
+        if (!source->isReady()) {
+            beginRemoveRows(QModelIndex(), i, i);
+            d->m_activeSources.removeAt(i);
+            i--;
+            endRemoveRows();
+            changed = true;
+        }
+    }
+
     QObject *nextActiveSource = !d->m_activeSources.isEmpty()
             ? d->m_activeSources.first()
             : 0;

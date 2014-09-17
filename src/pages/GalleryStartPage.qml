@@ -122,7 +122,7 @@ Page {
             id: delegateItem
             width: view.width
             height: thumbnail.height
-            enabled: media.count > 0
+            enabled: media && media.count > 0
             opacity: enabled ? 1.0 : 0.5
 
             Label {
@@ -134,7 +134,7 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
                 opacity: 0.4
-                text: media.count
+                text: media ? media.count : 0
                 color: delegateItem.down ? Theme.highlightColor : Theme.primaryColor
                 font.pixelSize: Theme.fontSizeLarge
             }
