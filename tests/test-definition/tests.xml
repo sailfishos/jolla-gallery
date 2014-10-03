@@ -4,9 +4,15 @@
        <description>Jolla Gallery Application automatic tests</description>
        <set name="unit-tests" feature="Jolla Gallery">
            <description>QML component unit tests</description>
+           <pre_steps>
+               <step>/usr/sbin/mcetool -jdisabled -Doff -B1 -jenabled -U -B1 -kunlocked</step>
+           </pre_steps>
            <case manual="false" name="unittests">
                <step>cd /opt/tests/jolla-gallery/auto/ &amp;&amp;DISPLAY=:0 ./run-tests.sh</step>
            </case>
+           <post_steps>
+               <step>/usr/sbin/mcetool -jdisabled -Doff</step>
+           </post_steps>
        </set>
    </suite>
 </testdefinition>
