@@ -39,27 +39,6 @@ ApplicationWindow {
             pageStack.pop(null, PageStackAction.Immediate)
         }
 
-        function test_title() {
-            // Can't test long title anymore because now it uses opacity ramp effect,
-            // which doesn't really change the width of the painted text.
-            fullscreenPage.model = albumModel
-            wait(500)
-            var imageView = Util.findItemByName(fullscreenPage, "flickableView")
-            verify(imageView !== null)
-
-            var imageTitle = Util.findItemByName(fullscreenPage, "imageTitle")
-            compare(imageTitle.text, "Photo 0")
-
-            imageView.currentIndex = 1
-            tryCompare(imageTitle, 'text', "Photo 1")
-
-            imageView.currentIndex = 2
-            tryCompare(imageTitle, 'text', "Photo 2")
-
-            imageView.currentIndex = 3
-            tryCompare(imageTitle, 'text', "Photo 3")
-        }
-
         function test_accented_file_name_loading()
         {
             fullscreenPage.model = accentedFileNameModel

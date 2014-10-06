@@ -62,6 +62,7 @@ Requires:   %{name} = %{version}-%{release}
 Requires:   qt5-qtdeclarative-import-qttest
 Requires:   qt5-qtdeclarative-devel-tools
 Requires:   dbus-x11
+Requires:   mce-tools
 
 %description tests
 This package contains QML unit tests for Jolla Gallery application
