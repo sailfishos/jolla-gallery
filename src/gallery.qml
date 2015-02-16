@@ -16,7 +16,7 @@ ApplicationWindow {
     property var activeObject: ({url: "", mimeType: ""})
     property url ambienceUrl
 
-    allowedOrientations: Orientation.Portrait | Orientation.Landscape | Orientation.LandscapeInverted
+    allowedOrientations: defaultAllowedOrientations
 
     function createAmbience(url)
     {
