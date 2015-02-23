@@ -136,6 +136,7 @@ SplitViewPage {
                                                                              qsTrId("gallery-la-share") : "")
             //% "Share"
             description: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
+            rightMargin: fullscreenPage.isPortrait ? Theme.horizontalPageMargin : Theme.paddingLarge
         }
 
         // Add "add account" to the footer. User must be able to
@@ -147,7 +148,7 @@ SplitViewPage {
                 id: addAccountLabel
                 //% "Add account"
                 text: qsTrId("gallery-la-add_account")
-                x: Theme.paddingLarge
+                x: Theme.horizontalPageMargin
                 anchors.verticalCenter: parent.verticalCenter
                 color: highlighted ? Theme.highlightColor : Theme.primaryColor
                 visible: fileInfo.localFile

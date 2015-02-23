@@ -142,7 +142,7 @@ Page {
             // Load icon from a plugin
             Loader {
                 id: thumbnail
-                x: Theme.itemSizeExtraLarge
+                x: Theme.itemSizeExtraLarge + Theme.horizontalPageMargin - Theme.paddingLarge
                 width: Theme.itemSizeExtraLarge
                 height: width
                 source: media.icon
@@ -165,6 +165,7 @@ Page {
                     left: thumbnail.right
                     right: parent.right
                     leftMargin: Theme.paddingLarge
+                    rightMargin: Theme.horizontalPageMargin
                     verticalCenter: parent.verticalCenter
                 }
             }
