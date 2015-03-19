@@ -17,6 +17,7 @@ ApplicationWindow {
     property url ambienceUrl
 
     allowedOrientations: defaultAllowedOrientations
+    _defaultLabelFormat: Text.PlainText
 
     function createAmbience(url)
     {
