@@ -86,33 +86,36 @@ ApplicationWindow {
 
             gridPage.allowedOrientations = Orientation.Portrait | Orientation.Landscape
 
-            // Verify that in portrait mode the grid wraps after 3 items.
+            // Verify that in portrait mode the grid wraps after portraitItemsPerRow items.
             gridPage.orientation = Orientation.Portrait
+
+            var portraitItemsPerRow = Math.floor(window.width / gridView.cellSize)
 
             var item2 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_2.jpg"
             })
             var item3 = Util.findItem(gridView.contentItem, function(item) {
-                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_3.jpg"
+                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_" + portraitItemsPerRow + ".jpg"
             })
-
             tryCompare(item3, "y", item2.y + gridView.cellSize)
 
-            // Verify that in landscape mode the grid wraps after 5 items.
+            // Verify that in landscape mode the grid wraps after landscapeItemsPerRow items.
             gridPage.orientation = Orientation.Landscape
-            wait(200)
+            wait(1000)
+            var landscapeItemsPerRow = Math.floor(window.height / gridView.cellSize)
+
             var item4 = Util.findItem(gridView.contentItem, function(item) {
-                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_4.jpg"
+                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_" + (landscapeItemsPerRow-1) + ".jpg"
             })
             var item5 = Util.findItem(gridView.contentItem, function(item) {
-                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_5.jpg"
+                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_" + landscapeItemsPerRow + ".jpg"
             })
 
             compare(item3.y, item2.y)
             compare(item5.y, item4.y + gridView.cellHeight)
 
             gridPage.orientation = Orientation.Portrait
-            wait(200)
+            wait(2000)
             compare(item3.y, item2.y + gridView.cellHeight)
             compare(item5.y, item4.y)
 
@@ -123,24 +126,18 @@ ApplicationWindow {
             verify(gridView !== null)
             verify(gridView.contentItem !== null)
             gridPage.orientation = Orientation.Portrait
-            wait()
+            wait(1000)
 
             var item2 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_2.jpg"
             })
             verify(item2 !== null)
 
+            var portraitItemsPerRow = Math.floor(window.width / gridView.cellSize)
             var item3 = Util.findItem(gridView.contentItem, function(item) {
-                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_3.jpg"
+                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_" + portraitItemsPerRow + ".jpg"
             })
             verify(item3 !== null)
-
-
-            var item5 = Util.findItem(gridView.contentItem, function(item) {
-                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_5.jpg"
-            })
-            verify(item5 !== null)
-
 
             // Open the context menu.
             testEvent.mousePress(item2, gridView.cellWidth / 2, gridView.cellHeight / 2,  Qt.LeftButton, 0, 0)
@@ -156,9 +153,14 @@ ApplicationWindow {
             tryCompare(gridView.contextMenu, 'active', false)
 
             // Change the orientation. Now item3 should be above the
-            // context menu, so y=0, but item 5 should be below it.
+            // context menu, so y=0, but item5 should be below it.
             gridPage.orientation = Orientation.Landscape
             wait()
+            var landscapeItemsPerRow = Math.floor(window.height / gridView.cellSize)
+            var item5 = Util.findItem(gridView.contentItem, function(item) {
+                return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_" + landscapeItemsPerRow + ".jpg"
+            })
+            verify(item5 !== null)
 
             testEvent.mousePress(item2, gridView.cellWidth / 2, gridView.cellHeight / 2,  Qt.LeftButton, 0, 0)
             wait(1000)
@@ -186,6 +188,8 @@ ApplicationWindow {
             verify(gridPage !== null)
             verify(gridView !== null)
             verify(gridView.contextMenu, "active", false)
+            gridPage.orientation = Orientation.Portrait
+            wait(1000)
 
             var item = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_2.jpg"
@@ -213,6 +217,8 @@ ApplicationWindow {
             verify(gridPage !== null)
             verify(gridView !== null)
             verify(gridView.contextMenu, "active", false)
+            gridPage.orientation = Orientation.Portrait
+            wait(1000)
 
             var item6 = Util.findItem(gridView.contentItem, function(item) {
                 return item.source == "file:///opt/tests/jolla-gallery/auto/images/photo_6.jpg"
