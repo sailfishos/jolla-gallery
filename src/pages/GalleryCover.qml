@@ -8,10 +8,8 @@ CoverBackground {
     id: cover
     property bool contentAvailable: galleryModel && galleryModel.count > 0
     property var galleryModel: photosModel
-    property int animationDuration: 2000
+    property int animationDuration: 2500
     property bool fullscreen: window.activeObject && window.activeObject.url != ""
-
-    signal updateZ()
 
     property var layouts: [
         // x, y, rot, z (scale will be increased for higher z)
@@ -37,7 +35,6 @@ CoverBackground {
         indexMap = shuffleArray(indexMap)
         // cycle between layouts
         layoutIdx = (layoutIdx + 1) % 3
-        opacityAnim.start()
     }
 
     Timer {
@@ -48,14 +45,6 @@ CoverBackground {
         onTriggered: calcRand()
     }
 
-    property real photoOpacity: 1.2
-    SequentialAnimation {
-        id: opacityAnim
-        PauseAnimation { duration: animationDuration/4 }
-        FadeAnimation { easing.type: Easing.InOutQuad; target: cover; property: "photoOpacity"; to: 0.05; duration: animationDuration/4 }
-        ScriptAction { script: cover.updateZ() }
-        FadeAnimation { easing.type: Easing.InOutQuad; target: cover; property: "photoOpacity"; to: 1.2; duration: animationDuration/4 }
-    }
 
     ListView{
         id: grid
@@ -72,13 +61,20 @@ CoverBackground {
         delegate: Item {
             id: wrapper
             property real rz: layouts[layoutIdx][indexMap[index]*4+3]
+            onRzChanged: opacityAnim.start()
 
             width: 1
             height: 1
 
-            Component.onCompleted: {
-                z = rz
-                cover.updateZ.connect(function() { z = rz })
+            Component.onCompleted: { z = rz }
+
+            property real photoOpacity: 1.0
+            SequentialAnimation {
+                id: opacityAnim
+                PauseAnimation { duration: index * animationDuration/10 }
+                FadeAnimation { easing.type: Easing.InOutQuad; target: wrapper; property: "photoOpacity"; to: 0.05; duration: animationDuration/4 }
+                ScriptAction { script: wrapper.z = rz }
+                FadeAnimation { easing.type: Easing.InOutQuad; target: wrapper; property: "photoOpacity"; to: 1.0; duration: animationDuration/4 }
             }
 
             CoverPhoto {
@@ -125,7 +121,7 @@ CoverBackground {
     }
 
     // Show the "Active object" e.g. fullscreen image or video
-    Thumbnail {
+        Thumbnail {
         // NOTE: MimeType needs to be updated first if it's changed.
         // It might otherwise cause problems because changing url
         // first e.g. from image to video url without changing the
@@ -137,7 +133,7 @@ CoverBackground {
         smooth: true
         sourceSize.width: parent.width
         sourceSize.height: parent.height
-        opacity: fullscreen ? 0.5 : 0.0
+        opacity: fullscreen ? 0.5 : 0
         Behavior on opacity { FadeAnimation {}}
     }
     CoverPhoto {
