@@ -17,8 +17,8 @@ Loader {
 
             anchors.fill: parent
             InteractionHintLabel {
-                //: Flick here to go to previous view
-                //% "Flick here to go to previous view"
+                //: Swipe here to go to previous view
+                //% "Swipe here to go to previous view"
                 text: qsTrId("gallery-la-split_view_back_hint")
                 anchors.bottom: parent.bottom
                 opacity: touchInteractionHint.running ? 1.0 : 0.0
