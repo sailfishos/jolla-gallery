@@ -43,7 +43,7 @@ Item {
             fillMode: Image.PreserveAspectCrop
         }
         Image {
-            source: "frame.png"
+            source: "image://theme/graphic-gallery-frame"
             anchors.centerIn: parent
             width: photoSize
             height: photoSize + borderWidth

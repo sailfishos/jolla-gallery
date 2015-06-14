@@ -12,6 +12,7 @@ CoverBackground {
     property bool fullscreen: window.activeObject && window.activeObject.url != ""
 
     property var baseLayout: [
+        // x, y, rot, z (scale will be increased for higher z)
         0.2, 0.16, -5, 2,   0.79, 0.1, 5, 5,  0.25, 0.48, 1, 2,    0.72, 0.5, -3, 4,     0.08, 0.86, -5, 3.8,   0.86, 0.74, 4, 5
     ]
 
@@ -64,8 +65,7 @@ CoverBackground {
     Timer {
         id: animTimer
         repeat: true
-        interval: 15000
-        running: cover.status === Cover.Active
+        interval: 2 * 3600 * 1000 // 2 hours
         onTriggered: calcRand()
     }
 
@@ -84,20 +84,20 @@ CoverBackground {
 
         delegate: Item {
             id: wrapper
-            property real rz: layout(index, layoutIdx)[3]
-            onRzChanged: { if (cover.status === Cover.Active) opacityAnim.start() }
+            property real zLayout: layout(index, layoutIdx)[3]
+            onZLayoutChanged: { if (cover.status === Cover.Active) opacityAnim.start() }
 
             width: 1
             height: 1
 
-            Component.onCompleted: z = rz
+            Component.onCompleted: z = zLayout
 
             property real photoOpacity: 1.0
             SequentialAnimation {
                 id: opacityAnim
                 PauseAnimation { duration: (index+1) * animationDuration/10 }
                 FadeAnimation { easing.type: Easing.InOutQuad; target: wrapper; property: "photoOpacity"; to: 0.1; duration: animationDuration/6 }
-                ScriptAction { script: wrapper.z = rz }
+                ScriptAction { script: wrapper.z = zLayout }
                 FadeAnimation { easing.type: Easing.InOutQuad; target: wrapper; property: "photoOpacity"; to: 1.0; duration: animationDuration/6 }
             }
 
@@ -120,7 +120,7 @@ CoverBackground {
                     NumberAnimation { easing.type: Easing.InOutQuad; duration: animationDuration }
                 }
 
-                photoScale: 1.0 + rz/20
+                photoScale: 1.0 + zLayout/20
                 Behavior on photoScale {
                     NumberAnimation { easing.type: Easing.InOutQuad; duration: animationDuration }
                 }

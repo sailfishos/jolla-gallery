@@ -12,7 +12,7 @@ MODULENAME = com/jolla/gallery
 system(qdbusxml2cpp -c GalleryAdaptor -a galleryadaptor.h:galleryadaptor.cpp  ../com.jolla.gallery.xml)
 
 
-qml.files = *.qml pages *.png
+qml.files = *.qml pages
 qml.path = $$DEPLOYMENT_PATH
 
 
