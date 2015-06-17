@@ -26,7 +26,6 @@ SlideshowView {
     }
 
     interactive: !itemScaled && count > 1
-    flickDeceleration: 300*Theme.pixelRatio
 
 
     Component.onCompleted: {
