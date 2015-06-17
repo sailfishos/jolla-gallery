@@ -148,8 +148,6 @@ SlideshowView {
                 enableZoom: !view.moving
 
                 active: mediaItem.active
-                maximumWidth: model.width
-                maximumHeight: model.height
 
                 onClicked: view.clicked()
             }
