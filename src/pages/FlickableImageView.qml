@@ -216,6 +216,12 @@ SlideshowView {
 
             source: MediaPlayer {
                 id: mediaPlayer
+                onPlaybackStateChanged: {
+                    if (playbackState == MediaPlayer.PlayingState && view.menuOpen) {
+                        // go fullscreen for playback
+                        view.clicked()
+                    }
+                }
             }
 
             visible: mediaPlayer.playbackState != MediaPlayer.StoppedState
