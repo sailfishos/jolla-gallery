@@ -173,10 +173,15 @@ SlideshowView {
                 contentHeight: view.contentHeight
 
                 onClicked: {
+                   view.clicked()
                    if (mediaPlayer.playbackState == MediaPlayer.PlayingState) {
-                       mediaPlayer.pause()
-                   } else {
-                       view.clicked()
+                       // pause and go splitscreen
+                       view._pause()
+                   } else if (!view.menuOpen && // negate because we just opened it via view.clicked() above
+                                (mediaPlayer.playbackState == MediaPlayer.StoppedState
+                              || mediaPlayer.playbackState == MediaPlayer.PausedState)) {
+                       // start playback and go fullscreen
+                       view._play()
                    }
                }
             }
@@ -218,7 +223,7 @@ SlideshowView {
                 id: mediaPlayer
                 onPlaybackStateChanged: {
                     if (playbackState == MediaPlayer.PlayingState && view.menuOpen) {
-                        // go fullscreen for playback
+                        // go fullscreen for playback if triggered via Play icon.
                         view.clicked()
                     }
                 }
