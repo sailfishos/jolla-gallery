@@ -47,7 +47,7 @@ Item {
             anchors.centerIn: parent
             width: photoSize
             height: photoSize + borderWidth
-            sourceSize.width: photo.width*1.5
+            sourceSize: Qt.size(width, height);
             smooth: true
         }
     }
