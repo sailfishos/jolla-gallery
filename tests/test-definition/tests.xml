@@ -7,8 +7,14 @@
            <pre_steps>
                <step>/usr/sbin/mcetool -jdisabled -Doff -B1 -jenabled -U -B1 -kunlocked</step>
            </pre_steps>
-           <case manual="false" name="unittests">
-               <step>cd /opt/tests/jolla-gallery/auto/ &amp;&amp;DISPLAY=:0 ./run-tests.sh</step>
+           <case manual="false" name="FullScreenPage">
+               <step>cd /opt/tests/jolla-gallery/auto/ &amp;&amp;DISPLAY=:0 ./run-tests.sh tst_fullscreenpage.qml</step>
+           </case>
+           <case manual="false" name="GridPage">
+               <step>cd /opt/tests/jolla-gallery/auto/ &amp;&amp;DISPLAY=:0 ./run-tests.sh tst_gridpage.qml</step>
+           </case>
+           <case manual="false" name="StartPage">
+               <step>cd /opt/tests/jolla-gallery/auto/ &amp;&amp;DISPLAY=:0 ./run-tests.sh tst_startpage.qml</step>
            </case>
            <post_steps>
                <step>/usr/sbin/mcetool -jdisabled -Doff</step>

@@ -5,7 +5,7 @@ export `dbus-launch`
 export QML2_IMPORT_PATH=/opt/tests/jolla-gallery/imports
 export LC_ALL=fi_FI.utf8
 
-/usr/lib/qt5/bin/qmltestrunner $@
+/usr/lib/qt5/bin/qmltestrunner -input $@
 exit_code=$?
 
 kill $DBUS_SESSION_BUS_PID
