@@ -88,6 +88,7 @@ ApplicationWindow {
 
             // Verify that in portrait mode the grid wraps after portraitItemsPerRow items.
             gridPage.orientation = Orientation.Portrait
+            wait(1000)
 
             var portraitItemsPerRow = Math.floor(window.width / gridView.cellSize)
 
