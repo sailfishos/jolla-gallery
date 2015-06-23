@@ -28,6 +28,7 @@ BuildRequires:  oneshot
 Requires:  ambient-icons-closed
 Requires:  sailfishsilica-qt5 >= 0.13.44
 Requires:  qt5-qtdocgallery
+Requires:  mapplauncherd >= 4.1.17
 Requires:  mapplauncherd-booster-silica-qt5
 Requires:  qt5-qtdeclarative-import-multimedia
 Requires:  declarative-transferengine-qt5 >= 0.0.49
