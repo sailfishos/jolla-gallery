@@ -64,6 +64,7 @@ CoverBackground {
 
     Timer {
         id: animTimer
+        running: true
         repeat: true
         interval: 2 * 3600 * 1000 // 2 hours
         onTriggered: calcRand()
