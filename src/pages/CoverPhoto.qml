@@ -30,6 +30,22 @@ Item {
         layer.enabled: parent.opacity != 1.0
         layer.smooth: true
 
+        Item {
+            clip: true
+            anchors.fill: thumbnail
+            Rectangle {
+                anchors {
+                    fill: parent
+                    margins: -parent.width * 0.2
+                }
+                rotation: -30
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: "#404040" }
+                    GradientStop { position: 1.0; color: "#999999" }
+                }
+            }
+        }
+
         Thumbnail {
             id: thumbnail
             anchors {
@@ -41,13 +57,25 @@ Item {
             sourceSize.width: width * 1.5
             sourceSize.height: height * 1.5
             fillMode: Image.PreserveAspectCrop
+            opacity: status == Thumbnail.Ready ? 1.0 : 0.0
+            Behavior on opacity {
+                id: developAnim
+                enabled: false
+                FadeAnimator { duration: 3000 }
+            }
+            Timer {
+                // If the thumbnail is not immediately available, fade it in slowly when ready
+                running: true
+                interval: 50
+                onTriggered: developAnim.enabled = true
+            }
         }
         Image {
             source: "image://theme/graphic-gallery-frame"
             anchors.centerIn: parent
             width: photoSize
             height: photoSize + borderWidth
-            sourceSize: Qt.size(width, height);
+            sourceSize.width: photo.width*1.5
             smooth: true
         }
     }
