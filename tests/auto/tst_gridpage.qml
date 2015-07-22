@@ -209,8 +209,8 @@ ApplicationWindow {
             deleteMenu.clicked(null)
             var remorseItem = Util.findItemByName(item, "remorseItem")
             compare(remorseItem.state, "active")
-            wait(6000)
-            compare(remorseItem.state, "activePending")
+            wait(5500)
+            tryCompare(remorseItem, 'state', "activePending")
         }
 
 
