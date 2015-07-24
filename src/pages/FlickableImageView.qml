@@ -216,26 +216,38 @@ SlideshowView {
     }   
 
     children: [
-        GStreamerVideoOutput {
-            id: video
-
-            source: MediaPlayer {
-                id: mediaPlayer
-                onPlaybackStateChanged: {
-                    if (playbackState == MediaPlayer.PlayingState && view.menuOpen) {
-                        // go fullscreen for playback if triggered via Play icon.
-                        view.clicked()
-                    }
-                }
-            }
-
+        Item {
             visible: mediaPlayer.playbackState != MediaPlayer.StoppedState
             width: view.contentWidth
             height: view.contentHeight
             anchors.centerIn: view._activeItem
 
-            ScreenBlank {
-                suspend: mediaPlayer.playbackState == MediaPlayer.PlayingState
+            Rectangle {
+                anchors.fill: parent
+                color: 'black'
+                opacity: video.playing ? 1 : 0
+                Behavior on opacity { FadeAnimation {} }
+            }
+
+            GStreamerVideoOutput {
+                id: video
+
+                property bool playing: mediaPlayer.playbackState == MediaPlayer.PlayingState
+
+                anchors.fill: parent
+                source: MediaPlayer {
+                    id: mediaPlayer
+                    onPlaybackStateChanged: {
+                        if (playbackState == MediaPlayer.PlayingState && view.menuOpen) {
+                            // go fullscreen for playback if triggered via Play icon.
+                            view.clicked()
+                        }
+                    }
+                }
+
+                ScreenBlank {
+                    suspend: video.playing
+                }
             }
         }
     ]
