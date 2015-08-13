@@ -16,6 +16,7 @@ import "scripts/AlbumManager.js" as AlbumManager
 SplitViewPage {
     id: fullscreenPage
 
+    closeOnMinimize: false
     property alias model: imageList.model
     property alias currentIndex: imageList.currentIndex
     property alias autoPlay: imageList.autoPlay
