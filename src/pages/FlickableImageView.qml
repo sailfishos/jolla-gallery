@@ -15,6 +15,7 @@ SlideshowView {
     property Item _activeItem
     property bool _applicationActive: window.applicationActive
     property alias _videoActive: permissions.enabled
+    property bool _minimizedPlaying
 
     property real contentWidth: width
     property real contentHeight: height
@@ -61,8 +62,14 @@ SlideshowView {
     }
 
     on_ApplicationActiveChanged: {
-        if (!_applicationActive && mediaPlayer.playbackState == MediaPlayer.PlayingState) {
-            mediaPlayer.pause()
+        if (!_applicationActive) {
+            // if we were playing a video when we minimized, store that information.
+            _minimizedPlaying = mediaPlayer.playbackState == MediaPlayer.PlayingState
+            if (_minimizedPlaying) {
+                mediaPlayer.pause() // and automatically pause the video
+            }
+        } else if (_minimizedPlaying) {
+            view._play() // restart playback automatically.  will also go fullscreen.
         }
     }
 
