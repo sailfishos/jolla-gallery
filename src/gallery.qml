@@ -10,9 +10,9 @@ import "pages/scripts/AlbumManager.js" as AlbumManager
 ApplicationWindow {
     id: window
 
-    property var photosModel: photosModelComponent.createObject(window)
-    property var videosModel: videosModelComponent.createObject(window)
-    property var ambienceModel: ambienceModelComponent.createObject(window)
+    property alias photosModel: photosModel
+    property alias videosModel: videosModel
+    property alias ambienceModel: ambienceModel
     property var activeObject: ({url: "", mimeType: ""})
     property url ambienceUrl
 
@@ -23,14 +23,29 @@ ApplicationWindow {
     {
         // Save current ambience count for checking later if there is a new
         // ambience created.
-        ambienceUrl = url
+        if (!window.showAmbienceDialog(url)) {
+            window.ambienceUrl = url
+        }
         Ambience.source = url
     }
 
-    function showAmbienceDialog()
+    function showAmbienceDialog(ambienceUrl)
     {
-        // We have a new ambience created. Show the settings dialog
-        pageStack.push( ambienceSettings, { "ambienceModel": window.ambienceModel, "source":  Ambience.source })
+        var ok = false
+        for (var i = ambienceModel.count - 1; i >= 0; --i) {
+              var data = ambienceModel.get(i)
+              if (data.url == ambienceUrl) {
+                  ok = true
+                  break
+              }
+        }
+
+        if (ok) {
+            // We have a new ambience created. Show the settings dialog
+            pageStack.push( ambienceSettings, { "ambienceModel": window.ambienceModel, "source":  ambienceUrl })
+        }
+
+        return ok
     }
 
     Component {
@@ -38,47 +53,33 @@ ApplicationWindow {
         AmbienceSettingsPage {}
     }
 
-    Component {
-        id: photosModelComponent
-        DocumentGalleryModel {
-            rootType: DocumentGallery.Image
-            properties: ["url", "mimeType", "title", "orientation", "lastModified", "width", "height" ]
-            sortProperties: ["-lastModified"]
-            autoUpdate: true
-            filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
-        }
+
+    DocumentGalleryModel {
+        id: photosModel
+
+        rootType: DocumentGallery.Image
+        properties: ["url", "mimeType", "title", "orientation", "lastModified", "width", "height" ]
+        sortProperties: ["-lastModified"]
+        autoUpdate: true
+        filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
     }
 
-    Component {
-        id: videosModelComponent
-        DocumentGalleryModel {
-            rootType: DocumentGallery.Video
-            properties: ["url", "mimeType", "title", "lastModified", "orientation", "duration"]
-            sortProperties: ["-lastModified"]
-            autoUpdate: true
-        }
+    DocumentGalleryModel {
+        id: videosModel
+
+        rootType: DocumentGallery.Video
+        properties: ["url", "mimeType", "title", "lastModified", "orientation", "duration"]
+        sortProperties: ["-lastModified"]
+        autoUpdate: true
     }
 
-    Component {
-        id: ambienceModelComponent
-        AmbienceModel {
-            filter: AmbienceModel.NoFilter
-            onRowsInserted: {
-                if (ambienceUrl == "") {
-                    return
-                }
-                var ok = false
-                for (var i = count - 1; i >= 0; --i) {
-                      var data = get(i)
-                      if (data.url == ambienceUrl) {
-                          ambienceUrl = ""
-                          ok = true
-                          break
-                      }
-                }
-                if (ok) {
-                    window.showAmbienceDialog()
-                }
+    AmbienceModel {
+        id: ambienceModel
+
+        filter: AmbienceModel.NoFilter
+        onRowsInserted: {
+            if (ambienceUrl != "" && window.showAmbienceDialog(window.ambienceUrl)) {
+                window.ambienceUrl = ""
             }
         }
     }
