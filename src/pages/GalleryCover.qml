@@ -10,6 +10,7 @@ CoverBackground {
     property var galleryModel: photosModel
     property int animationDuration: 2000
     property bool fullscreen: window.activeObject && window.activeObject.url != ""
+    property bool shuffleWhenActive
 
     property var baseLayout: [
         // x, y, rot, z (scale will be increased for higher z)
@@ -62,14 +63,35 @@ CoverBackground {
         layoutIdx = (layoutIdx + 1) % 3
     }
 
-    Timer {
-        id: animTimer
-        running: true
-        repeat: true
-        interval: 2 * 3600 * 1000 // 2 hours
-        onTriggered: calcRand()
+    onStatusChanged: {
+        if (status == Cover.Active && shuffleWhenActive) {
+            shuffleWhenActive = false
+            shuffleTimer.start()
+            shuffleDelayTimer.start()
+        }
     }
 
+    Timer {
+        id: shuffleDelayTimer
+        running: true
+        repeat: true
+        interval: 5 * 60 * 1000 // change cover no more than once every 5 minutes
+        onTriggered: {
+            if (cover.status == Cover.Active) {
+                shuffleTimer.start()
+            } else {
+                // Don't shuffle until the cover becomes visible
+                shuffleWhenActive = true
+                running = false
+            }
+        }
+    }
+
+    Timer {
+        id: shuffleTimer
+        interval: 2000
+        onTriggered: calcRand()
+    }
 
     ListView{
         id: grid
@@ -86,20 +108,36 @@ CoverBackground {
         delegate: Item {
             id: wrapper
             property real zLayout: layout(index, layoutIdx)[3]
-            onZLayoutChanged: { if (cover.status === Cover.Active) opacityAnim.start() }
+            onZLayoutChanged: {
+                if (cover.status == Cover.Active) {
+                    opacityAnim.start()
+                } else {
+                    z = zLayout
+                }
+            }
+
+            property var randVals: []
+            property int layoutIdx: cover.layoutIdx
+            onLayoutIdxChanged: randomize()
+            Component.onCompleted: {
+                randomize()
+                z = zLayout
+            }
+
+            function randomize() {
+                randVals[0] = Math.random()
+                randVals[1] = Math.random()
+                randVals[2] = Math.random()
+            }
 
             width: 1
             height: 1
 
-            Component.onCompleted: z = zLayout
-
-            property real photoOpacity: 1.0
             SequentialAnimation {
                 id: opacityAnim
-                PauseAnimation { duration: (index+1) * animationDuration/10 }
-                FadeAnimation { easing.type: Easing.InOutQuad; target: wrapper; property: "photoOpacity"; to: 0.1; duration: animationDuration/6 }
-                ScriptAction { script: wrapper.z = zLayout }
-                FadeAnimation { easing.type: Easing.InOutQuad; target: wrapper; property: "photoOpacity"; to: 1.0; duration: animationDuration/6 }
+                ScriptAction { script: photo1.z = zLayout }
+                FadeAnimation { easing.type: Easing.InOutQuad; target: photo; property: "opacity"; to: 0.0; duration: animationDuration }
+                ScriptAction { script: { wrapper.z = zLayout; photo.opacity = 1.0 } }
             }
 
             CoverPhoto {
@@ -109,10 +147,9 @@ CoverBackground {
                 anchors.centerIn: parent
                 width: grid.cellWidth
                 height: grid.cellHeight
-                opacity: photoOpacity
 
-                offsetX: layout(index, layoutIdx)[0] * cover.width + (Theme.paddingSmall - Math.random() * Theme.paddingMedium)
-                offsetY: layout(index, layoutIdx)[1] * cover.height + (Theme.paddingSmall - Math.random() * Theme.paddingMedium)
+                offsetX: layout(index, layoutIdx)[0] * cover.width + (Theme.paddingSmall - wrapper.randVals[0] * Theme.paddingMedium)
+                offsetY: layout(index, layoutIdx)[1] * cover.height + (Theme.paddingSmall - wrapper.randVals[1] * Theme.paddingMedium)
 
                 Behavior on offsetX {
                     NumberAnimation { easing.type: Easing.InOutQuad; duration: animationDuration }
@@ -126,9 +163,27 @@ CoverBackground {
                     NumberAnimation { easing.type: Easing.InOutQuad; duration: animationDuration }
                 }
 
-                rotation: layout(index, layoutIdx)[2] + 5 - Math.random() * 10
+                rotation: layout(index, layoutIdx)[2] + 5 - wrapper.randVals[2] * 10
                 Behavior on rotation {
                     RotationAnimation { easing.type: Easing.InOutQuad; duration: animationDuration }
+                }
+            }
+            Loader {
+                // This is used to do a clean cross-fade to the target z-value during animation
+                id: photo1
+                anchors.centerIn: wrapper
+                parent: wrapper.parent
+                active: opacityAnim.running
+                sourceComponent: CoverPhoto {
+                    source: url
+                    mimeType: model.mimeType
+                    width: grid.cellWidth
+                    height: grid.cellHeight
+                    opacity: 1.0 - photo.opacity
+                    offsetX: photo.offsetX
+                    offsetY: photo.offsetY
+                    photoScale: photo.photoScale
+                    rotation: photo.rotation
                 }
             }
         }
