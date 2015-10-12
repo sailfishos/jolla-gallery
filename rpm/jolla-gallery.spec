@@ -39,6 +39,8 @@ Requires:  sailfish-components-gallery-qt5 >= 0.1.4
 Requires:  ambienced
 Requires:  jolla-gallery-ambience >= 0.0.17
 Requires:  jolla-gallery-facebook
+Requires:  jolla-gallery-extensions-dropbox
+Requires:  jolla-gallery-extensions-onedrive
 Requires:  jolla-settings-accounts >= 0.1.31
 Requires:  nemo-qml-plugin-policy-qt5
 %{_oneshot_requires_post}
