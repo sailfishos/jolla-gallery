@@ -11,7 +11,7 @@ SlideshowView {
     property bool itemScaled: currentItem !== null && currentItem.itemScaled
     property bool isPortrait
     property bool menuOpen
-    property alias autoPlay: mediaPlayer.autoPlay
+    property bool autoPlay
     property Item _activeItem
     property bool _applicationActive: window.applicationActive
     property alias _videoActive: permissions.enabled
@@ -225,11 +225,76 @@ SlideshowView {
     }   
 
     children: [
-        Item {
-            visible: mediaPlayer.playbackState != MediaPlayer.StoppedState
+        Loader {
+            id: mediaPlayerLoader
+
+            sourceComponent: mediaPlayerComponent
+            active: false
+
             width: view.contentWidth
             height: view.contentHeight
             anchors.centerIn: view._activeItem
+        }
+    ]
+
+    QtObject {
+        id: mediaPlayer
+
+        property url source
+        onSourceChanged: {
+            mediaPlayerLoader.active = true
+            mediaPlayerLoader.item.player.source = source
+        }
+
+        readonly property int playbackState: mediaPlayerLoader.item
+                ? mediaPlayerLoader.item.player.playbackState
+                : MediaPlayer.StoppedState
+        readonly property int status: mediaPlayerLoader.item
+                ? mediaPlayerLoader.item.player.status
+                : MediaPlayer.NoMedia
+        readonly property bool hasVideo: mediaPlayerLoader.item
+                    && mediaPlayerLoader.item.player.hasVideo
+        readonly property int error: mediaPlayerLoader.item
+                    ? mediaPlayerLoader.item.player.error
+                    : MediaPlayer.NoError
+        readonly property int position: mediaPlayerLoader.item
+                    ? mediaPlayerLoader.item.player.position
+                    : 0
+        readonly property int duration: mediaPlayerLoader.item
+                    ? mediaPlayerLoader.item.player.duration
+                    : 0
+
+        onStatusChanged: console.log("status changed", status)
+
+        function play() {
+            if (mediaPlayerLoader.item) {
+                mediaPlayerLoader.item.player.play()
+            }
+        }
+        function pause() {
+            if (mediaPlayerLoader.item) {
+                mediaPlayerLoader.item.player.pause()
+            }
+        }
+        function stop() {
+            if (mediaPlayerLoader.item) {
+                mediaPlayerLoader.item.player.stop()
+            }
+        }
+        function seek(position) {
+            if (mediaPlayerLoader.item) {
+                mediaPlayerLoader.item.player.seek(position)
+            }
+        }
+    }
+
+    Component {
+        id: mediaPlayerComponent
+
+        Item {
+            property alias player: videoPlayer
+
+            visible: videoPlayer.playbackState != MediaPlayer.StoppedState
 
             Rectangle {
                 anchors.fill: parent
@@ -238,14 +303,17 @@ SlideshowView {
                 Behavior on opacity { FadeAnimation {} }
             }
 
-            GStreamerVideoOutput {
+            VideoOutput {
                 id: video
 
-                property bool playing: mediaPlayer.playbackState == MediaPlayer.PlayingState
+                property bool playing: videoPlayer.playbackState == MediaPlayer.PlayingState
 
                 anchors.fill: parent
                 source: MediaPlayer {
-                    id: mediaPlayer
+                    id: videoPlayer
+
+                    autoPlay: view.autoPlay
+
                     onPlaybackStateChanged: {
                         if (playbackState == MediaPlayer.PlayingState && view.menuOpen) {
                             // go fullscreen for playback if triggered via Play icon.
@@ -259,5 +327,5 @@ SlideshowView {
                 }
             }
         }
-    ]
+    }
 }
