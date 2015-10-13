@@ -30,6 +30,7 @@ SlideshowView {
 
 
     Component.onCompleted: {
+        view.positionViewAtIndex(view.currentIndex, PathView.Center)
         if (!view._activeItem && currentItem) {
             view._activeItem = currentItem
             view._activeItem.active = true
@@ -211,6 +212,7 @@ SlideshowView {
             anchors.centerIn: mediaItem
 
             sourceComponent: mediaItem.isImage ? imageComponent: videoComponent
+            asynchronous: view.currentIndex != model.index
 
             // Delay Poster creation until we're in playing state. Without this when auto playing
             // poster will blink at the beginning.

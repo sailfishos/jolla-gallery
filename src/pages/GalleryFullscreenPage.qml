@@ -187,7 +187,8 @@ SplitViewPage {
         contentWidth: fullscreenPage.width
         contentHeight: fullscreenPage.height
 
-        anchors.fill: parent
+        width: fullscreenPage.foregroundItem.width
+        height: fullscreenPage.foregroundItem.height
 
         objectName: "flickableView"
         isPortrait: fullscreenPage.isPortrait
