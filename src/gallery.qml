@@ -14,6 +14,7 @@ ApplicationWindow {
     property alias videosModel: videosModel
     property alias ambienceModel: ambienceModel
     property var activeObject: ({url: "", mimeType: ""})
+    property url previousAmbienceUrl
     property url ambienceUrl
 
     allowedOrientations: defaultAllowedOrientations
@@ -21,9 +22,9 @@ ApplicationWindow {
 
     function createAmbience(url)
     {
-        // Save current ambience count for checking later if there is a new
-        // ambience created.
+        previousAmbienceUrl = (Ambience.source != url) ? Ambience.source : ""
         if (!window.showAmbienceDialog(url)) {
+            // Save the url for checking later if there is a new ambience created.
             window.ambienceUrl = url
         }
         Ambience.source = url
@@ -50,7 +51,24 @@ ApplicationWindow {
 
     Component {
         id: ambienceSettings
-        AmbienceSettingsPage {}
+        AmbienceSettingsPage {
+            onAmbienceRemoved: {
+                // User removed the newly created ambience.
+                // Restore the previous ambience if it's still valid.
+                if (previousAmbienceUrl != "") {
+                    for (var i = ambienceModel.count - 1; i >= 0; --i) {
+                          var data = ambienceModel.get(i)
+                          if (data.url == previousAmbienceUrl) {
+                              Ambience.source = previousAmbienceUrl
+                              break
+                          }
+                    }
+                }
+            }
+            Component.onDestruction: {
+                previousAmbienceUrl = ""
+            }
+        }
     }
 
 
