@@ -3,7 +3,7 @@ Summary:    Jolla Gallery application
 Version:    0.1.88
 Release:    1
 Group:      Applications/Multimedia
-License:    TBD
+License:    Proprietary
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
 Source1:    rpmlintrc
@@ -50,7 +50,6 @@ The Jolla Gallery application.
 
 %package ts-devel
 Summary:   Translation source for Jolla Gallery
-License:   TBD
 Group:     Applications/Multimedia
 
 %description ts-devel
