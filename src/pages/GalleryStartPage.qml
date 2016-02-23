@@ -133,7 +133,7 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
                 opacity: 0.4
-                text: media ? media.count : 0
+                text: (media ? media.count : 0).toLocaleString()
                 color: delegateItem.down ? Theme.highlightColor : Theme.primaryColor
                 font.pixelSize: Theme.fontSizeLarge
             }
