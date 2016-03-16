@@ -12,65 +12,40 @@ ApplicationWindow {
 
     property alias photosModel: photosModel
     property alias videosModel: videosModel
-    property alias ambienceModel: ambienceModel
     property var activeObject: ({url: "", mimeType: ""})
-    property url previousAmbienceUrl
-    property url ambienceUrl
 
     allowedOrientations: defaultAllowedOrientations
     _defaultLabelFormat: Text.PlainText
 
     function createAmbience(url)
     {
-        previousAmbienceUrl = (Ambience.source != url) ? Ambience.source : ""
-        if (!window.showAmbienceDialog(url)) {
-            // Save the url for checking later if there is a new ambience created.
-            window.ambienceUrl = url
-        }
-        Ambience.source = url
-    }
-
-    function showAmbienceDialog(ambienceUrl)
-    {
-        var ok = false
-        for (var i = ambienceModel.count - 1; i >= 0; --i) {
-              var data = ambienceModel.get(i)
-              if (data.url == ambienceUrl) {
-                  ok = true
-                  break
-              }
-        }
-
-        if (ok) {
-            // We have a new ambience created. Show the settings dialog
-            pageStack.push( ambienceSettings, { "ambienceModel": window.ambienceModel, "source":  ambienceUrl })
-        }
-
-        return ok
+        var previousAmbienceUrl = Ambience.source
+        Ambience.setAmbience(url, function(ambienceId) {
+            pageStack.push(ambienceSettings, {
+                'contentId': ambienceId,
+                'previousAmbienceUrl': previousAmbienceUrl
+            })
+        })
     }
 
     Component {
         id: ambienceSettings
         AmbienceSettingsPage {
-            onAmbienceRemoved: {
-                // User removed the newly created ambience.
-                // Restore the previous ambience if it's still valid.
-                if (previousAmbienceUrl != "") {
-                    for (var i = ambienceModel.count - 1; i >= 0; --i) {
-                          var data = ambienceModel.get(i)
-                          if (data.url == previousAmbienceUrl) {
-                              Ambience.source = previousAmbienceUrl
-                              break
-                          }
-                    }
-                }
+            property alias previousAmbienceUrl: previousAmbience.url
+
+            allowRemove: previousAmbience.contentId !== 0
+
+            // Monitor the previous ambience, if it has been removed don't allow the
+            // current one to be removed as well.
+            AmbienceInfo {
+                id: previousAmbience
             }
-            Component.onDestruction: {
-                previousAmbienceUrl = ""
+
+            onAmbienceRemoved: {
+                Ambience.source = previousAmbienceUrl
             }
         }
     }
-
 
     DocumentGalleryModel {
         id: photosModel
@@ -89,17 +64,6 @@ ApplicationWindow {
         properties: ["url", "mimeType", "title", "lastModified", "orientation", "duration"]
         sortProperties: ["-lastModified"]
         autoUpdate: true
-    }
-
-    AmbienceModel {
-        id: ambienceModel
-
-        filter: AmbienceModel.NoFilter
-        onRowsInserted: {
-            if (ambienceUrl != "" && window.showAmbienceDialog(window.ambienceUrl)) {
-                window.ambienceUrl = ""
-            }
-        }
     }
 
     // For some reason if the gallery is launched via invoker, it sets codecForLocale to
