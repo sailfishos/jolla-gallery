@@ -35,7 +35,7 @@ Requires:  declarative-transferengine-qt5 >= 0.0.49
 Requires:  nemo-qml-plugin-thumbnailer-qt5-video
 Requires:  nemo-qml-plugin-thumbnailer-qt5
 Requires:  sailfish-components-media-qt5
-Requires:  sailfish-components-gallery-qt5 >= 0.1.7
+Requires:  sailfish-components-gallery-qt5 >= 0.1.10
 Requires:  ambienced
 Requires:  jolla-gallery-ambience >= 0.1.10
 Requires:  jolla-gallery-facebook

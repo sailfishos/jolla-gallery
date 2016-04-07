@@ -13,7 +13,6 @@
 
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
-#include "declarativefileinfo.h"
 #include "declarativethreadedfileremover.h"
 #include "declarativecameralauncher.h"
 #include "declarativegalleryservice.h"
@@ -75,7 +74,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     translator.load(QLocale(), "gallery", "-", translationPath);
     qApp->installTranslator(&translator);
 
-    qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
     qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");

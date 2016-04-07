@@ -49,7 +49,7 @@ Page {
             var file = urls[i]
             fileInfo.source = file
 
-            if (fileInfo.type == "image") {
+            if (fileInfo.mimeFileType == "image") {
                 metadata.source = file
                 props = { url: file,
                           mimeType: fileInfo.mimeType,
@@ -58,7 +58,7 @@ Page {
                           width: metadata.width,
                           height: metadata.height }
             } else
-            if (fileInfo.type == "video"){
+            if (fileInfo.mimeFileType == "video"){
                 props = { url: file,
                           mimeType: fileInfo.mimeType,
                           title: fileInfo.fileName,

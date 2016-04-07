@@ -23,7 +23,6 @@ SplitViewPage {
     property bool imageViewerMode: false
 
     readonly property bool currentItemIsImage: model && model.get(fullscreenPage.currentIndex).mimeType.indexOf("image/") == 0
-    readonly property bool currentItemIsJpeg: model && model.get(fullscreenPage.currentIndex).mimeType === "image/jpeg"
 
     signal deleteMedia(int index)
     signal requestIndex(int index)
@@ -117,7 +116,7 @@ SplitViewPage {
                 //% "Edit"
                 text: qsTrId("gallery-me-edit")
                 visible:  fullscreenPage.currentItemIsImage && !fullscreenPage.imageViewerMode
-                enabled: fullscreenPage.currentItemIsJpeg
+                enabled: fileInfo.editableImage
                 onClicked: pageStack.push("Sailfish.Gallery.ImageEditPage", { source: imageList.currentItemUrl() })
             }
 
