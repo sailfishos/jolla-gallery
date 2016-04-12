@@ -23,6 +23,14 @@
 #include <MDeclarativeCache>
 #endif
 
+static QObject *camera_launcher_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return new DeclarativeCameraLauncher;
+}
+
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QQuickWindow::setDefaultAlphaBuffer(true);
