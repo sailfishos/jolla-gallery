@@ -22,7 +22,6 @@ SOURCES += \
     galleryadaptor.cpp \
 
 HEADERS += \
-        $$GALLERY_SOURCE_PATH/declarativedbusinterface.h \
         $$GALLERY_SOURCE_PATH/declarativemediamodel.h \
         $$GALLERY_SOURCE_PATH/declarativemediasource.h \
         $$GALLERY_SOURCE_PATH/declarativefileinfo.h \
@@ -32,7 +31,6 @@ HEADERS += \
 
 SOURCES += \
         main.cpp \
-        $$GALLERY_SOURCE_PATH/declarativedbusinterface.cpp \
         $$GALLERY_SOURCE_PATH/declarativemediamodel.cpp \
         $$GALLERY_SOURCE_PATH/declarativemediasource.cpp \
         $$GALLERY_SOURCE_PATH/declarativefileinfo.cpp \

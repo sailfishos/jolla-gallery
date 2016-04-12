@@ -49,7 +49,6 @@ SOURCES += \
 HEADERS += \
     declarativemediamodel.h \
     declarativemediasource.h \
-    declarativedbusinterface.h \
     declarativefileinfo.h \
     declarativethreadedfileremover.h \
     declarativecameralauncher.h
@@ -57,7 +56,6 @@ HEADERS += \
 SOURCES += gallery.cpp \
     declarativemediamodel.cpp \
     declarativemediasource.cpp \
-    declarativedbusinterface.cpp \
     declarativefileinfo.cpp \
     declarativethreadedfileremover.cpp \
     declarativecameralauncher.cpp
