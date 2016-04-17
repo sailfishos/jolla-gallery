@@ -86,7 +86,7 @@ SplitViewPage {
         PullDownMenu {
             id: pullDownMenu
 
-            visible: (fileInfo.localFile || fullscreenPage.currentItemIsImage) && !fullscreenPage.imageViewerMode
+            visible: (fileInfo.localFile || fullscreenPage.currentItemIsImage)
 
             MenuItem {
                 id: detailsMenuItem
@@ -125,7 +125,7 @@ SplitViewPage {
                 id: createAmbienceMenuItem
                 //% "Create ambience"
                 text: qsTrId("gallery-me-create_ambience")
-                visible:  fullscreenPage.currentItemIsImage && !fullscreenPage.imageViewerMode
+                visible:  fullscreenPage.currentItemIsImage
                 onClicked: {
                     window.createAmbience(model.get(currentIndex).url)
                 }
