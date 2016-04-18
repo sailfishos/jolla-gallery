@@ -12,11 +12,4 @@ public:
     Q_INVOKABLE void exec();
 };
 
-static QObject *camera_launcher_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-
-    return new DeclarativeCameraLauncher;
-}
 #endif // DECLARATIVECAMERALAUNCHER_H

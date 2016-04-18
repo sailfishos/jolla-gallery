@@ -43,6 +43,7 @@ Requires:  jolla-gallery-extensions-dropbox
 Requires:  jolla-gallery-extensions-onedrive
 Requires:  jolla-settings-accounts >= 0.1.31
 Requires:  nemo-qml-plugin-policy-qt5
+Requires:  nemo-qml-plugin-dbus-qt5
 %{_oneshot_requires_post}
 
 %description

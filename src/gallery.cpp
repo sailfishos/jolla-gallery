@@ -13,7 +13,6 @@
 
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
-#include "declarativedbusinterface.h"
 #include "declarativefileinfo.h"
 #include "declarativethreadedfileremover.h"
 #include "declarativecameralauncher.h"
@@ -23,6 +22,14 @@
 #ifdef HAS_BOOSTER
 #include <MDeclarativeCache>
 #endif
+
+static QObject *camera_launcher_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return new DeclarativeCameraLauncher;
+}
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -71,7 +78,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
     qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
     qmlRegisterType<DeclarativeMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
-    qmlRegisterType<DeclarativeDBusInterface>("com.jolla.gallery", 1, 0, "DBusInterface");
     qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");
     qmlRegisterType<DeclarativeGalleryService>("com.jolla.gallery", 1, 0, "GalleryService");
     qmlRegisterType<DeclarativeTextCodec>("com.jolla.gallery", 1, 0, "TextCodec");

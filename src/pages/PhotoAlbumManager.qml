@@ -1,7 +1,11 @@
+import QtQuick 2.2
+import org.nemomobile.dbus 2.0
 import com.jolla.gallery 1.0
 
 DBusInterface {
-    destination: "org.freedesktop.Tracker1"
+    property QtObject fileRemover: FileRemover { }
+
+    service: "org.freedesktop.Tracker1"
     path: "/org/freedesktop/Tracker1/Resources"
     iface: "org.freedesktop.Tracker1.Resources"
 
@@ -66,7 +70,7 @@ DBusInterface {
     }
 
     function deleteMedia(url) {
-        if (removeFile(url)) {
+        if (fileRemover.deleteFileSync(url)) {
             // Remove image from any albums, and from tracker itself.
             // Tracker will find out the image is deleted eventually, but
             // by removing it ourselves we cut down on the wait time.

@@ -1,6 +1,7 @@
 import QtTest 1.0
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import org.nemomobile.dbus 2.0
 import com.jolla.gallery 1.0
 import "scripts/Util.js" as Util
 
@@ -205,7 +206,7 @@ ApplicationWindow {
     DBusInterface {
         id: galleryService
 
-        destination: "com.jolla.gallery"
+        service: "com.jolla.gallery"
         path: "/com/jolla/gallery/ui"
         iface: "com.jolla.gallery.ui"
 
