@@ -126,6 +126,10 @@ Page {
 
             Label {
                 id: countLabel
+
+                // Unlocalized helper property for testing purposes.
+                readonly property int count: media ? media.count : 0
+
                 objectName: "countLabel"
                 anchors {
                     right: thumbnail.left
@@ -133,7 +137,7 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
                 opacity: 0.4
-                text: (media ? media.count : 0).toLocaleString()
+                text: count.toLocaleString()
                 color: delegateItem.down ? Theme.highlightColor : Theme.primaryColor
                 font.pixelSize: Theme.fontSizeLarge
             }
