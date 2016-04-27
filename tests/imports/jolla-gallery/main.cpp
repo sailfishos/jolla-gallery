@@ -1,7 +1,6 @@
 
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
-#include "declarativefileinfo.h"
 #include "declarativethreadedfileremover.h"
 #include "declarativegalleryservice.h"
 #include "declarativetextcodec.h"
@@ -45,7 +44,6 @@ public:
                        << "Failed to register com.jolla.gallery service";
         }
 
-        qmlRegisterType<DeclarativeFileInfo>("com.jolla.gallery", 1, 0, "FileInfo");
         qmlRegisterType<DeclarativeMediaSource>("com.jolla.gallery", 1, 0, "MediaSource");
         qmlRegisterType<TestMediaModel>("com.jolla.gallery", 1, 0, "MediaSourceModel");
         qmlRegisterType<DeclarativeThreadedFileRemover>("com.jolla.gallery", 1, 0, "FileRemover");

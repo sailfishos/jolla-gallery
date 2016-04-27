@@ -49,14 +49,12 @@ SOURCES += \
 HEADERS += \
     declarativemediamodel.h \
     declarativemediasource.h \
-    declarativefileinfo.h \
     declarativethreadedfileremover.h \
     declarativecameralauncher.h
 
 SOURCES += gallery.cpp \
     declarativemediamodel.cpp \
     declarativemediasource.cpp \
-    declarativefileinfo.cpp \
     declarativethreadedfileremover.cpp \
     declarativecameralauncher.cpp
 
