@@ -116,13 +116,10 @@ CoverBackground {
                 }
             }
 
-            property var randVals: []
+            property var randVals: [ Math.random(), Math.random(), Math.random() ]
             property int layoutIdx: cover.layoutIdx
             onLayoutIdxChanged: randomize()
-            Component.onCompleted: {
-                randomize()
-                z = zLayout
-            }
+            Component.onCompleted: z = zLayout
 
             function randomize() {
                 randVals[0] = Math.random()
