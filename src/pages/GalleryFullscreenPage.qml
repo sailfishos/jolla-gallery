@@ -21,8 +21,9 @@ SplitViewPage {
     property alias currentIndex: imageList.currentIndex
     property alias autoPlay: imageList.autoPlay
     property bool imageViewerMode: false
+    property var currentImageItem: model && model.get(currentIndex)
 
-    readonly property bool currentItemIsImage: model && model.get(fullscreenPage.currentIndex).mimeType.indexOf("image/") == 0
+    readonly property bool currentItemIsImage: !!currentImageItem && currentImageItem.mimeType.indexOf("image/") == 0
 
     signal deleteMedia(int index)
     signal requestIndex(int index)
@@ -59,12 +60,21 @@ SplitViewPage {
         if (status !== PageStatus.Active) {
             return
         }
+        if (model === undefined || currentIndex >= model.count) {
+            // This can happen if all of the images are deleted
+            var firstPage = pageStack.previousPage(fullscreenPage)
+            while (pageStack.previousPage(firstPage)) {
+                firstPage = pageStack.previousPage(firstPage)
+            }
+            pageStack.pop(firstPage)
+            return
+        }
         requestIndex(currentIndex)
     }
 
     FileInfo {
         id: fileInfo
-        source: model.get(currentIndex).url
+        source: currentImageItem ? currentImageItem.url : ""
     }
 
     // This is the share method list, but it also
@@ -72,7 +82,7 @@ SplitViewPage {
     background: ShareMethodList {
         id: menuList
 
-        property string url: fullscreenPage.model.get(fullscreenPage.currentIndex).url
+        property string url: currentImageItem ? currentImageItem.url : ""
         filter: fileInfo.localFile ? fileInfo.mimeType : "text/x-url"
         objectName: "menuList"
         source: fileInfo.localFile ? url : ""
@@ -97,7 +107,7 @@ SplitViewPage {
                 //% "Details"
                 text: qsTrId("gallery-me-details")
                 visible: fileInfo.localFile && !fullscreenPage.imageViewerMode
-                onClicked: window.pageStack.push(detailsComponent, {modelItem: model.get(currentIndex).itemId} )
+                onClicked: window.pageStack.push(detailsComponent, {modelItem: currentImageItem.itemId} )
             }
 
             MenuItem {
@@ -126,13 +136,13 @@ SplitViewPage {
                 text: qsTrId("gallery-me-create_ambience")
                 visible:  fullscreenPage.currentItemIsImage
                 onClicked: {
-                    window.createAmbience(model.get(currentIndex).url)
+                    window.createAmbience(currentImageItem.url)
                 }
             }
         }
 
         header: PageHeader {
-            title: fileInfo.localFile ? model.get(currentIndex).title : (imageList._videoActive ?
+            title: fileInfo.localFile ? currentImageItem.title : (imageList._videoActive ?
                                                                              qsTrId("gallery-la-share") : "")
             //% "Share"
             description: fileInfo.localFile ? qsTrId("gallery-la-share") : ""
