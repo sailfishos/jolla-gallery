@@ -71,7 +71,7 @@ Item {
             }
         }
         Image {
-            source: "image://theme/graphic-gallery-frame"
+            source: "image://theme/graphic-gallery-frame?#FFFFFF"
             anchors.centerIn: parent
             width: photoSize
             height: photoSize + borderWidth
