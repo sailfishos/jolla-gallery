@@ -132,6 +132,8 @@ Page {
 
                 objectName: "countLabel"
                 anchors {
+                    left: parent.left
+                    leftMargin: Theme.paddingMedium
                     right: thumbnail.left
                     rightMargin: Theme.paddingLarge
                     verticalCenter: parent.verticalCenter
@@ -140,6 +142,8 @@ Page {
                 text: count.toLocaleString()
                 color: delegateItem.down ? Theme.highlightColor : Theme.primaryColor
                 font.pixelSize: Theme.fontSizeLarge
+                horizontalAlignment: Text.AlignRight
+                fontSizeMode: Text.HorizontalFit
             }
 
             // Load icon from a plugin
