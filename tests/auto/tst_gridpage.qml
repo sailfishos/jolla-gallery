@@ -251,15 +251,15 @@ ApplicationWindow {
 
     ListModel {
         id: albumModel
-        ListElement { itemId: "photo0"; mimeType: "image/jpeg"; title: "Photo 0"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_0.jpg"; lastModified: "2010-11-05T08:15:30-05:0" }
-        ListElement { itemId: "photo1"; mimeType: "image/jpeg"; title: "Photo 1"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_1.jpg"; lastModified: "2010-11-05T08:15:31-05:0" }
-        ListElement { itemId: "photo2"; mimeType: "image/jpeg"; title: "Photo 2"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_2.jpg"; lastModified: "2010-11-05T08:15:32-05:0" }
-        ListElement { itemId: "photo3"; mimeType: "image/jpeg"; title: "Photo 3"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_3.jpg"; lastModified: "2010-11-05T08:15:33-05:0" }
-        ListElement { itemId: "photo4"; mimeType: "image/jpeg"; title: "Photo 4"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_4.jpg"; lastModified: "2010-11-05T08:15:34-05:0" }
-        ListElement { itemId: "photo5"; mimeType: "image/jpeg"; title: "Photo 5"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_5.jpg"; lastModified: "2010-11-05T08:15:35-05:0" }
-        ListElement { itemId: "photo6"; mimeType: "image/jpeg"; title: "Photo 6"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_6.jpg"; lastModified: "2010-11-05T08:15:36-05:0" }
-        ListElement { itemId: "photo7"; mimeType: "image/jpeg"; title: "Photo 7"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_7.jpg"; lastModified: "2010-11-05T08:15:37-05:0" }
-        ListElement { itemId: "photo8"; mimeType: "image/jpeg"; title: "Photo 8"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_8.jpg"; lastModified: "2010-11-05T08:15:38-05:0" }
-        ListElement { itemId: "photo9"; mimeType: "image/jpeg"; title: "Photo 9"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_9.jpg"; lastModified: "2010-11-05T08:15:39-05:0" }
+        ListElement { itemId: "photo0"; mimeType: "image/jpeg"; title: "Photo 0"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_0.jpg"; dateTaken: "2010-11-05T08:15:30-05:0" }
+        ListElement { itemId: "photo1"; mimeType: "image/jpeg"; title: "Photo 1"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_1.jpg"; dateTaken: "2010-11-05T08:15:31-05:0" }
+        ListElement { itemId: "photo2"; mimeType: "image/jpeg"; title: "Photo 2"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_2.jpg"; dateTaken: "2010-11-05T08:15:32-05:0" }
+        ListElement { itemId: "photo3"; mimeType: "image/jpeg"; title: "Photo 3"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_3.jpg"; dateTaken: "2010-11-05T08:15:33-05:0" }
+        ListElement { itemId: "photo4"; mimeType: "image/jpeg"; title: "Photo 4"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_4.jpg"; dateTaken: "2010-11-05T08:15:34-05:0" }
+        ListElement { itemId: "photo5"; mimeType: "image/jpeg"; title: "Photo 5"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_5.jpg"; dateTaken: "2010-11-05T08:15:35-05:0" }
+        ListElement { itemId: "photo6"; mimeType: "image/jpeg"; title: "Photo 6"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_6.jpg"; dateTaken: "2010-11-05T08:15:36-05:0" }
+        ListElement { itemId: "photo7"; mimeType: "image/jpeg"; title: "Photo 7"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_7.jpg"; dateTaken: "2010-11-05T08:15:37-05:0" }
+        ListElement { itemId: "photo8"; mimeType: "image/jpeg"; title: "Photo 8"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_8.jpg"; dateTaken: "2010-11-05T08:15:38-05:0" }
+        ListElement { itemId: "photo9"; mimeType: "image/jpeg"; title: "Photo 9"; width: 453; height: 708; orientation: 0; url: "file:///opt/tests/jolla-gallery/auto/images/photo_9.jpg"; dateTaken: "2010-11-05T08:15:39-05:0" }
     }
 }
