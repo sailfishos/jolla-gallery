@@ -51,8 +51,8 @@ ApplicationWindow {
         id: photosModel
 
         rootType: DocumentGallery.Image
-        properties: ["url", "mimeType", "title", "orientation", "lastModified", "width", "height" ]
-        sortProperties: ["-lastModified"]
+        properties: ["url", "mimeType", "title", "orientation", "dateTaken", "width", "height" ]
+        sortProperties: ["-dateTaken"]
         autoUpdate: true
         filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
     }
