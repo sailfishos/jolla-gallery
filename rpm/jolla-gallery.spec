@@ -26,7 +26,7 @@ BuildRequires:  pkgconfig(contentaction5)
 BuildRequires:  oneshot
 
 Requires:  ambient-icons-closed
-Requires:  sailfishsilica-qt5 >= 0.13.44
+Requires:  sailfishsilica-qt5 >= 0.23.20
 Requires:  qt5-qtdocgallery
 Requires:  mapplauncherd >= 4.1.17
 Requires:  mapplauncherd-booster-silica-qt5

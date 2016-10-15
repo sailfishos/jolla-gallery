@@ -124,8 +124,6 @@ MediaSourcePage {
             function remove() {                
                 var remorse = removalComponent.createObject(null)
                 remorse.z = thumbnail.z + 1
-                remorse.wrapMode = Text.Wrap
-                remorse.horizontalAlignment = Text.AlignHCenter
 
                 //: Deleting image in 5 seconds
                 //% "Deleting"
@@ -193,6 +191,9 @@ MediaSourcePage {
             //: RemorseItem cancel help text
             //% "Cancel"
             cancelText: qsTrId("gallery-la-cancel-deletion")
+            wrapMode: Text.Wrap
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: Theme.fontSizeSmallBase
         }
     }
 }
