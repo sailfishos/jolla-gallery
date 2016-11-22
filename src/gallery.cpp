@@ -9,8 +9,6 @@
 #include <QLocale>
 #include <QtDebug>
 
-#include <QtDBus/QDBusConnection>
-
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
 #include "declarativethreadedfileremover.h"
@@ -40,13 +38,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QGuiApplication> app(new QGuiApplication(argc, argv));
     QScopedPointer<QQuickView> view(new QQuickView);
 #endif
-
-    QDBusConnection connection = QDBusConnection::sessionBus();
-    bool registeredService = connection.registerService("com.jolla.gallery");
-    if (!registeredService) {
-        qWarning() << Q_FUNC_INFO
-                   << "Failed to register com.jolla.gallery service";
-    }
 
     QString translationPath("/usr/share/translations/");
 

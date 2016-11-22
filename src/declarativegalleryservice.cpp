@@ -7,11 +7,17 @@ DeclarativeGalleryService::DeclarativeGalleryService(QObject *parent)
     : QObject(parent)
 {
     new GalleryAdaptor(this);
-    // We have already registered the service in Gallery's main
+
     QDBusConnection connection = QDBusConnection::sessionBus();
     if (!connection.registerObject("/com/jolla/gallery/ui", this)) {
         qWarning() << Q_FUNC_INFO
                    << "Failed to register /com/jolla/gallery/ui object";
+    }
+
+    bool registeredService = connection.registerService("com.jolla.gallery");
+    if (!registeredService) {
+        qWarning() << Q_FUNC_INFO
+                   << "Failed to register com.jolla.gallery service";
     }
 }
 
