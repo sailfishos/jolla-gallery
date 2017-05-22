@@ -99,7 +99,10 @@ Page {
                 }
                 // In a case we are not ready yet (<20 images) make the model ready
                 ready = true
-                docModel.countChanged.connect(_update)
+
+                // FIXME: UPDATING DISABLED - if update algorithm is n^2 it's just better not to update.
+                // should be reimplemented
+                //docModel.countChanged.connect(_update)
             }
 
             // TODO: Event though the next piece of code seems to block in some cases, I  think it's
