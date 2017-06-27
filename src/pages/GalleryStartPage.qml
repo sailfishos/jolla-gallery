@@ -24,7 +24,7 @@ Page {
             mediaType = "videos"
         }
 
-        window.pageStack.push(
+        pageStack.push(
                     Qt.resolvedUrl(media.page),
                     { title: media.title,
                       model: media.model,
@@ -68,12 +68,12 @@ Page {
             viewerModel.set(viewerModel.count, props)
         }
 
-        imageViewerPage = window.pageStack.push(
+        imageViewerPage = pageStack.push(
                         Qt.resolvedUrl("GalleryFullscreenPage.qml"),
                         { title: "",
                           model: viewerModel,
                           currentIndex: viewerModel.count - urls.length,
-                          imageViewerMode: true
+                          viewerOnlyMode: true
                         },
                         PageStackAction.Immediate)
         metadata.source = ""
@@ -98,12 +98,12 @@ Page {
                                orientation: 0
                             })
 
-        imageViewerPage = window.pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"),
+        imageViewerPage = pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"),
                                                 {
                                                     title: "",
                                                     model: viewerModel,
                                                     currentIndex: 0,
-                                                    imageViewerMode: true,
+                                                    viewerOnlyMode: true,
                                                     autoPlay: true
                                                  }, PageStackAction.Immediate)
         activate()
@@ -214,7 +214,7 @@ Page {
             }
         }
 
-        VerticalScrollDecorator { }
+        VerticalScrollDecorator {}
     }
 
     GalleryService {
@@ -229,13 +229,13 @@ Page {
         onPlayStream: startPage.playVideoStream(url)
 
         onShowAllPhotos: {
-            window.pageStack.pop(startPage, PageStackAction.Immediate)
+            pageStack.pop(startPage, PageStackAction.Immediate)
             showMedia(photoSource, PageStackAction.Immediate)
             activate()
         }
 
         onShowAllVideos: {
-            window.pageStack.pop(startPage, PageStackAction.Immediate)
+            pageStack.pop(startPage, PageStackAction.Immediate)
             showMedia(videoSource, PageStackAction.Immediate)
             activate()
         }
