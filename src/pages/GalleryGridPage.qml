@@ -23,8 +23,7 @@ MediaSourcePage {
         grid.positionViewAtIndex(index, GridView.Visible)
     }
 
-    function deleteMultipleItems(list)
-    {
+    function deleteMultipleItems(list) {
         _selectedItems = list
         pageStack.pop()
 
@@ -148,7 +147,7 @@ MediaSourcePage {
 
             onPressAndHold: {
                 grid.expandItem = thumbnail
-                grid.contextMenu.show(thumbnail)
+                grid.contextMenu.open(thumbnail)
             }
 
             GridView.onAdd: AddAnimation { target: thumbnail; duration: _animationDuration }
