@@ -6,7 +6,6 @@ Group:      Applications/Multimedia
 License:    Proprietary
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
-Source1:    rpmlintrc
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
