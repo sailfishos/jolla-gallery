@@ -1,12 +1,11 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.1.88
+Version:    0.2.10
 Release:    1
 Group:      Applications/Multimedia
 License:    Proprietary
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
-Source1:    rpmlintrc
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
@@ -110,9 +109,9 @@ desktop-file-install --delete-original       \
 
 %post -n jolla-gallery
 /sbin/ldconfig
-/usr/bin/update-desktop-database -q
+/usr/bin/update-desktop-database -q || :
 if [ "$1" -eq 1 ]; then
-%{_bindir}/add-oneshot --user --now enable-gallery-hints
+%{_bindir}/add-oneshot --user --now enable-gallery-hints || :
 fi
 
 %postun -n jolla-gallery

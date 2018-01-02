@@ -1,2 +1,0 @@
-setBadness('.*', 0)
-addFilter(".*")
