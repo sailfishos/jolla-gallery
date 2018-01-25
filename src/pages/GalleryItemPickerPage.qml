@@ -9,7 +9,7 @@ Page {
 
     property alias model: selectionModel.docModel
     property string title
-    signal itemsSelected(variant items)
+    signal itemsSelected(var items)
 
     allowedOrientations: Orientation.All
 
