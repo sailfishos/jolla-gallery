@@ -57,6 +57,15 @@ MediaSourcePage {
         }
     }
 
+    Connections {
+        target: gridPage.model
+        onCountChanged: {
+            if (gridPage.model.count === 0 && !pageStack.busy) {
+                pageStack.pop(pageStack.previousPage(gridPage))
+            }
+        }
+    }
+
     // File remover is a threaded object which can be used for file deletion in the background.
     // TODO: Not sure how we should deal with the error cases e.g. file couldn't be deleted and
     //       we don't even have a design for that yet.
