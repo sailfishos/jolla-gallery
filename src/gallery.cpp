@@ -20,6 +20,8 @@
 #include <MDeclarativeCache>
 #endif
 
+#include <qqmldebug.h>
+
 static QObject *camera_launcher_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
@@ -31,6 +33,10 @@ static QObject *camera_launcher_provider(QQmlEngine *engine, QJSEngine *scriptEn
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QQuickWindow::setDefaultAlphaBuffer(true);
+    if (!qgetenv("QML_DEBUGGING_ENABLED").isEmpty()) {
+        QQmlDebuggingEnabler qmlDebuggingEnabler;
+    }
+
 #ifdef HAS_BOOSTER
     QScopedPointer<QGuiApplication> app(MDeclarativeCache::qApplication(argc, argv));
     QScopedPointer<QQuickView> view(MDeclarativeCache::qQuickView());
