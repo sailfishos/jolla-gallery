@@ -9,7 +9,7 @@ MediaSourcePage {
     id: gridPage
     property alias currentIndex: grid.currentIndex
     property int _animationDuration: 150
-    property variant _selectedItems: null
+    property var _selectedItems: null
     property int _requestedIndex: -1
 
     allowedOrientations: Orientation.All
