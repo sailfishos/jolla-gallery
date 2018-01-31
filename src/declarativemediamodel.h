@@ -39,9 +39,8 @@ public:
     void setAlbumDelegate(QQmlComponent *albumDelegate);
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
-    int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
-
-    QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
 
 Q_SIGNALS:
