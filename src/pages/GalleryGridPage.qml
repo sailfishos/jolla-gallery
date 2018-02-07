@@ -16,13 +16,6 @@ MediaSourcePage {
 
     objectName: "gridPage"
 
-    function deleteItem(index) {
-        pageStack.pop()
-        grid.currentIndex = index
-        grid.currentItem.remove()
-        grid.positionViewAtIndex(index, GridView.Visible)
-    }
-
     function deleteMultipleItems(list) {
         _selectedItems = list
         pageStack.pop()
@@ -129,7 +122,7 @@ MediaSourcePage {
             z: isItemExpanded ? 1000 : 1
             enabled: isItemExpanded || !grid.contextMenu.active
 
-            function remove() {                
+            function remove() {
                 var remorse = removalComponent.createObject(null)
                 remorse.z = thumbnail.z + 1
 
@@ -149,7 +142,6 @@ MediaSourcePage {
                 }
 
                 pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
-                pageStack.currentPage.deleteMedia.connect(gridPage.deleteItem)
                 _requestedIndex = -1
                 pageStack.currentPage.requestIndex.connect(gridPage.requestIndex)
             }

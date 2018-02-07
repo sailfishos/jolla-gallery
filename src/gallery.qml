@@ -1,9 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import com.jolla.gallery 1.0
-import com.jolla.gallery.ambience 1.0
 import QtDocGallery 5.0
-import Sailfish.Ambience 1.0
 import "pages"
 import "pages/scripts/AlbumManager.js" as AlbumManager
 
@@ -15,37 +13,8 @@ ApplicationWindow {
     property var activeObject: ({url: "", mimeType: ""})
 
     allowedOrientations: defaultAllowedOrientations
+    _defaultPageOrientations: Orientation.All
     _defaultLabelFormat: Text.PlainText
-
-    function createAmbience(url)
-    {
-        var previousAmbienceUrl = Ambience.source
-        Ambience.setAmbience(url, function(ambienceId) {
-            pageStack.push(ambienceSettings, {
-                'contentId': ambienceId,
-                'previousAmbienceUrl': previousAmbienceUrl
-            })
-        })
-    }
-
-    Component {
-        id: ambienceSettings
-        AmbienceSettingsPage {
-            property alias previousAmbienceUrl: previousAmbience.url
-
-            allowRemove: previousAmbience.contentId !== 0
-
-            // Monitor the previous ambience, if it has been removed don't allow the
-            // current one to be removed as well.
-            AmbienceInfo {
-                id: previousAmbience
-            }
-
-            onAmbienceRemoved: {
-                Ambience.source = previousAmbienceUrl
-            }
-        }
-    }
 
     DocumentGalleryModel {
         id: photosModel
@@ -76,4 +45,3 @@ ApplicationWindow {
 
     initialPage: Component { GalleryStartPage {} }
 }
-

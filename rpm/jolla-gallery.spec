@@ -25,7 +25,7 @@ BuildRequires:  pkgconfig(contentaction5)
 BuildRequires:  oneshot
 
 Requires:  ambient-icons-closed
-Requires:  sailfishsilica-qt5 >= 0.23.20
+Requires:  sailfishsilica-qt5 >= 0.26.0
 Requires:  qt5-qtdocgallery
 Requires:  mapplauncherd >= 4.1.17
 Requires:  mapplauncherd-booster-silica-qt5
@@ -34,7 +34,7 @@ Requires:  declarative-transferengine-qt5 >= 0.0.49
 Requires:  nemo-qml-plugin-thumbnailer-qt5-video
 Requires:  nemo-qml-plugin-thumbnailer-qt5
 Requires:  sailfish-components-media-qt5
-Requires:  sailfish-components-gallery-qt5 >= 0.1.10
+Requires:  sailfish-components-gallery-qt5 >= 0.2.0
 Requires:  ambienced
 Requires:  jolla-gallery-ambience >= 0.1.10
 Requires:  jolla-settings-accounts >= 0.1.31

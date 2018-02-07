@@ -1,163 +1,68 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import Sailfish.Media 1.0
-import Sailfish.Gallery 1.0
+import Sailfish.Silica.private 1.0 as Private
 import QtMultimedia 5.0
-import org.nemomobile.policy 1.0
+import Sailfish.Gallery 1.0
+import com.jolla.gallery 1.0
 
 SlideshowView {
-    id: view
+    id: root
 
-    property bool itemScaled: currentItem !== null && currentItem.itemScaled
-    property bool isPortrait
-    property bool menuOpen
     property bool autoPlay
-    property Item _activeItem
-    property bool _applicationActive: window.applicationActive
-    property alias _videoActive: permissions.enabled
-    property bool _minimizedPlaying
+    property alias viewerOnlyMode: overlay.viewerOnlyMode
+    readonly property QtObject player: playerLoader.item ? playerLoader.item.player : null
+    readonly property bool playing: player && player.playing
 
-    property real contentWidth: width
-    property real contentHeight: height
+    Component.onCompleted: if (autoPlay) playerLoader.active = true
 
-    signal clicked
+    // XXX Qt5 Port - workaround PathView bug
+    pathItemCount: 3
+    itemWidth: width
+    itemHeight: height
+    interactive: count > 1 && !(!overlay.active && playing)
 
-    function currentItemUrl() {
-        return model.get(currentIndex).url
-    }
-
-    interactive: !itemScaled && count > 1
-
-
-    Component.onCompleted: {
-        view.positionViewAtIndex(view.currentIndex, PathView.Center)
-        if (!view._activeItem && currentItem) {
-            view._activeItem = currentItem
-            view._activeItem.active = true
-        }
-    }
-
-    onCurrentItemChanged: {
-        if (!moving && currentItem) {
-            if (view._activeItem) {
-                view._activeItem.active = false
-            }
-
-            view._activeItem = currentItem
-            view._activeItem.active = true
-        }
-    }
-
+    property Item previousItem
     onMovingChanged: {
-        if (!moving && view._activeItem != currentItem) {
-            if (view._activeItem) {
-                view._activeItem.active = false
-            }
-            mediaPlayer.stop()
-            mediaPlayer.source = ""
-            view._activeItem = currentItem
-            if (view._activeItem) {
-                view._activeItem.active = true
-            }
+        if (moving) {
+            previousItem = currentItem
+        } else if (player && previousItem != currentItem) {
+            player.reset()
         }
     }
 
-    on_ApplicationActiveChanged: {
-        if (!_applicationActive) {
-            // if we were playing a video when we minimized, store that information.
-            _minimizedPlaying = mediaPlayer.playbackState == MediaPlayer.PlayingState
-            if (_minimizedPlaying) {
-                mediaPlayer.pause() // and automatically pause the video
-            }
-        } else if (_minimizedPlaying) {
-            view._play() // restart playback automatically.  will also go fullscreen.
-        }
-    }
-
-    function _play() {
-        if (_videoActive) {
-            mediaPlayer.source = view._activeItem.source
-            mediaPlayer.play()
-        }
-    }
-
-    function _togglePlay() {
-        if (mediaPlayer.playbackState == MediaPlayer.PlayingState) {
-            mediaPlayer.pause()
-        } else if (_videoActive) {
-            mediaPlayer.source = view._activeItem.source
-            mediaPlayer.play()
-        }
-    }
-
-    function _pause() {
-        if (_videoActive) {
-            mediaPlayer.source = view._activeItem.source
-            mediaPlayer.pause()
-        }
-    }
-
-    function _stop() {
-        mediaPlayer.stop()
-    }
-
-    MediaKey { enabled: keysResource.acquired; key: Qt.Key_MediaTogglePlayPause; onPressed: view._togglePlay() }
-    MediaKey { enabled: keysResource.acquired; key: Qt.Key_MediaPlay; onPressed: view._play() }
-    MediaKey { enabled: keysResource.acquired; key: Qt.Key_MediaPause; onPressed: view._pause() }
-    MediaKey { enabled: keysResource.acquired; key: Qt.Key_MediaStop; onPressed: view._stop() }
-    MediaKey { enabled: keysResource.acquired; key: Qt.Key_ToggleCallHangup; onPressed: view._togglePlay() }
-
-    Permissions {
-        id: permissions
-
-        enabled: window.applicationActive && view._activeItem && !view._activeItem.isImage
-        applicationClass: "player"
-
-        Resource {
-            id: keysResource
-            type: Resource.HeadsetButtons
-            optional: true
-        }
-    }
-
-    delegate: Item {
-        id: mediaItem
-
-        property QtObject modelData: model
-        property bool isImage: model.mimeType.indexOf("image/") == 0
-        property bool active
-        readonly property bool itemScaled: loader.item.scaled != undefined && loader.item.scaled
+    delegate: Loader {
         readonly property url source: model.url
+        readonly property bool isImage: model.mimeType.indexOf("image/") == 0
+        readonly property string itemId: model.itemId !== undefined ? model.itemId : ""
+        readonly property int duration: model.duration !== undefined ? model.duration : 1
+        readonly property bool isCurrentItem: PathView.isCurrentItem
+        readonly property bool playing: root.playing && isCurrentItem
+        readonly property bool error: item && item.error
 
-        width: view.width
-        height: view.height
-
-        visible: view.moving || active
-
-        opacity: Math.abs(x) <= view.width ? 1.0 -  (Math.abs(x) / view.width) : 0
-
-        onActiveChanged: {
-            if (active && autoPlay) {
-                mediaPlayer.source = source
+        // Delay Poster creation until we're in playing state. Without this when auto playing
+        // poster will blink at the beginning.
+        onPlayingChanged: {
+            if (autoPlay && playing) {
+                active = true
             }
         }
+
+        width: root.width
+        height: root.height
+        active: !autoPlay
+        sourceComponent: isImage ? imageComponent : videoComponent
+        asynchronous: !isCurrentItem
 
         Component {
             id: imageComponent
 
             ImageViewer {
-                width: view.isPortrait ? Screen.width : Screen.height
-                height: view.contentHeight
+                onClicked: overlay.active = !overlay.active
 
                 source: model.url
-                menuOpen: view.menuOpen
-                fit: view.isPortrait ? Fit.Width : Fit.Height
+                active: isCurrentItem
                 orientation: model.orientation
-                enableZoom: !view.moving
-
-                active: mediaItem.active
-
-                onClicked: view.clicked()
+                viewMoving: root.moving
             }
         }
 
@@ -165,167 +70,79 @@ SlideshowView {
             id: videoComponent
 
             VideoPoster {
-                property bool scaled
-
-                player: mediaPlayer
+                onClicked: overlay.active = !overlay.active
+                onTogglePlay: {
+                    playerLoader.active = true
+                    player.togglePlay()
+                }
 
                 source: model.url
                 mimeType: model.mimeType
-                active: mediaItem.active
-                duration: model.duration
+                playing: player && player.playing
+                loaded: player && player.loaded
+                busy: autoPlay && player && !player.hasVideo && !player.hasError
 
-                width: mediaItem.width
-                height: mediaItem.height
-
-                contentWidth: view.contentWidth
-                contentHeight: view.contentHeight
-
-                onClicked: {
-                   view.clicked()
-                   if (mediaPlayer.playbackState == MediaPlayer.PlayingState) {
-                       // pause and go splitscreen
-                       view._pause()
-                   } else if (!view.menuOpen && // negate because we just opened it via view.clicked() above
-                                (mediaPlayer.playbackState == MediaPlayer.StoppedState
-                              || mediaPlayer.playbackState == MediaPlayer.PausedState)) {
-                       // start playback and go fullscreen
-                       view._play()
-                   }
-               }
-            }
-        }
-
-        // TODO: Move BusyIndicator inside VideoPoster. See bug #20995
-        BusyIndicator {
-            id: busyIndicator
-            anchors.centerIn: parent
-            size: BusyIndicatorSize.Large
-            running: autoPlay && !mediaPlayer.hasVideo && mediaPlayer.error == MediaPlayer.NoError
-        }
-
-        Loader {
-            id: loader
-
-            property int playbackState: mediaPlayer.playbackState
-
-            active: !autoPlay
-            anchors.centerIn: mediaItem
-
-            sourceComponent: mediaItem.isImage ? imageComponent: videoComponent
-            asynchronous: view.currentIndex != model.index
-
-            // Delay Poster creation until we're in playing state. Without this when auto playing
-            // poster will blink at the beginning.
-            onPlaybackStateChanged: {
-                if (!active && autoPlay && playbackState == MediaPlayer.PlayingState) {
-                    loader.active = true
-                }
-            }
-        }
-    }   
-
-    children: [
-        Loader {
-            id: mediaPlayerLoader
-
-            sourceComponent: mediaPlayerComponent
-            active: false
-
-            width: view.contentWidth
-            height: view.contentHeight
-            anchors.centerIn: view._activeItem
-        }
-    ]
-
-    QtObject {
-        id: mediaPlayer
-
-        property url source
-        onSourceChanged: {
-            mediaPlayerLoader.active = true
-            mediaPlayerLoader.item.player.source = source
-        }
-
-        readonly property int playbackState: mediaPlayerLoader.item
-                ? mediaPlayerLoader.item.player.playbackState
-                : MediaPlayer.StoppedState
-        readonly property int status: mediaPlayerLoader.item
-                ? mediaPlayerLoader.item.player.status
-                : MediaPlayer.NoMedia
-        readonly property bool hasVideo: mediaPlayerLoader.item
-                    && mediaPlayerLoader.item.player.hasVideo
-        readonly property int error: mediaPlayerLoader.item
-                    ? mediaPlayerLoader.item.player.error
-                    : MediaPlayer.NoError
-        readonly property int position: mediaPlayerLoader.item
-                    ? mediaPlayerLoader.item.player.position
-                    : 0
-        readonly property int duration: mediaPlayerLoader.item
-                    ? mediaPlayerLoader.item.player.duration
-                    : 0
-
-        onStatusChanged: console.log("status changed", status)
-
-        function play() {
-            if (mediaPlayerLoader.item) {
-                mediaPlayerLoader.item.player.play()
-            }
-        }
-        function pause() {
-            if (mediaPlayerLoader.item) {
-                mediaPlayerLoader.item.player.pause()
-            }
-        }
-        function stop() {
-            if (mediaPlayerLoader.item) {
-                mediaPlayerLoader.item.player.stop()
-            }
-        }
-        function seek(position) {
-            if (mediaPlayerLoader.item) {
-                mediaPlayerLoader.item.player.seek(position)
+                contentWidth: itemWidth
+                contentHeight: itemHeight
+                overlayMode: overlay.active
             }
         }
     }
 
-    Component {
-        id: mediaPlayerComponent
 
-        Item {
-            property alias player: videoPlayer
+    Loader {
+        id: playerLoader
 
-            visible: videoPlayer.playbackState != MediaPlayer.StoppedState
-
-            Rectangle {
-                anchors.fill: parent
-                color: 'black'
-                opacity: video.playing ? 1 : 0
-                Behavior on opacity { FadeAnimation {} }
-            }
-
-            VideoOutput {
-                id: video
-
-                property bool playing: videoPlayer.playbackState == MediaPlayer.PlayingState
-
-                anchors.fill: parent
-                source: MediaPlayer {
-                    id: videoPlayer
-
-                    autoPlay: view.autoPlay
-
-                    onPlaybackStateChanged: {
-                        if (playbackState == MediaPlayer.PlayingState && view.menuOpen) {
-                            // go fullscreen for playback if triggered via Play icon.
-                            view.clicked()
-                        }
+        active: false
+        width: itemWidth
+        height: itemHeight
+        sourceComponent: VideoOutput {
+            property alias player: mediaPlayer
+            visible: player.playbackState != MediaPlayer.StoppedState
+            source: GalleryMediaPlayer {
+                id: mediaPlayer
+                active: currentItem && !currentItem.isImage
+                autoPlay: root.autoPlay
+                source: active ? currentItem.source : ""
+                onPlayingChanged: {
+                    if (playing && overlay.active) {
+                        // go fullscreen for playback if triggered via Play icon.
+                        overlay.active = false
                     }
                 }
-
-                ScreenBlank {
-                    suspend: video.playing
-                }
+                onLoadedChanged: if (loaded) playerLoader.anchors.centerIn = currentItem
             }
         }
+    }
+
+    GalleryOverlay {
+        id: overlay
+
+        onRemove: {
+            var source = overlay.source
+            //: Delete an image
+            //% "Deleting"
+            remorseAction(qsTrId("gallery-la-deleting"), function() {
+                fileRemover.deleteFiles([source])
+                if (source === overlay.source) pageStack.pop()
+            })
+        }
+        onCreatePlayer: playerLoader.active = true
+
+        source: currentItem ? currentItem.source : ""
+        itemId: currentItem ? currentItem.itemId : ""
+        isImage: currentItem ? currentItem.isImage : true
+        duration: currentItem ? currentItem.duration : 1
+        error: currentItem && currentItem.error
+
+        player: root.player
+        anchors.fill: parent
+        z: model.count + 100
+
+
+        Private.DismissButton {}
+    }
+    FileRemover {
+        id: fileRemover
     }
 }

@@ -6,20 +6,25 @@ Loader {
     active: counter.active
     sourceComponent: Component {
         Item {
-            property bool pageActive: fullscreenPage.status === PageStatus.Active && Qt.application.active
+            property bool pageActive: root.status == PageStatus.Active
             onPageActiveChanged: {
                 if (pageActive) {
-                    touchInteractionHint.restart()
-                    pageActive = false
+                    timer.restart()
                     counter.increase()
+                    pageActive = false
                 }
             }
 
             anchors.fill: parent
+            Timer {
+                id: timer
+                interval: 500
+                onTriggered: touchInteractionHint.restart()
+            }
+
             InteractionHintLabel {
-                //: Swipe here to go to previous view
-                //% "Swipe here to go to previous view"
-                text: qsTrId("gallery-la-split_view_back_hint")
+                //% "Swipe down to go to previous view"
+                text: qsTrId("gallery-la-swipe_down_to_go_back")
                 anchors.bottom: parent.bottom
                 opacity: touchInteractionHint.running ? 1.0 : 0.0
                 Behavior on opacity { FadeAnimation { duration: 1000 } }
@@ -27,15 +32,14 @@ Loader {
             TouchInteractionHint {
                 id: touchInteractionHint
 
-                direction: TouchInteraction.Right
-                anchors.verticalCenter: parent.verticalCenter
+                direction: TouchInteraction.Down
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
     }
     FirstTimeUseCounter {
         id: counter
-        limit: 3
-        defaultValue: 1 // display hint twice for existing users
-        key: "/sailfish/gallery/split_view_back_hint_count"
+        limit: 2
+        key: "/sailfish/gallery/vertical_page_back_hint"
     }
 }
