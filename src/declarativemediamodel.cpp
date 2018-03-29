@@ -268,7 +268,7 @@ QModelIndex DeclarativeMediaModel::index(int row, int column, const QModelIndex 
             : QModelIndex();
 }
 
-int DeclarativeMediaModel::rowCount ( const QModelIndex & parent ) const
+int DeclarativeMediaModel::rowCount(const QModelIndex &parent) const
 {
     Q_D(const DeclarativeMediaModel);
     return !parent.isValid()
@@ -276,7 +276,7 @@ int DeclarativeMediaModel::rowCount ( const QModelIndex & parent ) const
             : 0;
 }
 
-QVariant DeclarativeMediaModel::data ( const QModelIndex & index, int role) const
+QVariant DeclarativeMediaModel::data(const QModelIndex &index, int role) const
 {
     Q_D(const DeclarativeMediaModel);
     if (!index.isValid()) {

@@ -15,8 +15,7 @@ Page {
 
     function showMedia(media, transition, index) {
         var mediaType = null
-        switch(media.type)
-        {
+        switch(media.type) {
         case MediaSource.Photos:
             mediaType = "photos"
             break;
@@ -33,8 +32,7 @@ Page {
                     transition !== undefined ? transition : PageStackAction.Animated)
     }
 
-    function showImage(urls)
-    {
+    function showImage(urls) {
         // To avoid mixed content e.g. videos and photos in the same model, just
         // clear everything each time when function is called.
         if (imageViewerPage && pageStack.currentPage === imageViewerPage) {
@@ -57,8 +55,7 @@ Page {
                           orientation: metadata.orientation,
                           width: metadata.width,
                           height: metadata.height }
-            } else
-            if (fileInfo.mimeFileType == "video"){
+            } else if (fileInfo.mimeFileType == "video"){
                 props = { url: file,
                           mimeType: fileInfo.mimeType,
                           title: fileInfo.fileName,
@@ -187,7 +184,6 @@ Page {
         anchors.fill: parent
         delegate: delegate
         model: MediaSourceModel {
-            id: mediaSourceModel
             MediaSource {
                 id: photoSource
                 //: Main screen
@@ -218,7 +214,6 @@ Page {
     }
 
     GalleryService {
-
         onOpenImages:{
             if (urls.length > 0) {
                 showImage(urls)
@@ -240,5 +235,4 @@ Page {
             activate()
         }
     }
-
 }
