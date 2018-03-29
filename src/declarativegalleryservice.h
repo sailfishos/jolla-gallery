@@ -13,6 +13,7 @@ public:
 
 public slots:
     void showImages(const QStringList &urls);
+    void openFile(const QString &file);
     void showPhotos();
     void showVideos();
     void playVideoStream(const QStringList &urls);
