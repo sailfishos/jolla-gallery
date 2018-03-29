@@ -55,7 +55,7 @@ Page {
                           orientation: metadata.orientation,
                           width: metadata.width,
                           height: metadata.height }
-            } else if (fileInfo.mimeFileType == "video"){
+            } else if (fileInfo.mimeFileType == "video") {
                 props = { url: file,
                           mimeType: fileInfo.mimeType,
                           title: fileInfo.fileName,

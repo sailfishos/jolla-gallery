@@ -32,6 +32,11 @@ void DeclarativeGalleryService::showImages(const QStringList &urls)
     emit openImages(urls);
 }
 
+void DeclarativeGalleryService::openFile(const QString &file)
+{
+    emit openImages(QStringList(file));
+}
+
 void DeclarativeGalleryService::showPhotos()
 {
     emit showAllPhotos();

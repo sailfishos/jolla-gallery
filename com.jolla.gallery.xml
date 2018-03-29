@@ -8,6 +8,10 @@
             <arg direction="in" type="as" name="urls"/>
         </method>
 
+        <method name="openFile">
+            <arg direction="in" type="s" name="file"/>
+        </method>
+
         <method name="showPhotos" />
 
         <method name="showVideos" />
