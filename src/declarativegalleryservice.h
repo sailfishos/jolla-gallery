@@ -16,12 +16,14 @@ public slots:
     void openFile(const QString &file);
     void showPhotos();
     void showVideos();
+    void showScreenshots();
     void playVideoStream(const QStringList &urls);
 
 signals:
     void openImages(const QStringList &urls);
     void showAllPhotos();
     void showAllVideos();
+    void showAllScreenshots();
     void playStream(const QString &url);
 };
 

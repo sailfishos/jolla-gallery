@@ -41,7 +41,8 @@ public:
     enum Type {
         Undefined,
         Photos,
-        Videos
+        Videos,
+        Screenshots
     };
 
     DeclarativeMediaSource();

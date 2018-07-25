@@ -16,6 +16,8 @@
 
         <method name="showVideos" />
 
+        <method name="showScreenshots" />
+
         <method name="playVideoStream">
             <arg direction="in" type="as" name="url"/>
         </method>

@@ -23,7 +23,10 @@ ApplicationWindow {
         properties: ["url", "mimeType", "title", "orientation", "dateTaken", "width", "height" ]
         sortProperties: ["-dateTaken"]
         autoUpdate: true
-        filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
+        filter: GalleryFilterIntersection {
+            GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
+            GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.pictures + "/Screenshots/"; negated: true }
+        }
     }
 
     DocumentGalleryModel {
@@ -33,6 +36,16 @@ ApplicationWindow {
         properties: ["url", "mimeType", "title", "lastModified", "orientation", "duration"]
         sortProperties: ["-lastModified"]
         autoUpdate: true
+    }
+
+    DocumentGalleryModel {
+        id: screenshotsModel
+
+        rootType: DocumentGallery.Image
+        properties: ["url", "mimeType", "title", "orientation", "dateTaken", "width", "height" ]
+        sortProperties: ["-dateTaken"]
+        autoUpdate: true
+        filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.pictures + "/Screenshots/" }
     }
 
     // For some reason if the gallery is launched via invoker, it sets codecForLocale to
