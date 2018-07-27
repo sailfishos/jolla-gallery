@@ -96,8 +96,13 @@ MediaSourcePage {
                 //: Select multiple images for different operations
                 //% "Select photos"
                 property string selectPhotosText: qsTrId("gallery-me-select-photos")
+                //: Select multiple images for different operations
+                //% "Select screenshots"
+                property string selectScreenshotsText: qsTrId("gallery-me-select-screenshots")
 
-                text: gridPage.userData === "photos" ? selectPhotosText : selectVideosText
+                text: gridPage.userData === MediaSource.Photos
+                      ? selectPhotosText
+                      : (gridPage.userData === MediaSource.Videos ? selectVideosText : selectScreenshotsText)
                 onClicked: {
                     pageStack.push(Qt.resolvedUrl("GalleryItemPickerPage.qml"),{
                                        model: grid.model,

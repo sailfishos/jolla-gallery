@@ -30,7 +30,7 @@ ApplicationWindow {
         GalleryGridPage {
             model: albumModel
             title: "Test"
-            userData: "photos"
+            userData: MediaSource.Photos
             orientation: Orientation.Portrait
             allowedOrientations: Orientation.Portrait | Orientation.Landscape
             _animationDuration: 0

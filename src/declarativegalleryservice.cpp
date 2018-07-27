@@ -47,6 +47,11 @@ void DeclarativeGalleryService::showVideos()
     emit showAllVideos();
 }
 
+void DeclarativeGalleryService::showScreenshots()
+{
+    emit showAllScreenshots();
+}
+
 void DeclarativeGalleryService::playVideoStream(const QStringList &urls)
 {
     if (!urls.isEmpty()) {

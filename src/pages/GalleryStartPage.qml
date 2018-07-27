@@ -13,21 +13,18 @@ Page {
 
     allowedOrientations: Orientation.All
 
-    function showMedia(media, transition, index) {
-        var mediaType = null
-        switch(media.type) {
-        case MediaSource.Photos:
-            mediaType = "photos"
-            break;
-        case MediaSource.Videos:
-            mediaType = "videos"
-        }
+    function showPage(mediaSource) {
+        pageStack.pop(startPage, PageStackAction.Immediate)
+        showMedia(mediaSource, PageStackAction.Immediate)
+        activate()
+    }
 
+    function showMedia(media, transition, index) {
         pageStack.push(
                     Qt.resolvedUrl(media.page),
                     { title: media.title,
                       model: media.model,
-                      userData: mediaType
+                      userData: media.type
                     },
                     transition !== undefined ? transition : PageStackAction.Animated)
     }
@@ -208,6 +205,18 @@ Page {
                 count: model ? model.count : 0
                 type: MediaSource.Videos
             }
+
+            MediaSource {
+                id: screenshotsSource
+                //% "Screenshots"
+                title: qsTrId("gallery-bt-screenshots")
+                icon: "ScreenshotIcon.qml"
+                page: "GalleryGridPage.qml"
+                model: screenshotsModel
+                ready: true
+                count: model ? model.count : 0
+                type: MediaSource.Screenshots
+            }
         }
 
         VerticalScrollDecorator {}
@@ -223,16 +232,8 @@ Page {
 
         onPlayStream: startPage.playVideoStream(url)
 
-        onShowAllPhotos: {
-            pageStack.pop(startPage, PageStackAction.Immediate)
-            showMedia(photoSource, PageStackAction.Immediate)
-            activate()
-        }
-
-        onShowAllVideos: {
-            pageStack.pop(startPage, PageStackAction.Immediate)
-            showMedia(videoSource, PageStackAction.Immediate)
-            activate()
-        }
+        onShowAllPhotos: showPage(photoSource)
+        onShowAllVideos: showPage(videoSource)
+        onShowAllScreenshots: showPage(screenshotsSource)
     }
 }
