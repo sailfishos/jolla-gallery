@@ -104,10 +104,10 @@ MediaSourcePage {
                       ? selectPhotosText
                       : (gridPage.userData === MediaSource.Videos ? selectVideosText : selectScreenshotsText)
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("GalleryItemPickerPage.qml"),{
-                                       model: grid.model,
-                                       title: text
-                                   })
+                    pageStack.animatorPush(Qt.resolvedUrl("GalleryItemPickerPage.qml"),{
+                                               model: grid.model,
+                                               title: text
+                                           })
                     pageStack.currentPage.itemsSelected.connect(gridPage.deleteMultipleItems)
                 }
             }
@@ -146,7 +146,8 @@ MediaSourcePage {
                     return
                 }
 
-                pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"), {currentIndex: index, model: grid.model} )
+                pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"),
+                               {currentIndex: index, model: grid.model})
                 _requestedIndex = -1
                 pageStack.currentPage.requestIndex.connect(gridPage.requestIndex)
             }
