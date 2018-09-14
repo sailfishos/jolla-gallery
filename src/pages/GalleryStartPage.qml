@@ -20,13 +20,9 @@ Page {
     }
 
     function showMedia(media, transition, index) {
-        pageStack.push(
-                    Qt.resolvedUrl(media.page),
-                    { title: media.title,
-                      model: media.model,
-                      userData: media.type
-                    },
-                    transition !== undefined ? transition : PageStackAction.Animated)
+        pageStack.animatorPush(Qt.resolvedUrl(media.page),
+                               { title: media.title, model: media.model, userData: media.type },
+                               transition !== undefined ? transition : PageStackAction.Animated)
     }
 
     function showImage(urls) {
