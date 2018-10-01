@@ -104,11 +104,13 @@ MediaSourcePage {
                       ? selectPhotosText
                       : (gridPage.userData === MediaSource.Videos ? selectVideosText : selectScreenshotsText)
                 onClicked: {
-                    pageStack.animatorPush(Qt.resolvedUrl("GalleryItemPickerPage.qml"),{
+                    var obj = pageStack.animatorPush(Qt.resolvedUrl("GalleryItemPickerPage.qml"),{
                                                model: grid.model,
                                                title: text
                                            })
-                    pageStack.currentPage.itemsSelected.connect(gridPage.deleteMultipleItems)
+                    obj.pageCompleted.connect(function(page) {
+                        page.itemsSelected.connect(gridPage.deleteMultipleItems)
+                    })
                 }
             }
         }
