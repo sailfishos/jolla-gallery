@@ -11,6 +11,7 @@ ApplicationWindow {
     property alias photosModel: photosModel
     property alias videosModel: videosModel
     property var activeObject: ({url: "", mimeType: ""})
+    property Page startPage
 
     allowedOrientations: defaultAllowedOrientations
     _defaultPageOrientations: Orientation.All
