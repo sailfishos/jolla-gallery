@@ -7,6 +7,7 @@ MediaSourceIcon {
     id: root
 
     property int galleryCount: model ? model.count : 0
+    property Item _initialThumbnail // required as ListView currentItem is null until index changes
 
     onTimerTriggered: slideShow.currentIndex = (slideShow.currentIndex + 1) % galleryCount
     timerEnabled: galleryCount > 1
@@ -24,7 +25,15 @@ MediaSourceIcon {
         model: root.model
 
         delegate: Thumbnail {
-            source: url
+            id: thumbnail
+
+            Component.onCompleted: {
+                if (!_initialThumbnail) {
+                    _initialThumbnail = thumbnail
+                }
+            }
+
+            source: model.url
             mimeType: model.mimeType
             width: slideShow.width
             height: slideShow.height
@@ -35,7 +44,9 @@ MediaSourceIcon {
 
     Loader {
         anchors.centerIn: parent
-        active: galleryCount == 0
+        active: galleryCount === 0
+                || (!!slideShow.currentItem && slideShow.currentItem.status === Thumbnail.Error)
+                || (!!slideShow._initialThumbnail && slideShow._initialThumbnail.status === Thumbnail.Error)
         sourceComponent: Rectangle {
             width: root.height
             height: root.height
