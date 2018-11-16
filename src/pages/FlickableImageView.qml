@@ -127,6 +127,7 @@ SlideshowView {
                 if (source === overlay.source) pageStack.pop()
             })
         }
+        onEdited: window.startPage.showImage([image])
         onCreatePlayer: playerLoader.active = true
 
         source: currentItem ? currentItem.source : ""

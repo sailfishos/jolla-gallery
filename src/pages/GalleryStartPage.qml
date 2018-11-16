@@ -36,26 +36,30 @@ Page {
         viewerModel.clear()
 
         for (var i=0; i < urls.length; ++i) {
-            var props = {}
+            var properties = {}
             var file = urls[i]
             fileInfo.source = file
 
             if (fileInfo.mimeFileType == "image") {
                 metadata.source = file
-                props = { url: file,
-                          mimeType: fileInfo.mimeType,
-                          title: fileInfo.fileName,
-                          orientation: metadata.orientation,
-                          width: metadata.width,
-                          height: metadata.height }
+                properties = {
+                    url: file,
+                    mimeType: fileInfo.mimeType,
+                    title: fileInfo.fileName,
+                    orientation: metadata.orientation,
+                    width: metadata.width,
+                    height: metadata.height
+                }
             } else if (fileInfo.mimeFileType == "video") {
-                props = { url: file,
-                          mimeType: fileInfo.mimeType,
-                          title: fileInfo.fileName,
-                          orientation: 0 }
+                properties = {
+                    url: file,
+                    mimeType: fileInfo.mimeType,
+                    title: fileInfo.fileName,
+                    orientation: 0
+                }
             }
 
-            viewerModel.set(viewerModel.count, props)
+            viewerModel.append(properties)
         }
 
         imageViewerPage = pageStack.push(
@@ -100,6 +104,8 @@ Page {
         metadata.source = ""
         fileInfo.source = ""
     }
+
+    Component.onCompleted: window.startPage = startPage
 
     ListModel { id: viewerModel }
     ImageMetadata { id: metadata }
