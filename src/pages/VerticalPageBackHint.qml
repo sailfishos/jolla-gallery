@@ -28,10 +28,13 @@ Loader {
                 anchors.bottom: parent.bottom
                 opacity: touchInteractionHint.running ? 1.0 : 0.0
                 Behavior on opacity { FadeAnimation { duration: 1000 } }
+                textColor: Theme.highlightFromColor(Theme.highlightColor, Theme.LightOnDark)
+                backgroundColor: Theme.rgba(Theme.highlightDimmerFromColor(Theme.highlightDimmerColor,  Theme.LightOnDark), 0.9)
             }
             TouchInteractionHint {
                 id: touchInteractionHint
 
+                color: Theme.lightPrimaryColor
                 direction: TouchInteraction.Down
                 anchors.horizontalCenter: parent.horizontalCenter
             }
