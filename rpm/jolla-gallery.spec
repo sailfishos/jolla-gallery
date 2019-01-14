@@ -6,6 +6,7 @@ Group:      Applications/Multimedia
 License:    Proprietary
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
+Source1:    %{name}.privileges
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
@@ -85,6 +86,9 @@ desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
 
+mkdir -p %{buildroot}%{_datadir}/mapplauncherd/privileges.d
+install -m 644 -p %{SOURCE1} %{buildroot}%{_datadir}/mapplauncherd/privileges.d/
+
 %files
 %defattr(-,root,root,-)
 %{_datadir}/applications/*.desktop
@@ -93,6 +97,7 @@ desktop-file-install --delete-original       \
 %{_datadir}/translations/gallery_eng_en.qm
 %{_datadir}/dbus-1/services/com.jolla.gallery.service
 %{_datadir}/dbus-1/interfaces/com.jolla.gallery.xml
+%{_datadir}/mapplauncherd/privileges.d/*
 %{_libdir}/qt5/qml/com/jolla/gallery/*.qml
 %{_libdir}/qt5/qml/com/jolla/gallery/qmldir
 %{_oneshotdir}/enable-gallery-hints
