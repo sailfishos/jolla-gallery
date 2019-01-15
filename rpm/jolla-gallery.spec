@@ -6,6 +6,7 @@ Group:      Applications/Multimedia
 License:    Proprietary
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
+Source1:    %{name}.privileges
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
@@ -36,7 +37,7 @@ Requires:  nemo-qml-plugin-thumbnailer-qt5
 Requires:  sailfish-components-media-qt5
 Requires:  sailfish-components-gallery-qt5 >= 0.3.3
 Requires:  ambienced
-Requires:  jolla-gallery-ambience >= 0.1.10
+Requires:  %{name}-ambience >= 0.1.10
 Requires:  jolla-settings-accounts >= 0.1.31
 Requires:  nemo-qml-plugin-policy-qt5
 Requires:  nemo-qml-plugin-dbus-qt5
@@ -78,23 +79,26 @@ make %{_smp_mflags}
 %install
 rm -rf %{buildroot}
 %qmake5_install
-chmod +x %{buildroot}/opt/tests/jolla-gallery/auto/run-tests.sh
+chmod +x %{buildroot}/opt/tests/%{name}/auto/run-tests.sh
 chmod +x %{buildroot}/%{_oneshotdir}/*
 
 desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
 
+mkdir -p %{buildroot}%{_datadir}/mapplauncherd/privileges.d
+install -m 644 -p %{SOURCE1} %{buildroot}%{_datadir}/mapplauncherd/privileges.d/
+
 %files
 %defattr(-,root,root,-)
 %{_datadir}/applications/*.desktop
-%{_datadir}/jolla-gallery/*
-%{_bindir}/jolla-gallery
+%{_datadir}/%{name}
+%{_bindir}/%{name}
 %{_datadir}/translations/gallery_eng_en.qm
 %{_datadir}/dbus-1/services/com.jolla.gallery.service
 %{_datadir}/dbus-1/interfaces/com.jolla.gallery.xml
-%{_libdir}/qt5/qml/com/jolla/gallery/*.qml
-%{_libdir}/qt5/qml/com/jolla/gallery/qmldir
+%{_datadir}/mapplauncherd/privileges.d/*
+%{_libdir}/qt5/qml/com/jolla/gallery
 %{_oneshotdir}/enable-gallery-hints
 
 %files ts-devel
@@ -103,18 +107,16 @@ desktop-file-install --delete-original       \
 
 %files tests
 %defattr(-,root,root,-)
-# >> files tests
-/opt/tests/jolla-gallery/*
-# << files tests
+/opt/tests/%{name}
 
-%post -n jolla-gallery
+%post -n %{name}
 /sbin/ldconfig
 /usr/bin/update-desktop-database -q || :
 if [ "$1" -eq 1 ]; then
 %{_bindir}/add-oneshot --user --now enable-gallery-hints || :
 fi
 
-%postun -n jolla-gallery
+%postun -n %{name}
 /sbin/ldconfig
 
 
