@@ -59,7 +59,7 @@ SlideshowView {
 
                 source: model.url
                 active: isCurrentItem
-                orientation: model.orientation
+                contentRotation: -model.orientation
                 viewMoving: root.moving
             }
         }
