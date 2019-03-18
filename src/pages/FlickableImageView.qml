@@ -15,8 +15,6 @@ SlideshowView {
 
     Component.onCompleted: if (autoPlay) playerLoader.active = true
 
-    // XXX Qt5 Port - workaround PathView bug
-    pathItemCount: 3
     itemWidth: width
     itemHeight: height
     interactive: count > 1 && !(!overlay.active && playing)
