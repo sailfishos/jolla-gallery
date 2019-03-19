@@ -55,7 +55,14 @@ SlideshowView {
             id: imageComponent
 
             ImageViewer {
-                onClicked: overlay.active = !overlay.active
+                onZoomedChanged: overlay.active = !zoomed
+                onClicked: {
+                    if (zoomed) {
+                        zoomOut()
+                    } else {
+                        overlay.active = !overlay.active
+                    }
+                }
 
                 source: model.url
                 active: isCurrentItem
