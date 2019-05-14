@@ -1,9 +1,10 @@
 [Desktop Entry]
 Type=Application
 NoDisplay=true
-Name=Gallery MimeHandler
-Icon=icon-launcher-dummy
-Exec=invoker --type=silica-qt5 /usr/bin/jolla-gallery %U
+Name=Gallery
+X-MeeGo-Logical-Id=gallery-ap-name
+X-MeeGo-Translation-Catalog=gallery
+Icon=icon-launcher-gallery
 Comment=Sailfish MimeType Handler for Gallery
 MimeType=x-scheme-handler/rtsp;video/3gpp;video/mp4;
 X-Maemo-Service=com.jolla.gallery
