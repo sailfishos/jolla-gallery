@@ -89,6 +89,7 @@ MediaSourcePage {
         model: gridPage.model
 
         PullDownMenu {
+            visible: model.count > 0
             MenuItem {
                 //: Select multiple videos for different operations
                 //% "Select videos"
