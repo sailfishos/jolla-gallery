@@ -117,7 +117,7 @@ Page {
             id: delegateItem
             width: view.width
             height: thumbnail.height
-            enabled: media && media.count > 0
+            enabled: media && (media.count > 0 || media.type === MediaSource.Screenshots)
             opacity: enabled ? 1.0 : 0.5
 
             Label {
@@ -213,7 +213,7 @@ Page {
                 //% "Screenshots"
                 title: qsTrId("gallery-bt-screenshots")
                 icon: "ScreenshotIcon.qml"
-                page: "GalleryGridPage.qml"
+                page: "ScreenshotsPage.qml"
                 model: screenshotsModel
                 ready: true
                 count: model ? model.count : 0
