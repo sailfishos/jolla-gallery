@@ -118,7 +118,7 @@ Page {
             width: view.width
             height: thumbnail.height
             enabled: media && (media.count > 0 || media.type === MediaSource.Screenshots)
-            opacity: enabled ? 1.0 : 0.5
+            opacity: enabled ? 1.0 : Theme.opacityLow
 
             Label {
                 id: countLabel
@@ -134,7 +134,7 @@ Page {
                     rightMargin: Theme.paddingLarge
                     verticalCenter: parent.verticalCenter
                 }
-                opacity: 0.4
+                opacity: Theme.opacityLow
                 text: count.toLocaleString()
                 color: delegateItem.down ? Theme.highlightColor : Theme.primaryColor
                 font.pixelSize: Theme.fontSizeLarge
@@ -149,7 +149,7 @@ Page {
                 width: Theme.itemSizeExtraLarge
                 height: width
                 source: media.icon
-                opacity: delegateItem.down ? 0.5 : 1
+                opacity: delegateItem.down ? Theme.opacityHigh : 1
                 onStatusChanged: {
                     if (status == Loader.Ready) {
                         item.model = media.model
