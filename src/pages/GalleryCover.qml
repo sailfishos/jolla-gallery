@@ -193,7 +193,7 @@ CoverBackground {
             bottom: takePhotosLabel.top
             bottomMargin: Theme.paddingLarge
         }
-        opacity: 0.2
+        opacity: Theme.opacityFaint
         visible: !contentAvailable
     }
 

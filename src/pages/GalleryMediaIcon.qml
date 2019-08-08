@@ -51,7 +51,7 @@ MediaSourceIcon {
             width: root.height
             height: root.height
             gradient: Gradient {
-                GradientStop { position: 0.0; color: Theme.rgba(Theme.primaryColor, 0.1) }
+                GradientStop { position: 0.0; color: Theme.rgba(Theme.primaryColor, Theme.opacityFaint) }
                 GradientStop { position: 1.0; color: "transparent" }
             }
 
