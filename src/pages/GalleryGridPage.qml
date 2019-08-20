@@ -20,10 +20,11 @@ MediaSourcePage {
         _selectedItems = list
         pageStack.pop()
 
-        //: Remorse popup for multiple image deletion
-        //% "Deleting %1 item(s)"
-        clearRemorse.execute(qsTrId("gallery-me-deleting-%1-items").arg(_selectedItems.length), function()
-        {
+        Remorse.popupAction(
+            gridPage,
+            //: Remorse popup for multiple image deletion
+            //% "Deleting %n item(s)"
+            qsTrId("gallery-me-deleting-%1-items", _selectedItems.length), function() {
             if (!_selectedItems) {
                 console.log("deleteMultipleItems: no selected files!")
                 return
@@ -65,12 +66,6 @@ MediaSourcePage {
     FileRemover {
         id: fileRemover
         onFinished: _selectedItems = null
-    }
-
-
-    // Remorse popup for multiple item deletion
-    RemorsePopup {
-        id: clearRemorse
     }
 
     ImageGridView {
@@ -134,10 +129,8 @@ MediaSourcePage {
                 var remorse = removalComponent.createObject(null)
                 remorse.z = thumbnail.z + 1
 
-                //: Deleting image in 5 seconds
-                //% "Deleting"
                 remorse.execute(remorseContainerComponent.createObject(thumbnail),
-                                qsTrId("gallery-la-deleting"),
+                                remorse.text,
                                 function() {
                                     AlbumManager.deleteMedia(thumbnail.mediaUrl)
                                 })
@@ -198,9 +191,8 @@ MediaSourcePage {
         RemorseItem {
             objectName: "remorseItem"
             //: RemorseItem cancel help text
-            //% "Cancel"
-            cancelText: qsTrId("gallery-la-cancel-deletion")
-            wrapMode: Text.Wrap
+            //% "Undo"
+            cancelText: qsTrId("gallery-la-undo-deletion")
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: Theme.fontSizeSmallBase
         }
