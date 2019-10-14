@@ -86,6 +86,7 @@ SlideshowView {
                 playing: player && player.playing
                 loaded: player && player.loaded
                 busy: autoPlay && player && !player.hasVideo && !player.hasError
+                onBusyChanged: if (!busy) { busy = false } // remove binding
 
                 contentWidth: itemWidth
                 contentHeight: itemHeight
