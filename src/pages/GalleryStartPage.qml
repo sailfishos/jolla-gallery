@@ -90,7 +90,7 @@ Page {
                                mimeType: fileInfo.mimeType,
                                title: fileInfo.fileName,
                                orientation: 0
-                            })
+                           })
 
         imageViewerPage = pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"),
                                                 {
@@ -99,7 +99,7 @@ Page {
                                                     currentIndex: 0,
                                                     viewerOnlyMode: true,
                                                     autoPlay: true
-                                                 }, PageStackAction.Immediate)
+                                                }, PageStackAction.Immediate)
         activate()
         metadata.source = ""
         fileInfo.source = ""
