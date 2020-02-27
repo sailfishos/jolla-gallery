@@ -112,9 +112,7 @@ install -m 644 -p %{SOURCE1} %{buildroot}%{_datadir}/mapplauncherd/privileges.d/
 %post -n %{name}
 /sbin/ldconfig
 /usr/bin/update-desktop-database -q || :
-if [ "$1" -eq 1 ]; then
-%{_bindir}/add-oneshot --user --now enable-gallery-hints || :
-fi
+%{_bindir}/add-oneshot --new-users enable-gallery-hints || :
 
 %postun -n %{name}
 /sbin/ldconfig
