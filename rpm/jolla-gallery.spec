@@ -2,7 +2,6 @@ Name:       jolla-gallery
 Summary:    Jolla Gallery application
 Version:    0.2.10
 Release:    1
-Group:      Applications/Multimedia
 License:    Proprietary
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
@@ -48,14 +47,12 @@ The Jolla Gallery application.
 
 %package ts-devel
 Summary:   Translation source for Jolla Gallery
-Group:     Applications/Multimedia
 
 %description ts-devel
-Translation source for Jolla Gallery
+%{summary}.
 
 %package tests
 Summary:    Unit tests for Jolla Gallery
-Group:      Applications/Multimedia
 BuildRequires:  pkgconfig(Qt5Test)
 BuildRequires:  pkgconfig(Qt5DocGallery)
 Requires:   %{name} = %{version}-%{release}
@@ -65,7 +62,7 @@ Requires:   dbus-x11
 Requires:   mce-tools
 
 %description tests
-This package contains QML unit tests for Jolla Gallery application
+This package contains QML unit tests for Jolla Gallery application.
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -74,7 +71,7 @@ This package contains QML unit tests for Jolla Gallery application
 
 %qmake5
 
-make %{_smp_mflags}
+make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
