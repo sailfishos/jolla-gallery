@@ -14,6 +14,10 @@ SlideshowView {
     readonly property QtObject player: playerLoader.item ? playerLoader.item.player : null
     readonly property bool playing: player && player.playing
 
+    function triggerViewerAction(action, immediately) {
+        overlay.triggerAction(action, immediately)
+    }
+
     Component.onCompleted: if (autoPlay) playerLoader.active = true
 
     itemWidth: width
