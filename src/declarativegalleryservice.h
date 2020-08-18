@@ -14,13 +14,15 @@ public:
 public slots:
     void showImages(const QStringList &urls);
     void openFile(const QString &file);
+    void editFile(const QString &file);
+    void shareFile(const QString &file);
     void showPhotos();
     void showVideos();
     void showScreenshots();
     void playVideoStream(const QStringList &urls);
 
 signals:
-    void openImages(const QStringList &urls);
+    void openImages(const QStringList &urls, const QString &viewerAction);
     void showAllPhotos();
     void showAllVideos();
     void showAllScreenshots();
