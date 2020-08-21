@@ -1,6 +1,6 @@
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    0.2.10
+Version:    1.0.19
 Release:    1
 License:    Proprietary
 URL:        https://bitbucket.org/jolla/ui-jolla-gallery
