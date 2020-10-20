@@ -12,6 +12,14 @@
             <arg direction="in" type="s" name="file"/>
         </method>
 
+        <method name="editFile">
+            <arg direction="in" type="s" name="file"/>
+        </method>
+
+        <method name="shareFile">
+            <arg direction="in" type="s" name="file"/>
+        </method>
+
         <method name="showPhotos" />
 
         <method name="showVideos" />

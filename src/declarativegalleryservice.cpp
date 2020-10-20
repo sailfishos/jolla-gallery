@@ -29,12 +29,22 @@ DeclarativeGalleryService::~DeclarativeGalleryService()
 
 void DeclarativeGalleryService::showImages(const QStringList &urls)
 {
-    emit openImages(urls);
+    emit openImages(urls, QString());
 }
 
 void DeclarativeGalleryService::openFile(const QString &file)
 {
-    emit openImages(QStringList(file));
+    emit openImages(QStringList(file), QString());
+}
+
+void DeclarativeGalleryService::editFile(const QString &file)
+{
+    emit openImages(QStringList(file), QStringLiteral("edit"));
+}
+
+void DeclarativeGalleryService::shareFile(const QString &file)
+{
+    emit openImages(QStringList(file), QStringLiteral("share"));
 }
 
 void DeclarativeGalleryService::showPhotos()
