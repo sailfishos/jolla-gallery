@@ -4,5 +4,9 @@ Name=Gallery
 X-MeeGo-Logical-Id=gallery-ap-name
 X-MeeGo-Translation-Catalog=gallery
 Icon=icon-launcher-gallery
-Exec=invoker --type=silica-qt5 -s /usr/bin/jolla-gallery
+Exec=/usr/bin/sailjail -p jolla-gallery.desktop /usr/bin/jolla-gallery
 Comment=Jolla Gallery
+[X-Sailjail]
+Permissions=Pictures;Videos;MediaIndexing;Downloads;Sharing;Ambience;Privileged
+OrganizationName=com.jolla
+ApplicationName=gallery

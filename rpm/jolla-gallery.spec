@@ -27,8 +27,7 @@ BuildRequires:  oneshot
 Requires:  ambient-icons-closed
 Requires:  sailfishsilica-qt5 >= 1.1.53
 Requires:  qt5-qtdocgallery
-Requires:  mapplauncherd >= 4.1.17
-Requires:  mapplauncherd-booster-silica-qt5
+Requires:  sailjail-launch-approval
 Requires:  qt5-qtdeclarative-import-multimedia
 Requires:  declarative-transferengine-qt5 >= 0.0.49
 Requires:  nemo-qml-plugin-thumbnailer-qt5-video
