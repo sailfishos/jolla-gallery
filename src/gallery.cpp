@@ -45,6 +45,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QQuickView> view(new QQuickView);
 #endif
 
+    app->setOrganizationName("com.jolla");
+    app->setApplicationName("gallery");
+
     QString translationPath("/usr/share/translations/");
 
     QTranslator engineeringEnglish;
