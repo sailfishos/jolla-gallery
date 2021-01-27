@@ -5,6 +5,7 @@ import Sailfish.Gallery 1.0
 import Sailfish.Gallery.private 1.0
 import com.jolla.gallery 1.0
 import QtDocGallery 5.0
+import Nemo.FileManager 1.0
 
 Page {
     id: startPage
@@ -35,9 +36,9 @@ Page {
         for (var i=0; i < urls.length; ++i) {
             var properties = {}
             var file = urls[i]
-            fileInfo.source = file
+            fileInfo.url = file
 
-            if (fileInfo.mimeFileType == "image") {
+            if (fileInfo.mimeType.indexOf("image/") === 0) {
                 metadata.source = file
                 properties = {
                     url: file,
@@ -48,13 +49,13 @@ Page {
                     height: metadata.height
                 }
 
-                if (fileInfo.source.toString().indexOf(StandardPaths.pictures + "/Screenshots/") >= 0) {
+                if (fileInfo.url.toString().indexOf(StandardPaths.pictures + "/Screenshots/") >= 0) {
                     showPage(screenshotsSource)
                 } else {
                     showPage(photoSource)
                 }
 
-            } else if (fileInfo.mimeFileType == "video") {
+            } else if (fileInfo.mimeType.indexOf("video") === 0) {
                 properties = {
                     url: file,
                     mimeType: fileInfo.mimeType,
@@ -80,7 +81,7 @@ Page {
             imageViewerPage.triggerViewerAction(viewerAction, true)
         }
         metadata.source = ""
-        fileInfo.source = ""
+        fileInfo.url = ""
     }
 
     function playVideoStream(url) {
@@ -89,7 +90,7 @@ Page {
         imageViewerPage = null
         pageStack.pop(null, PageStackAction.Immediate)
 
-        fileInfo.source = url
+        fileInfo.url = url
 
         viewerModel.clear()
         viewerModel.set(0, {
@@ -109,7 +110,7 @@ Page {
                                                 }, PageStackAction.Immediate)
         activate()
         metadata.source = ""
-        fileInfo.source = ""
+        fileInfo.url = ""
     }
 
     Component.onCompleted: window.startPage = startPage

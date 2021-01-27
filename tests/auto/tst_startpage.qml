@@ -12,9 +12,6 @@ ApplicationWindow {
             ? pageStack.currentPage.objectName
             : ""
     property MediaSourceModel model: null
-    FileInfo {
-        id: thumbnailHelper
-    }
 
     initialPage: GalleryStartPage {
         id: startPage

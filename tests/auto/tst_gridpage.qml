@@ -17,10 +17,6 @@ ApplicationWindow {
 
     allowedOrientations: Orientation.Portrait | Orientation.Landscape
 
-    FileInfo {
-        id: thumbnailHelper
-    }
-
     initialPage: Page {
         id: dummyPage
     }
