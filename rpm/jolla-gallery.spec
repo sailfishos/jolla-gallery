@@ -39,6 +39,7 @@ Requires:  %{name}-ambience >= 0.1.10
 Requires:  jolla-settings-accounts >= 0.1.31
 Requires:  nemo-qml-plugin-policy-qt5
 Requires:  nemo-qml-plugin-dbus-qt5
+Requires:  nemo-qml-plugin-filemanager
 %{_oneshot_requires_post}
 
 %description
