@@ -248,14 +248,4 @@ CoverBackground {
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.Wrap
     }
-
-    CoverActionList {
-       enabled: !contentAvailable
-       CoverAction {
-           iconSource: "image://theme/icon-cover-camera"
-           onTriggered: {
-               CameraLauncher.exec()
-           }
-       }
-   }
 }

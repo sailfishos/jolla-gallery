@@ -5,7 +5,7 @@ target.path = /usr/bin
 
 QT += qml quick dbus network docgallery multimedia concurrent
 CONFIG += link_pkgconfig
-PKGCONFIG += mlite5 libjollasignonuiservice-qt5 contentaction5
+PKGCONFIG += mlite5 libjollasignonuiservice-qt5
 
 MODULENAME = com/jolla/gallery
 
@@ -49,14 +49,12 @@ SOURCES += \
 HEADERS += \
     declarativemediamodel.h \
     declarativemediasource.h \
-    declarativethreadedfileremover.h \
-    declarativecameralauncher.h
+    declarativethreadedfileremover.h
 
 SOURCES += gallery.cpp \
     declarativemediamodel.cpp \
     declarativemediasource.cpp \
-    declarativethreadedfileremover.cpp \
-    declarativecameralauncher.cpp
+    declarativethreadedfileremover.cpp
 
 INSTALLS += target qml component interface
 

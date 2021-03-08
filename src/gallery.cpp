@@ -12,7 +12,6 @@
 #include "declarativemediamodel.h"
 #include "declarativemediasource.h"
 #include "declarativethreadedfileremover.h"
-#include "declarativecameralauncher.h"
 #include "declarativegalleryservice.h"
 #include "declarativetextcodec.h"
 
@@ -21,14 +20,6 @@
 #endif
 
 #include <qqmldebug.h>
-
-static QObject *camera_launcher_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-
-    return new DeclarativeCameraLauncher;
-}
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
 {
@@ -64,7 +55,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<DeclarativeGalleryService>("com.jolla.gallery", 1, 0, "GalleryService");
     qmlRegisterType<DeclarativeTextCodec>("com.jolla.gallery", 1, 0, "TextCodec");
 
-    qmlRegisterSingletonType<DeclarativeCameraLauncher>("com.jolla.gallery", 1, 0, "CameraLauncher", camera_launcher_provider);
     QString path = QString(DEPLOYMENT_PATH);
 
     //: Gallery application name
