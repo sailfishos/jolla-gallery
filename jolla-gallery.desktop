@@ -7,6 +7,6 @@ Icon=icon-launcher-gallery
 Exec=/usr/bin/sailjail -p jolla-gallery.desktop /usr/bin/jolla-gallery
 Comment=Jolla Gallery
 [X-Sailjail]
-Permissions=Pictures;Videos;MediaIndexing;Downloads;Sharing;Ambience;Privileged;Internet;SyncFW
+Permissions=Pictures;Videos;MediaIndexing;Downloads;Sharing;Ambience;Privileged;Internet;Synchronization
 OrganizationName=com.jolla
 ApplicationName=gallery
