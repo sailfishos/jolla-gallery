@@ -5,7 +5,7 @@ import QtMultimedia 5.0
 import Sailfish.Gallery 1.0
 import com.jolla.gallery 1.0
 
-SlideshowView {
+PagedView {
     id: root
 
     property bool autoPlay
@@ -19,8 +19,6 @@ SlideshowView {
 
     Component.onCompleted: if (autoPlay) playerLoader.active = true
 
-    itemWidth: width
-    itemHeight: height
     interactive: count > 1 && !(!overlay.active && playing)
 
     property Item previousItem
@@ -94,8 +92,8 @@ SlideshowView {
                 busy: autoPlay && player && !player.hasVideo && !player.hasError
                 onBusyChanged: if (!busy) { busy = false } // remove binding
 
-                contentWidth: itemWidth
-                contentHeight: itemHeight
+                contentWidth: root.width
+                contentHeight: root.height
                 overlayMode: overlay.active
             }
         }
@@ -105,9 +103,11 @@ SlideshowView {
     Loader {
         id: playerLoader
 
+        parent: root.contentItem
+        z: -1
         active: false
-        width: itemWidth
-        height: itemHeight
+        width: root.width
+        height: root.height
         sourceComponent: GalleryVideoOutput {
             player: GalleryMediaPlayer {
                 id: mediaPlayer
