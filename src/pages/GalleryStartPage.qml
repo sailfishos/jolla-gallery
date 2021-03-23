@@ -227,6 +227,17 @@ Page {
                 count: model ? model.count : 0
                 type: MediaSource.Screenshots
             }
+
+            MediaSource {
+                //% "Android™ storage"
+                title: qsTrId("gallery-bt-android_storage")
+                icon: "PhotoIcon.qml"
+                page: "GalleryGridPage.qml"
+                model: androidStorage
+                ready: FileEngine.exists(androidStorage.path)
+                count: model ? model.count : 0
+                type: MediaSource.Photos
+            }
         }
 
         VerticalScrollDecorator {}

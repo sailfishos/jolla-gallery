@@ -27,6 +27,7 @@ ApplicationWindow {
         filter: GalleryFilterIntersection {
             GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.music; negated: true }
             GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.pictures + "/Screenshots/"; negated: true }
+            GalleryStartsWithFilter { property: "filePath"; value: androidStorage.path; negated: true }
         }
     }
 
@@ -47,6 +48,18 @@ ApplicationWindow {
         sortProperties: ["-dateTaken"]
         autoUpdate: true
         filter: GalleryStartsWithFilter { property: "filePath"; value: StandardPaths.pictures + "/Screenshots/" }
+    }
+
+    DocumentGalleryModel {
+        id: androidStorage
+
+        readonly property string path: StandardPaths.home + "/android_storage/"
+
+        rootType: DocumentGallery.Image
+        properties: ["url", "mimeType", "title", "orientation", "dateTaken", "width", "height" ]
+        sortProperties: ["-dateTaken"]
+        autoUpdate: true
+        filter: GalleryStartsWithFilter { property: "filePath"; value: androidStorage.path }
     }
 
     // For some reason if the gallery is launched via invoker, it sets codecForLocale to
