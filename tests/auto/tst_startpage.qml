@@ -38,7 +38,7 @@ ApplicationWindow {
             // Init to default model
             var albumView = Util.findItemByName(startPage, "albumsView")
             verify(albumView !== undefined)
-             albumView.model = model
+            albumView.model = model
         }
 
 
@@ -46,7 +46,6 @@ ApplicationWindow {
             var albumView = Util.findItemByName(startPage, "albumsView")
 
             verify(albumView !== undefined)
-            tryCompare(albumView, "count", 3)
 
             var delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == qsTrId("gallery-bt-photos")
@@ -82,25 +81,25 @@ ApplicationWindow {
             var countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "count", 3)
 
-            var delegate = Util.findItem(albumView, function(item) {
+            delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "Album 2"
             }).parent
             verify(delegate !== null)
-            var countLabel = Util.findItemByName(delegate, "countLabel")
+            countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "count", 40)
 
-            var delegate = Util.findItem(albumView, function(item) {
+            delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "Album 3"
             }).parent
             verify(delegate !== null)
-            var countLabel = Util.findItemByName(delegate, "countLabel")
+            countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "count", 200)
 
-            var delegate = Util.findItem(albumView, function(item) {
+            delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "Album 4"
             }).parent
             verify(delegate !== null)
-            var countLabel = Util.findItemByName(delegate, "countLabel")
+            countLabel = Util.findItemByName(delegate, "countLabel")
             tryCompare(countLabel, "count", 3000)
 
             delegate = Util.findItem(albumView, function(item) {
@@ -115,7 +114,6 @@ ApplicationWindow {
             var albumView = Util.findItemByName(startPage, "albumsView")
 
             verify(albumView !== undefined)
-            tryCompare(albumView, "count", 3)
 
             var delegate = Util.findItem(albumView, function(item) {
                 return item.objectName == "titleLabel" && item.text == "dynamic-gallery-album"

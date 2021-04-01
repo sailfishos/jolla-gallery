@@ -56,7 +56,7 @@ ApplicationWindow {
             verify(gridView.contentItem !== null)
 
             gridPage.orientation = Orientation.Portrait
-            gridView.contextMenu.hide()
+            gridView.contextMenu.close()
 
             //testService.trackerInfoDeleted = false
         }
