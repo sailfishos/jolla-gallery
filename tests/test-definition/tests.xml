@@ -7,9 +7,6 @@
            <pre_steps>
                <step>/usr/sbin/mcetool -jdisabled -Doff -B1 -jenabled -U -B1 -kunlocked</step>
            </pre_steps>
-           <case manual="false" name="FullScreenPage">
-               <step>cd /opt/tests/jolla-gallery/auto/ &amp;&amp; ./run-tests.sh tst_fullscreenpage.qml</step>
-           </case>
            <case manual="false" name="GridPage">
                <step>cd /opt/tests/jolla-gallery/auto/ &amp;&amp; ./run-tests.sh tst_gridpage.qml</step>
            </case>
