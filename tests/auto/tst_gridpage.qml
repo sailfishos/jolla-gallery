@@ -4,7 +4,6 @@ import Sailfish.Silica 1.0
 import Sailfish.Gallery 1.0
 import com.jolla.gallery 1.0
 import "scripts/Util.js" as Util
-import "/usr/share/jolla-gallery/pages/scripts/AlbumManager.js" as AlbumManager
 
 ApplicationWindow {
     id: window
