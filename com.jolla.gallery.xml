@@ -4,6 +4,10 @@
 <node name="/com/jolla/gallery/ui">
     <interface name="com.jolla.gallery.ui">
 
+        <method name="openUrl">
+            <arg direction="in" type="as" name="urls"/>
+        </method>
+
         <method name="showImages">
             <arg direction="in" type="as" name="urls"/>
         </method>

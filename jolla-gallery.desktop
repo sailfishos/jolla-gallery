@@ -6,6 +6,10 @@ X-MeeGo-Translation-Catalog=gallery
 Icon=icon-launcher-gallery
 Exec=/usr/bin/sailjail -p jolla-gallery.desktop /usr/bin/jolla-gallery
 Comment=Jolla Gallery
+MimeType=image/*;x-scheme-handler/rtsp;video/*;
+X-Maemo-Service=com.jolla.gallery
+X-Maemo-Object-Path=/com/jolla/gallery/ui
+X-Maemo-Method=com.jolla.gallery.ui.openUrl
 [X-Sailjail]
 Permissions=Pictures;Videos;MediaIndexing;Downloads;Sharing;Ambience;Privileged;Internet;Synchronization;RemovableMedia
 OrganizationName=com.jolla

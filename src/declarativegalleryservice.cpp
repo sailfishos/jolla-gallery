@@ -1,6 +1,17 @@
+/****************************************************************************************
+**
+** Copyright (c) 2013 - 2020 Jolla Ltd.
+** Copyright (c) 2021 Open Mobile Platform LLC.
+** All rights reserved.
+**
+** License: Proprietary
+**
+****************************************************************************************/
+
 #include "declarativegalleryservice.h"
 #include "galleryadaptor.h"
 #include <QtDebug>
+#include <QTimerEvent>
 #include <QUrl>
 
 DeclarativeGalleryService::DeclarativeGalleryService(QObject *parent)
@@ -19,47 +30,89 @@ DeclarativeGalleryService::DeclarativeGalleryService(QObject *parent)
         qWarning() << Q_FUNC_INFO
                    << "Failed to register com.jolla.gallery service";
     }
+
+    if (QCoreApplication::arguments().contains("-prestart")) {
+        // Exit after 30 seconds if no window has been shown yet.
+        m_loopLocker.reset(new QEventLoopLocker);
+
+        m_timeoutId = startTimer(30 * 1000);
+    }
 }
 
 DeclarativeGalleryService::~DeclarativeGalleryService()
 {
-    QDBusConnection::sessionBus().unregisterObject("/com/jolla/gallery/ui");    
+    QDBusConnection::sessionBus().unregisterObject("/com/jolla/gallery/ui");
 }
 
+void DeclarativeGalleryService::openUrl(const QStringList &urls)
+{
+    if (urls.isEmpty()) {
+        activate();
+    } else {
+        const QUrl url(urls.first());
+
+        if (url.isLocalFile()) {
+            QMimeType mimeType = QMimeDatabase().mimeTypeForUrl(url);
+
+            if (mimeType.name().startsWith(QLatin1String("video/"))) {
+                playVideoStream(urls);
+            } else {
+                showImages(urls);
+            }
+        } else {
+            playVideoStream(urls);
+        }
+    }
+    windowShown();
+}
 
 void DeclarativeGalleryService::showImages(const QStringList &urls)
 {
     emit openImages(urls, QString());
+
+    windowShown();
 }
 
 void DeclarativeGalleryService::openFile(const QString &file)
 {
     emit openImages(QStringList(file), QString());
+
+    windowShown();
 }
 
 void DeclarativeGalleryService::editFile(const QString &file)
 {
     emit openImages(QStringList(file), QStringLiteral("edit"));
+
+    windowShown();
 }
 
 void DeclarativeGalleryService::shareFile(const QString &file)
 {
     emit openImages(QStringList(file), QStringLiteral("share"));
+
+    windowShown();
 }
 
 void DeclarativeGalleryService::showPhotos()
 {
     emit showAllPhotos();
+
+    windowShown();
 }
 
 void DeclarativeGalleryService::showVideos()
 {
     emit showAllVideos();
+
+    windowShown();
 }
 
 void DeclarativeGalleryService::showScreenshots()
 {
     emit showAllScreenshots();
+
+    windowShown();
 }
 
 void DeclarativeGalleryService::playVideoStream(const QStringList &urls)
@@ -74,4 +127,27 @@ void DeclarativeGalleryService::playVideoStream(const QStringList &urls)
             emit playStream(urls.at(0));
         }
     }
+
+    windowShown();
+}
+
+void DeclarativeGalleryService::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == m_timeoutId) {
+        killTimer(m_timeoutId);
+        m_timeoutId = -1;
+
+        m_loopLocker.reset();
+    } else {
+        return QObject::timerEvent(event);
+    }
+}
+
+void DeclarativeGalleryService::windowShown()
+{
+    if (m_timeoutId != -1) {
+        killTimer(m_timeoutId);
+        m_timeoutId = -1;
+    }
+    m_loopLocker.reset();
 }

@@ -244,11 +244,13 @@ Page {
     }
 
     GalleryService {
+        onActivate: window.activate()
+
         onOpenImages:{
             if (urls.length > 0) {
                 showImage(urls, viewerAction)
             }
-            activate()
+            window.activate()
         }
 
         onPlayStream: startPage.playVideoStream(url)

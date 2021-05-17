@@ -1,3 +1,4 @@
 [D-BUS Service]
 Name=com.jolla.gallery
-Exec=/usr/bin/invoker -s --type=generic /usr/bin/sailjail -p jolla-gallery.desktop /usr/bin/jolla-gallery
+Exec=/usr/bin/invoker -s --type=generic /usr/bin/sailjail -p jolla-gallery.desktop /usr/bin/jolla-gallery -prestart
+

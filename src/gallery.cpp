@@ -61,7 +61,14 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     //% "Gallery"
     view->setTitle(qtTrId("gallery-ap-name"));
     view->setSource(path + QLatin1String("gallery.qml"));
-    view->showFullScreen();
 
-    return app->exec();
+    if (view->status() == QQuickView::Ready) {
+        if (!QCoreApplication::arguments().contains(QLatin1String("-prestart"))) {
+            view->showFullScreen();
+        }
+
+        return app->exec();
+    } else {
+        return EXIT_FAILURE;
+    }
 }
