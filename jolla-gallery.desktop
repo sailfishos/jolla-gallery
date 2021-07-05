@@ -10,7 +10,8 @@ MimeType=image/*;x-scheme-handler/rtsp;video/*;
 X-Maemo-Service=com.jolla.gallery
 X-Maemo-Object-Path=/com/jolla/gallery/ui
 X-Maemo-Method=com.jolla.gallery.ui.openUrl
+
 [X-Sailjail]
-Permissions=Pictures;Videos;MediaIndexing;Downloads;Sharing;Ambience;Privileged;Internet;Synchronization;RemovableMedia
+Permissions=UserDirs;MediaIndexing;Sharing;Ambience;Privileged;Internet;Synchronization;RemovableMedia
 OrganizationName=com.jolla
 ApplicationName=gallery
