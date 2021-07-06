@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Gallery 1.0
-import "scripts/AlbumManager.js" as AlbumManager
 import QtDocGallery 5.0
 
 Page {
