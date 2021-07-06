@@ -87,9 +87,11 @@ Page {
                 return
             }
 
+            var i, j
+
             // First time initialization
             if (model.count == 0) {
-                for(var i=0; i < docModel.count; i++) {
+                for(i=0; i < docModel.count; i++) {
                     model.insert(i, {"url": "" + docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
 
                     // Just make the model ready when there are enough pics to show
@@ -110,12 +112,15 @@ Page {
             //       Maybe using WorkerScript could provide some kind of solution for keeping model
             //       updated.
 
+            var found
+            var url
+
             // Images removed from the document model e.g. someone has removed the image via commandline
             if (model.count > docModel.count) {
-                for (var i=0; i < model.count; i++) {
-                    var url = model.get(i).url
-                    var found = false
-                    for (var j=0; j < docModel.count; j++) {
+                for (i=0; i < model.count; i++) {
+                    url = model.get(i).url
+                    found = false
+                    for (j=0; j < docModel.count; j++) {
                         if (url == docModel.get(j).url) {
                             found = true
                             break
@@ -132,10 +137,10 @@ Page {
 
             // Images have been added
             if (model.count < docModel.count) {
-                for (var i=0; i < docModel.count; i++) {
-                    var url = docModel.get(i).url
-                    var found = false
-                    for (var j=0; j < model.count; j++) {
+                for (i=0; i < docModel.count; i++) {
+                    url = docModel.get(i).url
+                    found = false
+                    for (j=0; j < model.count; j++) {
                         if (url == model.get(j).url) {
                             found = true
                         }
@@ -148,7 +153,6 @@ Page {
                             model.append({"url": "" + docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
                         }
                     }
-
                 }
             }
         }
