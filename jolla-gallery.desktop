@@ -12,6 +12,6 @@ X-Maemo-Object-Path=/com/jolla/gallery/ui
 X-Maemo-Method=com.jolla.gallery.ui.openUrl
 
 [X-Sailjail]
-Permissions=UserDirs;MediaIndexing;Sharing;Ambience;Privileged;Internet;Synchronization;RemovableMedia;Audio
+Permissions=UserDirs;MediaIndexing;Sharing;Ambience;Privileged;Internet;Synchronization;RemovableMedia;Audio;Accounts
 OrganizationName=com.jolla
 ApplicationName=gallery
