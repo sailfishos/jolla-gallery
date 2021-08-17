@@ -143,7 +143,7 @@ Page {
                     verticalCenter: parent.verticalCenter
                 }
                 opacity: Theme.opacityLow
-                text: count.toLocaleString()
+                text: media.busy && count == 0 ? "" : count.toLocaleString()
                 color: delegateItem.down ? Theme.highlightColor : Theme.primaryColor
                 font.pixelSize: Theme.fontSizeLarge
                 horizontalAlignment: Text.AlignRight
@@ -163,6 +163,11 @@ Page {
                         item.model = media.model
                     }
                 }
+            }
+
+            BusyIndicator {
+                anchors.centerIn: thumbnail
+                running: media.busy
             }
 
             Label {
@@ -200,6 +205,7 @@ Page {
                 page: "GalleryGridPage.qml"
                 model: photosModel
                 ready: true
+                busy: model.status == DocumentGalleryModel.Active
                 count: model ? model.count : 0
                 type: MediaSource.Photos
             }
@@ -212,6 +218,7 @@ Page {
                 page: "GalleryGridPage.qml"
                 model: videosModel
                 ready: true
+                busy: model.status == DocumentGalleryModel.Active
                 count: model ? model.count : 0
                 type: MediaSource.Videos
             }
@@ -224,6 +231,7 @@ Page {
                 page: "ScreenshotsPage.qml"
                 model: screenshotsModel
                 ready: true
+                busy: model.status == DocumentGalleryModel.Active
                 count: model ? model.count : 0
                 type: MediaSource.Screenshots
             }
@@ -235,6 +243,7 @@ Page {
                 page: "GalleryGridPage.qml"
                 model: androidStorage
                 ready: FileEngine.exists(androidStorage.path)
+                busy: model.status == DocumentGalleryModel.Active
                 count: model ? model.count : 0
                 type: MediaSource.Photos
             }

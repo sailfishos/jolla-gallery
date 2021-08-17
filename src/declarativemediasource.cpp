@@ -4,6 +4,7 @@
 DeclarativeMediaSource::DeclarativeMediaSource()
     : m_count(0)
     , m_ready(false)
+    , m_busy(false)
     , m_type(DeclarativeMediaSource::Undefined)
 {
 }
@@ -87,6 +88,19 @@ void DeclarativeMediaSource::setReady(bool ready)
     if (ready != m_ready) {
         m_ready = ready;
         emit readyChanged();
+    }
+}
+
+bool DeclarativeMediaSource::busy() const
+{
+    return m_busy;
+}
+
+void DeclarativeMediaSource::setBusy(bool busy)
+{
+    if (busy != m_busy) {
+        m_busy = busy;
+        emit busyChanged();
     }
 }
 
