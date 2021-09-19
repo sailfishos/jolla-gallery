@@ -80,6 +80,25 @@ Page {
             }
         }
 
+        function _itemAt(i) {
+            if (i < 0 || i >= docModel.count) {
+                console.warn("Calling GalleryItemPickerPage::_itemAt(i) out of bounds")
+            }
+
+            var item = {
+                "url": "" + docModel.get(i).url,
+                "mimeType": docModel.get(i).mimeType,
+                "selected": false
+            }
+
+            if (docModel.rootType === DocumentGallery.Image) {
+                item["dateTaken"] = docModel.get(i).dateTaken
+            } else {
+                item["lastModified"] = docModel.get(i).lastModified
+            }
+            return item
+        }
+
         function _update()
         {
             if (active && docModel == null) {
@@ -91,7 +110,7 @@ Page {
             // First time initialization
             if (model.count == 0) {
                 for(i=0; i < docModel.count; i++) {
-                    model.insert(i, {"url": "" + docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
+                    model.insert(i, _itemAt(i))
 
                     // Just make the model ready when there are enough pics to show
                     if (i > 20) {
@@ -147,9 +166,9 @@ Page {
                     // New item, let's add it to the model
                     if (!found) {
                         if (i < model.count) {
-                            model.insert(i, {"url": "" + docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
+                            model.insert(i, _itemAt(i))
                         } else {
-                            model.append({"url": "" + docModel.get(i).url, "mimeType": docModel.get(i).mimeType, "selected": false})
+                            model.append(i, _itemAt(i))
                         }
                     }
                 }
@@ -164,7 +183,8 @@ Page {
 
         model: selectionModel.ready ? selectionModel.model : null
         header: PageHeader { title: root.title }
-        highlightEnabled: false
+        dateProperty: root.model.rootType === DocumentGallery.Image ? "dateTaken" : "lastModified"
+
         clip: true
 
         anchors {
@@ -192,16 +212,12 @@ Page {
 
         delegate: ThumbnailImage {
             id: thumbnail
-            // Initialize selection status if delegate is instantiated again
-            source: url
-            size: grid.cellSize
 
             onClicked: selectionModel.setSelected(index, !model.selected)
 
-            HighlightItem {
-                anchors.fill: parent
-                active: model.selected
-            }
+            // Initialize selection status if delegate is instantiated again
+            source: url
+            selected: model.selected
         }
     }
 
