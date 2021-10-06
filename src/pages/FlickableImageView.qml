@@ -35,12 +35,13 @@ PagedView {
         readonly property bool isImage: model.mimeType.indexOf("image/") == 0
         readonly property string itemId: model.itemId !== undefined ? model.itemId : ""
         readonly property int duration: model.duration !== undefined ? model.duration : 1
-        readonly property bool isCurrentItem: PathView.isCurrentItem
+        readonly property bool isCurrentItem: PagedView.isCurrentItem
         readonly property bool playing: root.playing && isCurrentItem
         readonly property bool error: item && item.error
 
         // Delay Poster creation until we're in playing state. Without this when auto playing
         // poster will blink at the beginning.
+        active: !autoPlay
         onPlayingChanged: {
             if (autoPlay && playing) {
                 active = true
@@ -49,7 +50,6 @@ PagedView {
 
         width: root.width
         height: root.height
-        active: !autoPlay
         sourceComponent: isImage ? imageComponent : videoComponent
         asynchronous: !isCurrentItem
 
@@ -110,8 +110,6 @@ PagedView {
         height: root.height
         sourceComponent: GalleryVideoOutput {
             player: GalleryMediaPlayer {
-                id: mediaPlayer
-
                 autoPlay: root.autoPlay
                 active: currentItem && !currentItem.isImage && Qt.application.active
                 source: active ? currentItem.source : ""
