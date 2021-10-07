@@ -71,8 +71,7 @@ Page {
 
         imageViewerPage = pageStack.push(
                         Qt.resolvedUrl("GalleryFullscreenPage.qml"),
-                        { title: "",
-                          model: viewerModel,
+                        { model: viewerModel,
                           currentIndex: viewerModel.count - urls.length,
                           viewerOnlyMode: true
                         },
@@ -102,7 +101,6 @@ Page {
 
         imageViewerPage = pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"),
                                                 {
-                                                    title: "",
                                                     model: viewerModel,
                                                     currentIndex: 0,
                                                     viewerOnlyMode: true,
