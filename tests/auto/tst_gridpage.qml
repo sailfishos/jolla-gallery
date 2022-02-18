@@ -111,7 +111,7 @@ ApplicationWindow {
             tryCompare(item3, "y", item2.y + gridView.cellSize)
 
             // Verify that in landscape mode the grid wraps after landscapeItemsPerRow items.
-            gridPage.orientation = Orientation.Landscape
+            gridPage.allowedOrientations = Orientation.Landscape
             wait(1000)
             var landscapeItemsPerRow = Math.floor(window.height / gridView.cellSize)
 
@@ -125,7 +125,7 @@ ApplicationWindow {
             compare(item3.y, item2.y)
             compare(item5.y, item4.y + gridView.cellHeight)
 
-            gridPage.orientation = Orientation.Portrait
+            gridPage.allowedOrientations = Orientation.Portrait
             wait(2000)
             compare(item3.y, item2.y + gridView.cellHeight)
             compare(item5.y, item4.y)
