@@ -6,5 +6,5 @@ GalleryGridPage 1.0 ../../../../../../../usr/share/jolla-gallery/pages/GalleryGr
 GalleryStartPage 1.0 ../../../../../../../usr/share/jolla-gallery/pages/GalleryStartPage.qml
 VideoPlayer 1.0 ../../../../../../../usr/share/jolla-gallery/pages/VideoPlayer.qml
 ZoomableImage 1.0 ../../../../../../../usr/share/jolla-gallery/pages/ZoomableImage.qml
-MediaSourcePage 1.0 ../../../../../../../usr/lib/qt5/qml/com/jolla/gallery/MediaSourcePage.qml
-MediaSourceIcon 1.0 ../../../../../../../usr/lib/qt5/qml/com/jolla/gallery/MediaSourceIcon.qml
+MediaSourcePage 1.0 MediaSourcePage.qml
+MediaSourceIcon 1.0 MediaSourceIcon.qml

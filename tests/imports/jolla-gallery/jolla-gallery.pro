@@ -36,7 +36,7 @@ SOURCES += \
         $$GALLERY_SOURCE_PATH/declarativegalleryservice.cpp \
         $$GALLERY_SOURCE_PATH/declarativetextcodec.cpp
 
-
-import.files = qmldir
+# pages/* can be referred via /usr/share path in qmldir but lib dir isn't static -> just copy those here
+import.files = qmldir ../../../src/components/*.qml
 import.path = $$TARGETPATH
 INSTALLS += import
