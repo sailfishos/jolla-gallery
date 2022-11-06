@@ -34,7 +34,6 @@ Requires:  sailfish-components-media-qt5
 Requires:  sailfish-components-gallery-qt5 >= 1.2.2
 Requires:  ambienced
 Requires:  %{name}-ambience >= 0.1.10
-Requires:  jolla-settings-accounts >= 0.1.31
 Requires:  nemo-qml-plugin-policy-qt5
 Requires:  nemo-qml-plugin-dbus-qt5
 Requires:  nemo-qml-plugin-filemanager
