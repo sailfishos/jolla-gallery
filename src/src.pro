@@ -5,7 +5,7 @@ target.path = /usr/bin
 
 QT += qml quick dbus network docgallery multimedia concurrent
 CONFIG += link_pkgconfig
-PKGCONFIG += mlite5 libjollasignonuiservice-qt5
+PKGCONFIG += mlite5
 
 MODULENAME = com/jolla/gallery
 
