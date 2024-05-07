@@ -7,31 +7,29 @@ URL:        https://bitbucket.org/jolla/ui-jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
 Source1:    %{name}.privileges
 BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
-BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Network)
 BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  pkgconfig(Qt5Concurrent)
-BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig(mlite5)
+BuildRequires:  pkgconfig(Qt5Test)
 BuildRequires:  pkgconfig(Qt5DocGallery)
+BuildRequires:  pkgconfig(mlite5)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
 BuildRequires:  qt5-qttools
 BuildRequires:  qt5-qttools-linguist
 BuildRequires:  oneshot
 
-Requires:  ambient-icons-closed
+Requires:  sailfish-content-graphics-closed
 Requires:  sailfishsilica-qt5 >= 1.1.53
 Requires:  qt5-qtdocgallery
 Requires:  sailjail-launch-approval
 Requires:  qt5-qtdeclarative-import-multimedia
-Requires:  declarative-transferengine-qt5 >= 0.0.49
 Requires:  nemo-qml-plugin-thumbnailer-qt5-video
 Requires:  nemo-qml-plugin-thumbnailer-qt5
 Requires:  sailfish-components-media-qt5
 Requires:  sailfish-components-gallery-qt5 >= 1.2.2
-Requires:  ambienced
 Requires:  %{name}-ambience >= 0.1.10
 Requires:  nemo-qml-plugin-policy-qt5
 Requires:  nemo-qml-plugin-dbus-qt5
@@ -49,8 +47,6 @@ Summary:   Translation source for Jolla Gallery
 
 %package tests
 Summary:    Unit tests for Jolla Gallery
-BuildRequires:  pkgconfig(Qt5Test)
-BuildRequires:  pkgconfig(Qt5DocGallery)
 Requires:   %{name} = %{version}-%{release}
 Requires:   qt5-qtdeclarative-import-qttest
 Requires:   qt5-qtdeclarative-devel-tools
@@ -66,24 +62,20 @@ This package contains QML unit tests for Jolla Gallery application.
 %build
 
 %qmake5
-
-make %{?_smp_mflags}
+%make_build
 
 %install
-rm -rf %{buildroot}
 %qmake5_install
 chmod +x %{buildroot}/opt/tests/%{name}/auto/run-tests.sh
 chmod +x %{buildroot}/%{_oneshotdir}/*
 
-desktop-file-install --delete-original       \
-  --dir %{buildroot}%{_datadir}/applications             \
-   %{buildroot}%{_datadir}/applications/*.desktop
-
 mkdir -p %{buildroot}%{_datadir}/mapplauncherd/privileges.d
 install -m 644 -p %{SOURCE1} %{buildroot}%{_datadir}/mapplauncherd/privileges.d/
 
+%post
+%{_bindir}/add-oneshot --new-users enable-gallery-hints || :
+
 %files
-%defattr(-,root,root,-)
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
 %{_bindir}/%{name}
@@ -95,19 +87,7 @@ install -m 644 -p %{SOURCE1} %{buildroot}%{_datadir}/mapplauncherd/privileges.d/
 %{_oneshotdir}/enable-gallery-hints
 
 %files ts-devel
-%defattr(-,root,root,-)
 %{_datadir}/translations/source/gallery.ts
 
 %files tests
-%defattr(-,root,root,-)
 /opt/tests/%{name}
-
-%post -n %{name}
-/sbin/ldconfig
-/usr/bin/update-desktop-database -q || :
-%{_bindir}/add-oneshot --new-users enable-gallery-hints || :
-
-%postun -n %{name}
-/sbin/ldconfig
-
-

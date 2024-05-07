@@ -6,6 +6,7 @@ import Sailfish.Gallery 1.0
 
 MediaSourcePage {
     id: gridPage
+
     property alias currentIndex: grid.currentIndex
     property int _animationDuration: 150
     property var _selectedItems: null
@@ -69,8 +70,8 @@ MediaSourcePage {
 
     ImageGridView {
         id: grid
-        objectName: "gridView"
 
+        objectName: "gridView"
         anchors.fill: parent
         header: PageHeader { title: gridPage.title }
         model: gridPage.model
