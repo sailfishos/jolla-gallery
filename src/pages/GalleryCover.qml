@@ -6,6 +6,7 @@ import Nemo.Thumbnailer 1.0
 
 CoverBackground {
     id: cover
+
     property bool contentAvailable: galleryModel && galleryModel.count > 0
     property var galleryModel: photosModel
     property int animationDuration: 2000
@@ -47,10 +48,10 @@ CoverBackground {
         var startIdx
         if (mappedIdx < 2) {
             startIdx = mappedIdx * 4
-            return layouts[layoutIdx].slice(startIdx, startIdx+4)
+            return layouts[layoutIdx].slice(startIdx, startIdx + 4)
         } else {
-            startIdx = (mappedIdx-2) * 4
-            return baseLayout.slice(startIdx, startIdx+4)
+            startIdx = (mappedIdx - 2) * 4
+            return baseLayout.slice(startIdx, startIdx + 4)
         }
     }
 
@@ -73,6 +74,7 @@ CoverBackground {
 
     Timer {
         id: shuffleDelayTimer
+
         running: true
         repeat: true
         interval: 5 * 60 * 1000 // change cover no more than once every 5 minutes
@@ -89,25 +91,36 @@ CoverBackground {
 
     Timer {
         id: shuffleTimer
+
         interval: 2000
         onTriggered: calcRand()
     }
 
     ListView{
         id: grid
+
+        property real cellWidth: Math.floor(parent.width / 1.8)
+        property real cellHeight: Math.ceil(parent.height / 2.5)
+
         width: 1
         height: 7.1 // will create 8 one pixel high delegates
         interactive: false
         cacheBuffer: 0
-        property real cellWidth: Math.floor(parent.width / 1.8)
-        property real cellHeight: Math.ceil(parent.height / 2.5)
         model: galleryModel
         opacity: fullscreen ? 0.0 : 1.0
         Behavior on opacity { FadeAnimation {}}
 
         delegate: Item {
             id: wrapper
-            property real zLayout: layout(index, layoutIdx)[3]
+
+            property real zLayout: {
+                var itemProperties = layout(index, layoutIdx)
+                if (itemProperties.length > 3) {
+                    return itemProperties[3]
+                }
+
+                return -1
+            }
             onZLayoutChanged: {
                 if (cover.status == Cover.Active) {
                     opacityAnim.start()
@@ -132,21 +145,31 @@ CoverBackground {
 
             SequentialAnimation {
                 id: opacityAnim
+
                 ScriptAction { script: photo1.z = zLayout }
-                FadeAnimation { easing.type: Easing.InOutQuad; target: photo; property: "opacity"; to: 0.0; duration: animationDuration }
+                FadeAnimation {
+                    easing.type: Easing.InOutQuad
+                    target: photo
+                    property: "opacity"
+                    to: 0.0
+                    duration: animationDuration
+                }
                 ScriptAction { script: { wrapper.z = zLayout; photo.opacity = 1.0 } }
             }
 
             CoverPhoto {
                 id: photo
+
                 source: url
                 mimeType: model.mimeType
                 anchors.centerIn: parent
                 width: grid.cellWidth
                 height: grid.cellHeight
 
-                offsetX: layout(index, layoutIdx)[0] * cover.width + (Theme.paddingSmall - wrapper.randVals[0] * Theme.paddingMedium)
-                offsetY: layout(index, layoutIdx)[1] * cover.height + (Theme.paddingSmall - wrapper.randVals[1] * Theme.paddingMedium)
+                offsetX: layout(index, layoutIdx)[0] * cover.width
+                         + (Theme.paddingSmall - wrapper.randVals[0] * Theme.paddingMedium)
+                offsetY: layout(index, layoutIdx)[1] * cover.height
+                         + (Theme.paddingSmall - wrapper.randVals[1] * Theme.paddingMedium)
 
                 Behavior on offsetX {
                     NumberAnimation { easing.type: Easing.InOutQuad; duration: animationDuration }
@@ -168,6 +191,7 @@ CoverBackground {
             Loader {
                 // This is used to do a clean cross-fade to the target z-value during animation
                 id: photo1
+
                 anchors.centerIn: wrapper
                 parent: wrapper.parent
                 active: opacityAnim.running
