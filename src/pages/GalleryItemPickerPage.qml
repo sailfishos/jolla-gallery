@@ -8,7 +8,8 @@ Page {
 
     property alias model: selectionModel.docModel
     property string title
-    signal itemsSelected(var items)
+
+    signal deleteTriggered(var items)
 
     allowedOrientations: Orientation.All
 
@@ -22,7 +23,7 @@ Page {
         }
 
         // Emit signal with selected items, to indicate that selection is done
-        itemsSelected(array)
+        deleteTriggered(array)
     }
 
     function clearSelections() {

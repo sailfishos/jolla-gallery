@@ -100,7 +100,7 @@ MediaSourcePage {
                                                          title: text
                                                      })
                     obj.pageCompleted.connect(function(page) {
-                        page.itemsSelected.connect(gridPage.deleteMultipleItems)
+                        page.deleteTriggered.connect(gridPage.deleteMultipleItems)
                     })
                 }
             }
