@@ -8,7 +8,7 @@ GALLERY_SOURCE_PATH = $$PWD/../../../src
 system(qdbusxml2cpp -c GalleryAdaptor -a galleryadaptor.h:galleryadaptor.cpp  ../../../com.jolla.gallery.xml)
 
 QT += dbus qml quick docgallery multimedia concurrent
-CONFIG += mobility link_pkgconfig
+CONFIG += link_pkgconfig
 MOBILITY += gallery
 
 PKGCONFIG += mlite5
