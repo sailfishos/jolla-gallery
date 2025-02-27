@@ -118,10 +118,10 @@ void DeclarativeGalleryService::showScreenshots()
 void DeclarativeGalleryService::playVideoStream(const QStringList &urls)
 {
     if (!urls.isEmpty()) {
-        QString cleanedUrl = QUrl(urls.at(0)).toDisplayString(QUrl::RemoveScheme |
-                                                              QUrl::RemoveUserInfo |
-                                                              QUrl::RemoveFragment |
-                                                              QUrl::StripTrailingSlash);
+        QString cleanedUrl = QUrl(urls.at(0)).toDisplayString(QUrl::RemoveScheme
+                                                              | QUrl::RemoveUserInfo
+                                                              | QUrl::RemoveFragment
+                                                              | QUrl::StripTrailingSlash);
         // Remove "//" between scheme and host.
         if (!cleanedUrl.remove(0, 2).isEmpty()) {
             emit playStream(urls.at(0));

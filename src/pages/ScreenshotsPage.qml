@@ -2,7 +2,6 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 GalleryGridPage {
-
     SilicaFlickable {
         anchors.fill: parent
         enabled: model.count === 0

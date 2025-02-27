@@ -30,6 +30,7 @@ FullscreenContentPage {
     }
     FileInfo {
         id: fileInfo
+
         url: {
             if (model && model.count >= imageView.currentIndex - 1) {
                 var data = model.get(imageView.currentIndex)
@@ -63,5 +64,6 @@ FullscreenContentPage {
         anchors.fill: parent
         objectName: "flickableView"
     }
+
     VerticalPageBackHint {}
 }

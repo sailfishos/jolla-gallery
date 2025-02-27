@@ -3,7 +3,7 @@
 #include <QtConcurrentMap>
 #include <qqmlinfo.h>
 
-bool removeFile(const QString &filePath)
+static bool removeFile(const QString &filePath)
 {
     QUrl url(filePath);
     return QFile::remove(url.toLocalFile());
