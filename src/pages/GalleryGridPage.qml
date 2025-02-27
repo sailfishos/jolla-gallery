@@ -94,12 +94,13 @@ MediaSourcePage {
                       ? selectPhotosText
                       : (gridPage.userData === MediaSource.Videos ? selectVideosText : selectScreenshotsText)
                 onClicked: {
-                    var obj = pageStack.animatorPush(Qt.resolvedUrl("GalleryItemPickerPage.qml"),{
-                                               model: grid.model,
-                                               title: text
-                                           })
+                    var obj = pageStack.animatorPush(Qt.resolvedUrl("GalleryItemPickerPage.qml"),
+                                                     {
+                                                         model: grid.model,
+                                                         title: text
+                                                     })
                     obj.pageCompleted.connect(function(page) {
-                        page.itemsSelected.connect(gridPage.deleteMultipleItems)
+                        page.deleteTriggered.connect(gridPage.deleteMultipleItems)
                     })
                 }
             }
@@ -120,7 +121,7 @@ MediaSourcePage {
 
             onClicked: {
                 pageStack.push(Qt.resolvedUrl("GalleryFullscreenPage.qml"),
-                               {currentIndex: index, model: grid.model})
+                               { currentIndex: index, model: grid.model })
                 _requestedIndex = -1
                 pageStack.currentPage.requestIndex.connect(gridPage.requestIndex)
             }
@@ -139,7 +140,13 @@ MediaSourcePage {
             GridView.onAdd: AddAnimation { target: thumbnail; duration: _animationDuration }
             GridView.onRemove: SequentialAnimation {
                 PropertyAction { target: thumbnail; property: "GridView.delayRemove"; value: true }
-                NumberAnimation { target: thumbnail; properties: "opacity,scale"; to: 0; duration: 250; easing.type: Easing.InOutQuad }
+                NumberAnimation {
+                    target: thumbnail
+                    properties: "opacity,scale"
+                    to: 0
+                    duration: 250
+                    easing.type: Easing.InOutQuad
+                }
                 PropertyAction { target: thumbnail; property: "GridView.delayRemove"; value: false }
             }
         }

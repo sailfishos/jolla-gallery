@@ -8,31 +8,29 @@ Page {
 
     property alias model: selectionModel.docModel
     property string title
-    signal itemsSelected(var items)
+
+    signal deleteTriggered(var items)
 
     allowedOrientations: Orientation.All
 
-    function deleteClicked()
-    {
+    function deleteClicked() {
         // Store selected items to the array
         var array = []
         for (var index = 0; index < selectionModel.count; index++) {
-            if(selectionModel.get(index).selected) {
+            if (selectionModel.get(index).selected) {
                 array.push(selectionModel.get(index).url)
             }
         }
 
         // Emit signal with selected items, to indicate that selection is done
-        itemsSelected(array)
+        deleteTriggered(array)
     }
 
-    function clearSelections()
-    {
+    function clearSelections() {
         selectionModel.selectOrClearAll(false)
     }
 
-    function selectAll()
-    {
+    function selectAll() {
         selectionModel.selectOrClearAll(true)
     }
 
@@ -41,6 +39,7 @@ Page {
     // while this Page is active to keep the content up-to-date.
     QtObject {
         id: selectionModel
+
         property bool ready
         property int count: model.count
         property int selectionCount: 0
@@ -51,14 +50,12 @@ Page {
         // Make sure not to call _update() when this page is not active anymore
         onActiveChanged: if (!active) docModel.countChanged.disconnect(_update)
 
-        function get(index)
-        {
+        function get(index) {
             return model.get(index)
         }
 
-        function selectOrClearAll(select)
-        {
-            for(var i=0; i < docModel.count; i++) {
+        function selectOrClearAll(select) {
+            for (var i = 0; i < docModel.count; i++) {
                 model.setProperty(i, "selected", select)
             }
 
@@ -69,8 +66,7 @@ Page {
             }
         }
 
-        function setSelected(index, selected)
-        {
+        function setSelected(index, selected) {
             model.setProperty(index, "selected", selected)
 
             if (selected) {
@@ -99,8 +95,7 @@ Page {
             return item
         }
 
-        function _update()
-        {
+        function _update() {
             if (active && docModel == null) {
                 return
             }
@@ -109,7 +104,7 @@ Page {
 
             // First time initialization
             if (model.count == 0) {
-                for(i=0; i < docModel.count; i++) {
+                for (i = 0; i < docModel.count; i++) {
                     model.insert(i, _itemAt(i))
 
                     // Just make the model ready when there are enough pics to show
@@ -135,10 +130,10 @@ Page {
 
             // Images removed from the document model e.g. someone has removed the image via commandline
             if (model.count > docModel.count) {
-                for (i=0; i < model.count; i++) {
+                for (i = 0; i < model.count; i++) {
                     url = model.get(i).url
                     found = false
-                    for (j=0; j < docModel.count; j++) {
+                    for (j = 0; j < docModel.count; j++) {
                         if (url == docModel.get(j).url) {
                             found = true
                             break
@@ -155,7 +150,7 @@ Page {
 
             // Images have been added
             if (model.count < docModel.count) {
-                for (i=0; i < docModel.count; i++) {
+                for (i = 0; i < docModel.count; i++) {
                     url = docModel.get(i).url
                     found = false
                     for (j=0; j < model.count; j++) {
@@ -223,6 +218,7 @@ Page {
 
     DockedPanel {
         id: controlPanel
+
         width: parent.width
         height: Theme.itemSizeLarge
         dock: Dock.Bottom

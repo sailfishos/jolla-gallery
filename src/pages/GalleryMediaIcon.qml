@@ -15,6 +15,7 @@ MediaSourceIcon {
 
     ListView {
         id: slideShow
+
         interactive: false
         currentIndex: 0
         clip: true

@@ -4,6 +4,7 @@ import Nemo.Thumbnailer 1.0
 
 Item {
     id: photo
+
     property alias source: thumbnail.source
     property alias mimeType: thumbnail.mimeType
 
@@ -48,6 +49,7 @@ Item {
 
         Thumbnail {
             id: thumbnail
+
             anchors {
                 centerIn: parent
                 verticalCenterOffset: -borderWidth/2
@@ -58,8 +60,10 @@ Item {
             sourceSize.height: height * 1.5
             fillMode: Image.PreserveAspectCrop
             opacity: status == Thumbnail.Ready ? 1.0 : 0.0
+
             Behavior on opacity {
                 id: developAnim
+
                 enabled: false
                 FadeAnimator { duration: 3000 }
             }

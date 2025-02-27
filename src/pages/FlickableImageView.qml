@@ -99,7 +99,6 @@ PagedView {
         }
     }
 
-
     Loader {
         id: playerLoader
 
@@ -150,9 +149,9 @@ PagedView {
         anchors.fill: parent
         z: model.count + 100
 
-
         Private.DismissButton {}
     }
+
     FileRemover {
         id: fileRemover
     }

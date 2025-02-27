@@ -222,7 +222,6 @@ void DeclarativeMediaModel::componentComplete()
     updateActiveSources();
 }
 
-
 QQmlListProperty<DeclarativeMediaSource> DeclarativeMediaModel::sources()
 {
     Q_D(DeclarativeMediaModel);

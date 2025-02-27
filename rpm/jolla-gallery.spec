@@ -26,7 +26,6 @@ Requires:  sailfishsilica-qt5 >= 1.1.53
 Requires:  qt5-qtdocgallery
 Requires:  sailjail-launch-approval
 Requires:  qt5-qtdeclarative-import-multimedia
-Requires:  nemo-qml-plugin-thumbnailer-qt5-video
 Requires:  nemo-qml-plugin-thumbnailer-qt5
 Requires:  sailfish-components-media-qt5
 Requires:  sailfish-components-gallery-qt5 >= 1.2.2
