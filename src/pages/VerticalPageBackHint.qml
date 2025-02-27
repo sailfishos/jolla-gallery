@@ -2,11 +2,15 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Loader {
+    id: root
+
+    property bool pageActive
+
     anchors.fill: parent
     active: counter.active
     sourceComponent: Component {
         Item {
-            property bool pageActive: root.status == PageStatus.Active
+            property bool pageActive: root.pageActive
             onPageActiveChanged: {
                 if (pageActive) {
                     timer.restart()

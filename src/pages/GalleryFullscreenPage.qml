@@ -65,5 +65,7 @@ FullscreenContentPage {
         objectName: "flickableView"
     }
 
-    VerticalPageBackHint {}
+    VerticalPageBackHint {
+        pageActive: root.status == PageStatus.Active
+    }
 }
