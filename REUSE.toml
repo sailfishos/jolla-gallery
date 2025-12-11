@@ -7,3 +7,8 @@ SPDX-FileCopyrightText = [
     "2025 Jolla Mobile Ltd",
 ]
 SPDX-License-Identifier = "BSD-3-Clause"
+
+[[annotations]]
+path = "README.md"
+SPDX-FileCopyrightText = "2025 Jolla Mobile Ltd"
+SPDX-License-Identifier = "BSD-3-Clause"
