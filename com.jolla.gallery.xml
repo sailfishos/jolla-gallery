@@ -1,5 +1,11 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<!--
+SPDX-FileCopyrightText: 2013-2021 Jolla Ltd.
+SPDX-FileCopyrightText: 2025 Jolla Mobile Ltd
+
+SPDX-License-Identifier: BSD-3-Clause
+-->
 
 <node name="/com/jolla/gallery/ui">
     <interface name="com.jolla.gallery.ui">

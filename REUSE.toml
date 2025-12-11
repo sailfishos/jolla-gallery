@@ -1,0 +1,9 @@
+version = 1
+
+[[annotations]]
+path = ["tests/images/*.jpg"]
+SPDX-FileCopyrightText = [
+    "2013 Jolla Ltd.",
+    "2025 Jolla Mobile Ltd",
+]
+SPDX-License-Identifier = "BSD-3-Clause"

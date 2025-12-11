@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2013 Jolla Ltd.
+// SPDX-FileCopyrightText: 2025 Jolla Mobile Ltd
+//
+// SPDX-License-Identifier: BSD-3-Clause
+
 import QtQuick 2.1
 import com.jolla.gallery 1.0
 
