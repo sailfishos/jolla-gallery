@@ -5,10 +5,10 @@
 
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    1.0.19
+Version:    1.2.0
 Release:    1
 License:    BSD-3-Clause
-URL:        https://bitbucket.org/jolla/ui-jolla-gallery
+URL:        https://github.com/sailfishos/jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
 Source1:    %{name}.privileges
 BuildRequires:  pkgconfig(Qt5Core)
