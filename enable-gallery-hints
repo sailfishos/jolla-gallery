@@ -1,4 +1,10 @@
 #!/bin/sh
+
+# SPDX-FileCopyrightText: 2014 Jolla Ltd.
+# SPDX-FileCopyrightText: 2025 Jolla Mobile Ltd
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 # reset hint counter on fresh installation
 /usr/bin/dconf write /sailfish/gallery/split_view_back_hint_count 0
 

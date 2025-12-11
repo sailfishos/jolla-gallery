@@ -1,9 +1,14 @@
+# SPDX-FileCopyrightText: 2012-2023 Jolla Ltd.
+# SPDX-FileCopyrightText: 2024-2025 Jolla Mobile Ltd
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 Name:       jolla-gallery
 Summary:    Jolla Gallery application
-Version:    1.0.19
+Version:    1.2.0
 Release:    1
-License:    Proprietary
-URL:        https://bitbucket.org/jolla/ui-jolla-gallery
+License:    BSD-3-Clause
+URL:        https://github.com/sailfishos/jolla-gallery
 Source0:    %{name}-%{version}.tar.bz2
 Source1:    %{name}.privileges
 BuildRequires:  pkgconfig(Qt5Core)
@@ -75,6 +80,7 @@ install -m 644 -p %{SOURCE1} %{buildroot}%{_datadir}/mapplauncherd/privileges.d/
 %{_bindir}/add-oneshot --new-users enable-gallery-hints || :
 
 %files
+%license LICENSES/BSD-3-Clause.txt
 %{_datadir}/applications/*.desktop
 %{_datadir}/%{name}
 %{_bindir}/%{name}

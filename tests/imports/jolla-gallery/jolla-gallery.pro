@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2012-2022 Jolla Ltd.
+# SPDX-FileCopyrightText: 2025 Jolla Mobile Ltd
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 MODULENAME = com/jolla/gallery
 TARGET = jollagalleryplugin
 

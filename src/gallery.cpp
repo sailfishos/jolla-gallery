@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2012-2021 Jolla Ltd.
+// SPDX-FileCopyrightText: 2025 Jolla Mobile Ltd
+//
+// SPDX-License-Identifier: BSD-3-Clause
 
 #include <QGuiApplication>
 #include <QQuickView>

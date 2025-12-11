@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+SPDX-FileCopyrightText: 2012-2021 Jolla Ltd.
+SPDX-FileCopyrightText: 2025 Jolla Mobile Ltd
+
+SPDX-License-Identifier: BSD-3-Clause
+-->
+
 <testdefinition version="1.0">
    <suite name="jolla-gallery-tests" domain="ui">
        <description>Jolla Gallery Application automatic tests</description>
