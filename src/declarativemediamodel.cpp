@@ -287,6 +287,10 @@ QVariant DeclarativeMediaModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
+    if (index.row() < 0 || index.row() >= d->m_activeSources.count()) {
+        return QVariant();
+    }
+
     DeclarativeMediaSource *mediaSource = d->m_activeSources.at(index.row());
     if (role == MediaRole)
         return QVariant::fromValue<QObject *>(mediaSource);
