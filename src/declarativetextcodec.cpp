@@ -7,8 +7,8 @@
 #include <QTextCodec>
 #include <QtDebug>
 
-DeclarativeTextCodec::DeclarativeTextCodec(QObject *parent) :
-    QObject(parent)
+DeclarativeTextCodec::DeclarativeTextCodec(QObject *parent)
+    : QObject(parent)
 {
 }
 
@@ -18,9 +18,9 @@ QString DeclarativeTextCodec::codecForLocale() const
 
     if (c) {
         return QTextCodec::codecForLocale()->name();
-    } else {
-        return QString();
     }
+
+    return QString();
 }
 
 void DeclarativeTextCodec::setCodecForLocale(const QString &codecName)
@@ -37,4 +37,3 @@ void DeclarativeTextCodec::setCodecForLocale(const QString &codecName)
         emit codecForLocaleChanged();
     }
 }
-

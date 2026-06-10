@@ -17,8 +17,8 @@ class QQmlComponent;
 QT_END_NAMESPACE
 
 class DeclarativeMediaSource;
-
 class DeclarativeMediaModelPrivate;
+
 class DeclarativeMediaModel : public QAbstractListModel, public QQmlParserStatus
 {
     Q_OBJECT
@@ -48,7 +48,6 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
 
 Q_SIGNALS:
     void sourcesChanged();

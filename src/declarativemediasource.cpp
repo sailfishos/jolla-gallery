@@ -120,4 +120,3 @@ void DeclarativeMediaSource::setType(DeclarativeMediaSource::Type type)
         emit typeChanged();
     }
 }
-
