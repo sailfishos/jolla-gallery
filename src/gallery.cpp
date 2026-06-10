@@ -72,7 +72,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         }
 
         return app->exec();
-    } else {
-        return EXIT_FAILURE;
     }
+
+    return EXIT_FAILURE;
 }

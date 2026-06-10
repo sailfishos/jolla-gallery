@@ -26,14 +26,13 @@ class AlbumContentData : public QQmlContext
     Q_PROPERTY(QString albumTitle READ albumTitle NOTIFY albumTitleChanged)
     Q_PROPERTY(int albumCount READ albumCount NOTIFY albumCountChanged)
 public:
-    AlbumContentData(
-                QQmlContext *parentContext,
-                int index,
-                QGalleryResultSet *resultSet,
-                int titleKey,
-                int countKey)
+    AlbumContentData(QQmlContext *parentContext,
+                     int index,
+                     QGalleryResultSet *resultSet,
+                     int titleKey,
+                     int countKey)
         : QQmlContext(parentContext)
-        , source(0)
+        , source(nullptr)
         , m_resultSet(resultSet)
         , m_index(index)
         , m_titleKey(titleKey)
@@ -68,10 +67,10 @@ class DeclarativeMediaModelPrivate
 {
 public:
 
-    DeclarativeMediaModelPrivate(DeclarativeMediaModel * parent):
-        q_ptr(parent),
-        m_albumDelegate(0),
-        m_componentComplete(false)
+    DeclarativeMediaModelPrivate(DeclarativeMediaModel * parent)
+        : q_ptr(parent)
+        , m_albumDelegate(nullptr)
+        , m_componentComplete(false)
     {
     }
 
@@ -146,9 +145,9 @@ void DeclarativeMediaModelPrivate::queryAlbums()
     }
 }
 
-DeclarativeMediaModel::DeclarativeMediaModel(QObject *parent) :
-    QAbstractListModel(parent),
-    d_ptr(new DeclarativeMediaModelPrivate(this))
+DeclarativeMediaModel::DeclarativeMediaModel(QObject *parent)
+    : QAbstractListModel(parent)
+    , d_ptr(new DeclarativeMediaModelPrivate(this))
 {
     d_ptr->m_sourcesPath = QLatin1String(SOURCES_PATH);
 }
@@ -164,7 +163,7 @@ DeclarativeMediaModel::DeclarativeMediaModel(const QString &sourcesPath, QObject
 DeclarativeMediaModel::~DeclarativeMediaModel()
 {
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 QHash<int, QByteArray> DeclarativeMediaModel::roleNames() const
@@ -285,6 +284,10 @@ QVariant DeclarativeMediaModel::data(const QModelIndex &index, int role) const
     Q_D(const DeclarativeMediaModel);
     if (!index.isValid()) {
         qWarning() << "MediaModel::data: Index out of range";
+        return QVariant();
+    }
+
+    if (index.row() < 0 || index.row() >= d->m_activeSources.count()) {
         return QVariant();
     }
 

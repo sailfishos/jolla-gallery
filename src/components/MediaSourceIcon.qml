@@ -19,5 +19,4 @@ Item {
         running: window.applicationActive && timerEnabled && pageStack.currentPage === startPage
         onTriggered: timerTriggered()
     }
-
 }

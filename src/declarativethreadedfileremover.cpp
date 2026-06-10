@@ -14,9 +14,9 @@ static bool removeFile(const QString &filePath)
     return QFile::remove(url.toLocalFile());
 }
 
-DeclarativeThreadedFileRemover::DeclarativeThreadedFileRemover(QObject *parent) :
-    QObject(parent),
-    m_watcher(new QFutureWatcher<bool>(this))
+DeclarativeThreadedFileRemover::DeclarativeThreadedFileRemover(QObject *parent)
+    : QObject(parent)
+    , m_watcher(new QFutureWatcher<bool>(this))
 {
     connect(m_watcher, SIGNAL(finished()), this, SIGNAL(finished()));
 }

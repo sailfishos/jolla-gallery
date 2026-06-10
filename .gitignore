@@ -9,3 +9,5 @@
 moc_*
 *.moc
 Makefile
+*.ts
+*.qm
